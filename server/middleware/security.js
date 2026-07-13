@@ -3,8 +3,18 @@
 import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimit } from 'express-rate-limit';
-import { randomBytes } from 'crypto';
+import { randomBytes, randomUUID } from 'crypto';
 import config from '../config.js';
+
+// ─── 0. Request ID ─────────────────────────────────────────────────────
+/** Attaches a unique X-Request-ID to every request for log correlation */
+export function requestId(req, res, next) {
+  const id = req.headers['x-request-id'] || randomUUID();
+  req.requestId = id;
+  res.setHeader('X-Request-ID', id);
+  next();
+}
+
 
 // ─── 1. Helmet — 15+ security headers ────────────────────────────────
 export const helmetMiddleware = helmet({
@@ -149,9 +159,11 @@ export function securityLogger(req, res, next) {
   const start = Date.now();
   res.on('finish', () => {
     const duration = Date.now() - start;
-    const level = res.statusCode >= 400 ? 'WARN' : 'INFO';
+    const level    = res.statusCode >= 400 ? 'WARN' : 'INFO';
+    const ts       = new Date().toISOString();
+    const reqId    = req.requestId ? `[${req.requestId.slice(0, 8)}]` : '';
     if (req.path.startsWith('/api/')) {
-      console.log(`[${level}] ${req.method} ${req.path} → ${res.statusCode} (${duration}ms) IP:${req.ip}`);
+      console.log(`[${ts}] ${reqId} [${level}] ${req.method} ${req.path} → ${res.statusCode} (${duration}ms) IP:${req.ip}`);
     }
   });
   next();

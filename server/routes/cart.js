@@ -4,7 +4,6 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
-import { optionalAuth } from '../middleware/authenticate.js';
 import { requireAuth } from '../middleware/authenticate.js';
 import { verifyCsrfToken } from '../middleware/security.js';
 import { db } from '../services/db.js';
@@ -264,9 +263,9 @@ router.post('/checkout', requireAuth, verifyCsrfToken, (req, res) => {
 
     const checkout = db.transaction(() => {
       db.prepare(`
-        INSERT INTO orders (id, user_id, order_ref, items, total, currency, status, placed_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(orderId, req.user.id, orderRef, JSON.stringify(orderItems), totals.total, 'INR', 'Confirmed', placedAt);
+        INSERT INTO orders (id, user_id, order_ref, items, subtotal, tax, total, currency, status, placed_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(orderId, req.user.id, orderRef, JSON.stringify(orderItems), totals.subtotal, totals.tax, totals.total, 'INR', 'Confirmed', placedAt);
 
       // Clear cart after order is recorded
       db.prepare('DELETE FROM cart WHERE user_id = ?').run(req.user.id);

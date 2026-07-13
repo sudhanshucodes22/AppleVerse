@@ -1,7 +1,5 @@
-// ─── server/routes/user.js ────────────────────────────────────────────
-// Protected user routes (all require valid JWT)
 import { Router } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body, query, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import { requireAuth } from '../middleware/authenticate.js';
 import { verifyCsrfToken } from '../middleware/security.js';
@@ -94,10 +92,20 @@ router.post('/change-password', verifyCsrfToken, changePasswordRules, async (req
   }
 });
 
-// ─── GET /api/user/orders ─────────────────────────────────────────────
-router.get('/orders', (req, res) => {
-  const orders = UserStore.getOrders(req.user.id);
-  return res.status(200).json({ orders });
+// ─── GET /api/user/orders ──────────────────────────────────────────
+router.get('/orders', [
+  query('limit').optional().isInt({ min: 1, max: 50 }).toInt().withMessage('Limit must be 1–50.'),
+  query('offset').optional().isInt({ min: 0 }).toInt().withMessage('Offset must be ≥ 0.'),
+], (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ error: 'Validation failed.', code: 'VALIDATION_ERROR',
+      fields: errors.array().map(e => ({ field: e.path, message: e.msg })) });
+  }
+  const limit  = req.query.limit  ?? 20;
+  const offset = req.query.offset ?? 0;
+  const result = UserStore.getOrders(req.user.id, limit, offset);
+  return res.status(200).json(result);
 });
 
 // ─── POST /api/user/orders ────────────────────────────────────────────
@@ -107,6 +115,8 @@ const createOrderRules = [
   body('items.*.name').notEmpty().withMessage('Item name required.'),
   body('items.*.price').isNumeric().withMessage('Item price must be a number.'),
   body('items.*.qty').isInt({ min: 1 }).withMessage('Item quantity must be at least 1.'),
+  body('subtotal').optional().isNumeric(),
+  body('tax').optional().isNumeric(),
   body('total').isNumeric().withMessage('Total must be a number.'),
   body('currency').optional().isString(),
   body('status').optional().isString(),
@@ -121,8 +131,8 @@ router.post('/orders', verifyCsrfToken, createOrderRules, (req, res) => {
     });
   }
 
-  const { orderRef, items, total, currency = 'INR', status = 'Confirmed' } = req.body;
-  const order = UserStore.addOrder(req.user.id, { orderRef, items, total, currency, status });
+  const { orderRef, items, subtotal = 0, tax = 0, total, currency = 'INR', status = 'Confirmed' } = req.body;
+  const order = UserStore.addOrder(req.user.id, { orderRef, items, subtotal, tax, total, currency, status });
   if (!order) {
     return res.status(404).json({ error: 'User not found.', code: 'NOT_FOUND' });
   }

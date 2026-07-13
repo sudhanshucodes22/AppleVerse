@@ -5,6 +5,8 @@ import { Router } from 'express';
 import { db } from '../services/db.js';
 import { PRODUCTS, CATEGORIES } from '../data/products.js';
 
+const VALID_ORDER_STATUSES = ['Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Refunded'];
+
 const router = Router();
 
 // ─── Admin Auth Middleware ─────────────────────────────────────────────
@@ -106,8 +108,13 @@ router.get('/stats', requireAdmin, (req, res) => {
 // ─── GET /api/admin/users ─────────────────────────────────────────────
 // List all users (paginated)
 router.get('/users', requireAdmin, (req, res) => {
-  const limit  = Math.min(parseInt(req.query.limit || '50', 10), 200);
-  const offset = parseInt(req.query.offset || '0', 10);
+  const rawLimit  = parseInt(req.query.limit  || '50', 10);
+  const rawOffset = parseInt(req.query.offset || '0',  10);
+  if (isNaN(rawLimit) || isNaN(rawOffset) || rawLimit < 1 || rawOffset < 0) {
+    return res.status(422).json({ error: 'Invalid limit or offset.', code: 'VALIDATION_ERROR' });
+  }
+  const limit  = Math.min(rawLimit, 200);
+  const offset = rawOffset;
   try {
     const total = db.prepare("SELECT COUNT(*) as n FROM users WHERE deleted_at IS NULL").get().n;
     const users = db.prepare(`
@@ -126,8 +133,13 @@ router.get('/users', requireAdmin, (req, res) => {
 // ─── GET /api/admin/orders ────────────────────────────────────────────
 // List all orders (paginated, newest first)
 router.get('/orders', requireAdmin, (req, res) => {
-  const limit  = Math.min(parseInt(req.query.limit || '50', 10), 200);
-  const offset = parseInt(req.query.offset || '0', 10);
+  const rawLimit  = parseInt(req.query.limit  || '50', 10);
+  const rawOffset = parseInt(req.query.offset || '0',  10);
+  if (isNaN(rawLimit) || isNaN(rawOffset) || rawLimit < 1 || rawOffset < 0) {
+    return res.status(422).json({ error: 'Invalid limit or offset.', code: 'VALIDATION_ERROR' });
+  }
+  const limit  = Math.min(rawLimit, 200);
+  const offset = rawOffset;
   try {
     const total = db.prepare("SELECT COUNT(*) as n FROM orders").get().n;
     const orders = db.prepare(`
@@ -143,6 +155,8 @@ router.get('/orders', requireAdmin, (req, res) => {
       userName:  row.user_name,
       userEmail: row.user_email,
       items:     JSON.parse(row.items),
+      subtotal:  row.subtotal || 0,
+      tax:       row.tax || 0,
       total:     row.total,
       currency:  row.currency,
       status:    row.status,
@@ -152,6 +166,38 @@ router.get('/orders', requireAdmin, (req, res) => {
   } catch (err) {
     console.error('[admin/orders]', err);
     return res.status(500).json({ error: 'Could not fetch orders.', code: 'INTERNAL_ERROR' });
+  }
+});
+
+// ─── PATCH /api/admin/orders/:id ──────────────────────────────────────────────
+// Update an order's status (admin only)
+router.patch('/orders/:id', requireAdmin, (req, res) => {
+  const { status } = req.body;
+  if (!status || !VALID_ORDER_STATUSES.includes(status)) {
+    return res.status(422).json({
+      error: `Status must be one of: ${VALID_ORDER_STATUSES.join(', ')}.`,
+      code: 'VALIDATION_ERROR',
+      validStatuses: VALID_ORDER_STATUSES,
+    });
+  }
+
+  try {
+    const order = db.prepare('SELECT id, status FROM orders WHERE id = ?').get(req.params.id);
+    if (!order) return res.status(404).json({ error: 'Order not found.', code: 'NOT_FOUND' });
+
+    db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(status, req.params.id);
+
+    console.log(`[admin] Order ${req.params.id} status updated: ${order.status} → ${status}`);
+    return res.status(200).json({
+      message: 'Order status updated.',
+      code: 'ORDER_UPDATED',
+      orderId: req.params.id,
+      previousStatus: order.status,
+      newStatus: status,
+    });
+  } catch (err) {
+    console.error('[admin/orders/patch]', err);
+    return res.status(500).json({ error: 'Could not update order.', code: 'INTERNAL_ERROR' });
   }
 });
 

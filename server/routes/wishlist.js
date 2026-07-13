@@ -89,7 +89,21 @@ router.post('/', verifyCsrfToken, [
   }
 });
 
-// ─── DELETE /api/wishlist/:productId ─────────────────────────────────
+// ─── GET /api/wishlist/check/:productId ───────────────────────────────────
+// Check if a specific product is in the user's wishlist
+router.get('/check/:productId', (req, res) => {
+  try {
+    const row = db.prepare(`
+      SELECT id FROM wishlist WHERE user_id = ? AND product_id = ?
+    `).get(req.user.id, req.params.productId);
+    return res.status(200).json({ inWishlist: !!row, productId: req.params.productId });
+  } catch (err) {
+    console.error('[wishlist/check]', err);
+    return res.status(500).json({ error: 'Could not check wishlist.', code: 'INTERNAL_ERROR' });
+  }
+});
+
+// ─── DELETE /api/wishlist/:productId ───────────────────────────────────
 // Remove a specific product from the wishlist
 router.delete('/:productId', verifyCsrfToken, (req, res) => {
   try {
@@ -123,20 +137,6 @@ router.delete('/', verifyCsrfToken, (req, res) => {
   } catch (err) {
     console.error('[wishlist/clear]', err);
     return res.status(500).json({ error: 'Could not clear wishlist.', code: 'INTERNAL_ERROR' });
-  }
-});
-
-// ─── GET /api/wishlist/check/:productId ───────────────────────────────
-// Check if a specific product is in the user's wishlist
-router.get('/check/:productId', (req, res) => {
-  try {
-    const row = db.prepare(`
-      SELECT id FROM wishlist WHERE user_id = ? AND product_id = ?
-    `).get(req.user.id, req.params.productId);
-    return res.status(200).json({ inWishlist: !!row });
-  } catch (err) {
-    console.error('[wishlist/check]', err);
-    return res.status(500).json({ error: 'Could not check wishlist.', code: 'INTERNAL_ERROR' });
   }
 });
 

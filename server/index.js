@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import os from 'os';
 import config from './config.js';
 import {
+  requestId,
   helmetMiddleware,
   corsMiddleware,
   apiLimiter,
@@ -18,7 +19,7 @@ import productRoutes from './routes/products.js';
 import cartRoutes    from './routes/cart.js';
 import wishlistRoutes from './routes/wishlist.js';
 import adminRoutes   from './routes/admin.js';
-import { db } from './services/db.js';
+import { db, closeDb } from './services/db.js';
 import { PRODUCTS, CATEGORIES } from './data/products.js';
 
 const app = express();
@@ -27,16 +28,17 @@ const SERVER_START = Date.now();
 // ─── Trust proxy (for correct IP in rate limiting behind Nginx/LB) ───
 app.set('trust proxy', 1);
 
-// ─── Security Middleware Stack (ORDER MATTERS) ────────────────────────
-app.use(helmetMiddleware);          // 1. Security headers first
-app.use(corsMiddleware);            // 2. CORS
-app.use(apiLimiter);                // 3. Global rate limit
-app.use(cookieParser());            // 4. Parse cookies
-app.use(express.json({ limit: '10kb' }));          // 5. Parse JSON (10KB max)
-app.use(express.urlencoded({ extended: false, limit: '10kb' })); // 6. Parse URL-encoded
-app.use(sanitizeRequest);           // 7. Strip null bytes
-app.use(generateCsrfToken);         // 8. Generate/read CSRF token
-app.use(securityLogger);            // 9. Log security events
+// ─── Security Middleware Stack (ORDER MATTERS) ────────────────────────────────
+app.use(requestId);                // 1. Attach unique X-Request-ID first
+app.use(helmetMiddleware);         // 2. Security headers
+app.use(corsMiddleware);           // 3. CORS
+app.use(apiLimiter);               // 4. Global rate limit
+app.use(cookieParser());           // 5. Parse cookies
+app.use(express.json({ limit: '10kb' }));          // 6. Parse JSON (10KB max)
+app.use(express.urlencoded({ extended: false, limit: '10kb' })); // 7. Parse URL-encoded
+app.use(sanitizeRequest);          // 8. Strip null bytes
+app.use(generateCsrfToken);        // 9. Generate/read CSRF token
+app.use(securityLogger);           // 10. Log with timestamp + request ID
 
 // ─── API Routes ───────────────────────────────────────────────────────
 app.use('/api/auth',     authRoutes);
@@ -104,9 +106,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error.', code: 'INTERNAL_ERROR' });
 });
 
-// ─── Start Server ─────────────────────────────────────────────────────
-app.listen(config.port, () => {
-  console.log(`\n🛡️  AppleVerse API Server`);
+// ─── Start Server ────────────────────────────────────────────────────────────────
+const server = app.listen(config.port, () => {
+  console.log(`\n🛡️  AppleVerse API Server v2.1.0`);
   console.log(`   Port:        ${config.port}`);
   console.log(`   Environment: ${config.nodeEnv}`);
   console.log(`   CORS origins: ${config.cors.allowedOrigins.join(', ')}`);
@@ -115,5 +117,22 @@ app.listen(config.port, () => {
   console.log(`\n✅ Server ready at http://localhost:${config.port}\n`);
 });
 
-export default app;
+// ─── Graceful Shutdown ────────────────────────────────────────────────────────────────
+function shutdown(signal) {
+  console.log(`\n[server] ${signal} received. Shutting down gracefully...`);
+  server.close(() => {
+    console.log('[server] HTTP server closed.');
+    closeDb(); // Flush WAL and close SQLite cleanly
+    process.exit(0);
+  });
+  // Force exit after 10 seconds if graceful close stalls
+  setTimeout(() => {
+    console.error('[server] Forced shutdown after timeout.');
+    process.exit(1);
+  }, 10_000).unref();
+}
 
+process.on('SIGINT',  () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+export default app;

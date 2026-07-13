@@ -1,8 +1,11 @@
-// ─── server/routes/products.js ────────────────────────────────────────
+// ─── server/routes/products.js ────────────────────────────────────────────
 // Public products API — no auth required
 import { Router } from 'express';
-import { query, validationResult } from 'express-validator';
+import { query, body, validationResult } from 'express-validator';
 import { PRODUCTS, CATEGORIES } from '../data/products.js';
+import { requireAuth } from '../middleware/authenticate.js';
+import { verifyCsrfToken } from '../middleware/security.js';
+import { db } from '../services/db.js';
 
 const router = Router();
 
@@ -73,6 +76,9 @@ router.get('/', listRules, (req, res) => {
   const total = results.length;
   const paginated = results.slice(offset, offset + limit);
 
+  // Cache public product lists for 60 seconds
+  res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=30');
+
   return res.status(200).json({
     products: paginated,
     total,
@@ -90,6 +96,7 @@ router.get('/categories', (req, res) => {
     name: cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' & '),
     count: PRODUCTS.filter(p => p.category === cat).length,
   }));
+  res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
   return res.status(200).json({ categories: counts });
 });
 
@@ -101,6 +108,7 @@ router.get('/featured', (req, res) => {
     return catProducts.sort((a, b) => b.rating - a.rating)[0];
   }).filter(Boolean);
 
+  res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
   return res.status(200).json({ products: featured });
 });
 
@@ -126,6 +134,7 @@ router.get('/search', [
     p.category.toLowerCase().includes(term)
   );
 
+  res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=30');
   return res.status(200).json({
     query: req.query.q,
     results,
@@ -133,7 +142,96 @@ router.get('/search', [
   });
 });
 
-// ─── GET /api/products/:id ────────────────────────────────────────────
+// ─── GET /api/products/:id/reviews ──────────────────────────────────────
+router.get('/:id/reviews', (req, res) => {
+  const product = PRODUCTS.find(p => p.id === req.params.id);
+  if (!product) return res.status(404).json({ error: 'Product not found.', code: 'NOT_FOUND' });
+
+  try {
+    const rows = db.prepare(`
+      SELECT r.id, r.rating, r.title, r.body, r.created_at,
+             u.name as reviewer_name
+      FROM reviews r
+      JOIN users u ON r.user_id = u.id
+      WHERE r.product_id = ?
+      ORDER BY r.created_at DESC
+    `).all(req.params.id);
+
+    const avgRating = rows.length
+      ? Math.round((rows.reduce((s, r) => s + r.rating, 0) / rows.length) * 10) / 10
+      : product.rating;
+
+    return res.status(200).json({
+      productId: req.params.id,
+      reviews: rows.map(r => ({
+        id: r.id,
+        rating: r.rating,
+        title: r.title,
+        body: r.body,
+        reviewerName: r.reviewer_name,
+        createdAt: r.created_at,
+      })),
+      total: rows.length,
+      averageRating: avgRating,
+    });
+  } catch (err) {
+    console.error('[products/reviews/get]', err);
+    return res.status(500).json({ error: 'Could not fetch reviews.', code: 'INTERNAL_ERROR' });
+  }
+});
+
+// ─── POST /api/products/:id/reviews ──────────────────────────────────────
+// Submit a review (requires auth; one per user per product)
+const reviewRules = [
+  body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be 1–5.'),
+  body('title').optional().isString().isLength({ max: 120 }).trim(),
+  body('body').optional().isString().isLength({ max: 2000 }).trim(),
+];
+
+router.post('/:id/reviews', requireAuth, verifyCsrfToken, reviewRules, (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      error: 'Validation failed.', code: 'VALIDATION_ERROR',
+      fields: errors.array().map(e => ({ field: e.path, message: e.msg })),
+    });
+  }
+
+  const product = PRODUCTS.find(p => p.id === req.params.id);
+  if (!product) return res.status(404).json({ error: 'Product not found.', code: 'NOT_FOUND' });
+
+  // Check user has purchased this product
+  const hasPurchased = db.prepare(`
+    SELECT COUNT(*) as n FROM orders
+    WHERE user_id = ? AND items LIKE ?
+  `).get(req.user.id, `%${req.params.id}%`).n > 0;
+
+  if (!hasPurchased) {
+    return res.status(403).json({
+      error: 'You can only review products you have purchased.',
+      code: 'PURCHASE_REQUIRED',
+    });
+  }
+
+  try {
+    const { rating, title = null, body: reviewBody = null } = req.body;
+    db.prepare(`
+      INSERT INTO reviews (product_id, user_id, rating, title, body)
+      VALUES (?, ?, ?, ?, ?)
+      ON CONFLICT(product_id, user_id) DO UPDATE
+      SET rating = excluded.rating, title = excluded.title,
+          body = excluded.body, created_at = datetime('now')
+    `).run(req.params.id, req.user.id, rating, title, reviewBody);
+
+    console.log(`[reviews] Review submitted for ${req.params.id} by ${req.user.email} (${rating}★)`);
+    return res.status(201).json({ message: 'Review submitted.', code: 'REVIEW_SUBMITTED' });
+  } catch (err) {
+    console.error('[products/reviews/post]', err);
+    return res.status(500).json({ error: 'Could not submit review.', code: 'INTERNAL_ERROR' });
+  }
+});
+
+// ─── GET /api/products/:id ───────────────────────────────────────────────────
 // Get a single product by ID
 router.get('/:id', (req, res) => {
   const product = PRODUCTS.find(p => p.id === req.params.id);

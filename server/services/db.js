@@ -1,5 +1,6 @@
 // ─── server/services/db.js ────────────────────────────────────────────
 // SQLite database — single connection, auto-migrates schema on startup
+// v2.1.0: added subtotal/tax to orders, reviews table, graceful shutdown
 import Database from 'better-sqlite3';
 import { readFileSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
@@ -57,13 +58,31 @@ db.exec(`
     user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     order_ref  TEXT NOT NULL,
     items      TEXT NOT NULL,
+    subtotal   REAL NOT NULL DEFAULT 0,
+    tax        REAL NOT NULL DEFAULT 0,
     total      REAL NOT NULL,
     currency   TEXT NOT NULL DEFAULT 'INR',
     status     TEXT NOT NULL DEFAULT 'Confirmed',
     placed_at  TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
-  CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id);
+  CREATE INDEX IF NOT EXISTS idx_orders_user    ON orders(user_id);
+  CREATE INDEX IF NOT EXISTS idx_orders_status  ON orders(status);
+  CREATE INDEX IF NOT EXISTS idx_orders_placed  ON orders(placed_at);
+
+  CREATE TABLE IF NOT EXISTS reviews (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id  TEXT NOT NULL,
+    user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    rating      INTEGER NOT NULL CHECK(rating BETWEEN 1 AND 5),
+    title       TEXT,
+    body        TEXT,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(product_id, user_id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_reviews_product ON reviews(product_id);
+  CREATE INDEX IF NOT EXISTS idx_reviews_user    ON reviews(user_id);
 
   CREATE TABLE IF NOT EXISTS cart (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -163,4 +182,23 @@ function migrateFromJson() {
 }
 
 migrateFromJson();
+
+// ─── Migration v2.1 — add subtotal/tax to existing orders table ───────
+try {
+  db.exec(`ALTER TABLE orders ADD COLUMN subtotal REAL NOT NULL DEFAULT 0`);
+} catch { /* column already exists — safe to ignore */ }
+try {
+  db.exec(`ALTER TABLE orders ADD COLUMN tax REAL NOT NULL DEFAULT 0`);
+} catch { /* column already exists — safe to ignore */ }
+
 console.log(`[db] SQLite ready: ${DB_PATH}`);
+
+// ─── Graceful Shutdown ────────────────────────────────────────────────
+export function closeDb() {
+  try {
+    db.close();
+    console.log('[db] Database connection closed cleanly.');
+  } catch (err) {
+    console.error('[db] Error closing database:', err.message);
+  }
+}

@@ -114,42 +114,63 @@ export const UserStore = {
     return safe;
   },
 
-  /** Get all orders for a user (newest first) */
-  getOrders(userId) {
+  /** Get orders for a user with pagination (newest first) */
+  getOrders(userId, limit = 20, offset = 0) {
     const rows = db.prepare(`
-      SELECT * FROM orders WHERE user_id = ? ORDER BY placed_at DESC
-    `).all(userId);
-    return rows.map(r => ({
-      id:        r.id,
-      userId:    r.user_id,
-      orderRef:  r.order_ref,
-      items:     JSON.parse(r.items),
-      total:     r.total,
-      currency:  r.currency,
-      status:    r.status,
-      placedAt:  r.placed_at,
-    }));
+      SELECT * FROM orders WHERE user_id = ? ORDER BY placed_at DESC LIMIT ? OFFSET ?
+    `).all(userId, limit, offset);
+    const total = db.prepare('SELECT COUNT(*) as n FROM orders WHERE user_id = ?').get(userId).n;
+    return {
+      orders: rows.map(r => ({
+        id:        r.id,
+        userId:    r.user_id,
+        orderRef:  r.order_ref,
+        items:     JSON.parse(r.items),
+        subtotal:  r.subtotal || 0,
+        tax:       r.tax || 0,
+        total:     r.total,
+        currency:  r.currency,
+        status:    r.status,
+        placedAt:  r.placed_at,
+      })),
+      total,
+      limit,
+      offset,
+      hasMore: offset + limit < total,
+    };
   },
 
-  /** Append a new order to a user's history */
-  addOrder(userId, { orderRef, items, total, currency = 'INR', status = 'Confirmed' }) {
+  /** Append a new order with full financial breakdown */
+  addOrder(userId, { orderRef, items, subtotal = 0, tax = 0, total, currency = 'INR', status = 'Confirmed' }) {
     const id       = uuidv4();
     const placedAt = new Date().toISOString();
     db.prepare(`
-      INSERT INTO orders (id, user_id, order_ref, items, total, currency, status, placed_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(id, userId, orderRef, JSON.stringify(items), total, currency, status, placedAt);
-    return { id, userId, orderRef, items, total, currency, status, placedAt };
+      INSERT INTO orders (id, user_id, order_ref, items, subtotal, tax, total, currency, status, placed_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(id, userId, orderRef, JSON.stringify(items), subtotal, tax, total, currency, status, placedAt);
+    return { id, userId, orderRef, items, subtotal, tax, total, currency, status, placedAt };
   },
 };
 
 // ─── TokenStore ───────────────────────────────────────────────────────
 export const TokenStore = {
 
-  /** Save a refresh token — one per user (replaces old) */
+  /** Save a refresh token — allows multi-device login, caps at 5 tokens per user */
   saveRefreshToken(userId, token, expiresAt) {
-    // Remove any existing tokens for this user first
-    db.prepare('DELETE FROM refresh_tokens WHERE user_id = ?').run(userId);
+    // Remove expired tokens for this user first
+    db.prepare(`
+      DELETE FROM refresh_tokens WHERE user_id = ? AND expires_at < datetime('now')
+    `).run(userId);
+
+    // If user already has 5+ active tokens, remove the oldest one (FIFO)
+    const count = db.prepare('SELECT COUNT(*) as n FROM refresh_tokens WHERE user_id = ?').get(userId).n;
+    if (count >= 5) {
+      const oldest = db.prepare(
+        'SELECT id FROM refresh_tokens WHERE user_id = ? ORDER BY created_at ASC LIMIT 1'
+      ).get(userId);
+      if (oldest) db.prepare('DELETE FROM refresh_tokens WHERE id = ?').run(oldest.id);
+    }
+
     db.prepare(`
       INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)
     `).run(userId, token, expiresAt);
