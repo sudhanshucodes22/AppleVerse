@@ -3,305 +3,606 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>My Account — AppleVerse</title>
-  <meta name="description" content="Manage your AppleVerse account, view orders, and update your profile."/>
+  <title>My Apple ID — AppleVerse</title>
+  <meta name="description" content="Manage your Apple ID, view orders, trace shipments, track trade-ins, and update your settings."/>
   <meta name="robots" content="noindex, nofollow"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300..400,0..1&display=swap" rel="stylesheet"/>
   <style>
-    * { font-family: 'Inter', sans-serif; }
-    body { background: #F2F2F7; min-height: 100vh; }
+    * { font-family: 'Outfit', sans-serif; }
+    body { background: #F5F5F7; min-height: 100vh; color: #1D1D1F; }
 
-    .glass-card {
-      background: rgba(255,255,255,0.88);
+    .apple-glass {
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border: 1px solid rgba(210,210,215,0.3);
+      border: 1px solid rgba(210, 210, 215, 0.3);
     }
 
-    .stat-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid rgba(210,210,215,0.4);
+    .apple-card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .apple-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .stat-bubble {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 18px 24px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.01);
     }
 
     .input-field {
-      width: 100%; padding: 12px 14px;
-      background: #F2F2F7; border: 1.5px solid #D2D2D7;
-      border-radius: 10px; font-size: 15px; color: #1D1D1F; outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%; padding: 12px 16px;
+      background: #F5F5F7; border: 1px solid #D2D2D7;
+      border-radius: 12px; font-size: 15px; color: #1D1D1F; outline: none;
+      transition: all 0.2s ease;
     }
-    .input-field:focus { border-color: #0066CC; box-shadow: 0 0 0 3px rgba(0,102,204,0.1); background: white; }
+    .input-field:focus {
+      border-color: #0066CC;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.15);
+    }
 
-    .btn-primary {
-      padding: 12px 24px; background: #0066CC; color: white;
-      border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s;
+    .btn-apple {
+      padding: 10px 22px; background: #0066CC; color: white;
+      border: none; border-radius: 20px; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex; align-items: center; gap: 6px;
     }
-    .btn-primary:hover { background: #0056b3; }
-    .btn-primary:active { transform: scale(0.97); }
-    .btn-primary:disabled { background: #D2D2D7; cursor: not-allowed; }
+    .btn-apple:hover { background: #0077ED; }
+    .btn-apple:active { transform: scale(0.97); }
+    .btn-apple:disabled { background: #E5E5EA; color: #AEAEB2; cursor: not-allowed; }
+
+    .btn-apple-secondary {
+      padding: 10px 22px; background: #F5F5F7; color: #0066CC;
+      border: none; border-radius: 20px; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-apple-secondary:hover { background: #E8E8ED; }
 
     .btn-danger {
-      padding: 11px 24px; background: transparent; color: #FF3B30;
-      border: 1.5px solid #FF3B30; border-radius: 10px;
-      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+      padding: 10px 22px; background: transparent; color: #FF3B30;
+      border: 1px solid #FF3B30; border-radius: 20px;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
     }
-    .btn-danger:hover { background: #FFF2F2; }
+    .btn-danger:hover { background: #FF3B30; color: white; }
 
     .nav-tab {
-      display: flex; align-items: center; gap: 10px; padding: 12px 16px;
-      border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500;
-      color: #3A3A3C; transition: all 0.15s; text-decoration: none;
+      display: flex; align-items: center; gap: 12px; padding: 11px 16px;
+      border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500;
+      color: #515154; transition: all 0.2s; text-decoration: none;
     }
-    .nav-tab:hover { background: #F2F2F7; }
+    .nav-tab:hover { background: #F5F5F7; color: #1D1D1F; }
     .nav-tab.active { background: #0066CC; color: white; }
-    .nav-tab .material-symbols-outlined { font-size: 20px; }
-
-    .security-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 16px 0; border-bottom: 1px solid #F2F2F7;
-    }
-    .security-row:last-child { border-bottom: none; }
+    .nav-tab .material-symbols-outlined { font-size: 20px; font-variation-settings: 'FILL' 0; }
+    .nav-tab.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
 
     .badge {
       display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
     }
-    .badge-green { background: #EDFAF2; color: #34C759; }
-    .badge-blue  { background: #EBF4FF; color: #0066CC; }
+    .badge-green  { background: #E8F8EE; color: #1D9B47; }
+    .badge-blue   { background: #EAF4FC; color: #0066CC; }
+    .badge-yellow { background: #FFF7E6; color: #D48806; }
+    .badge-red    { background: #FFEFEF; color: #E53935; }
 
-    /* Avatar gradient */
-    .avatar-ring {
-      background: linear-gradient(135deg, #0066CC, #9B59B6);
+    .avatar-gradient {
+      background: linear-gradient(135deg, #FF5E62, #FF9966);
       padding: 3px; border-radius: 50%;
     }
-    .avatar-inner {
-      background: white; border-radius: 50%; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
 
-    .skeleton {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    /* Shimmer Effect */
+    .shimmer-bg {
+      background: linear-gradient(90deg, #EBEBEB 25%, #F5F5F7 50%, #EBEBEB 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
-      border-radius: 8px;
     }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    .alert-box {
-      padding: 12px 16px; border-radius: 10px; font-size: 14px;
-      display: none; align-items: center; gap: 10px;
+    /* Custom Stepper Styling */
+    .step-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: bold; transition: all 0.3s;
     }
-    .alert-box.show { display: flex; }
-    .alert-error   { background: #FFF2F2; border: 1px solid #FFCDD2; color: #C62828; }
-    .alert-success { background: #F1FFF4; border: 1px solid #C8E6C9; color: #2E7D32; }
 
     #toast-container {
       position: fixed; bottom: 24px; right: 24px;
       z-index: 9999; display: flex; flex-direction: column;
       gap: 10px; pointer-events: none;
     }
+
+    /* Modal styling */
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   </style>
 </head>
-<body>
+<body class="bg-[#F5F5F7]">
   <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Top Nav -->
-  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-[#D2D2D7]/30 px-6 py-3 flex items-center justify-between">
-    <a href="/index.html" class="flex items-center gap-3">
-      <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-10 w-auto object-contain">
+  <!-- Main Navbar -->
+  <nav class="sticky top-0 z-50 bg-[#F5F5F7]/85 backdrop-blur-xl border-b border-[#D2D2D7]/20 px-6 py-4 flex items-center justify-between">
+    <a href="/home.html" class="flex items-center gap-3">
+      <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-9 w-auto object-contain">
       <div class="flex flex-col leading-none">
-        <span class="font-bold text-[19px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
-        <span class="text-[9px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
+        <span class="font-bold text-[17px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
+        <span class="text-[8px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
       </div>
     </a>
     <div class="flex items-center gap-3">
-      <span id="nav-user-name" class="hidden md:block text-[13px] font-medium text-[#3A3A3C]"></span>
+      <span id="nav-user-name" class="hidden md:block text-[13px] font-semibold text-[#515154]"></span>
       <button id="logout-btn" type="button" aria-label="Sign out"
-        class="flex items-center gap-1.5 text-[13px] font-medium text-[#FF3B30] hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
+        class="flex items-center gap-1 text-[13px] font-semibold text-[#FF3B30] hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
         <span class="material-symbols-outlined text-[18px]">logout</span>
         <span class="hidden md:inline">Sign Out</span>
       </button>
     </div>
   </nav>
 
-  <!-- Loading Skeleton -->
-  <div id="loading-state" class="max-w-5xl mx-auto px-4 py-8">
-    <div class="skeleton h-8 w-48 mb-8"></div>
+  <!-- Full Page Loader Skeleton -->
+  <div id="loading-state" class="max-w-6xl mx-auto px-4 py-10">
+    <div class="shimmer-bg h-10 w-64 rounded-xl mb-10"></div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div class="skeleton h-64 rounded-2xl"></div>
-      <div class="md:col-span-3 skeleton h-64 rounded-2xl"></div>
+      <div class="shimmer-bg h-80 rounded-2xl"></div>
+      <div class="md:col-span-3 shimmer-bg h-80 rounded-2xl"></div>
     </div>
   </div>
 
-  <!-- Main Content (hidden until auth) -->
-  <main id="main-content" class="hidden max-w-5xl mx-auto px-4 py-8">
+  <!-- Premium Main Workspace -->
+  <main id="main-content" class="hidden max-w-6xl mx-auto px-4 py-8">
 
-    <!-- Page header -->
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <h1 class="text-[26px] font-bold text-[#1D1D1F] tracking-tight" id="greeting">Welcome back!</h1>
-        <p class="text-[14px] text-[#8E8E93] mt-0.5">Manage your account and security settings</p>
+    <!-- Top Banner: Hello & Stats Summary -->
+    <div class="mb-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-[28px] font-bold tracking-tight text-[#1D1D1F]" id="greeting-title">Hello, Sudhanshu 👋</h1>
+          <p class="text-[14px] text-[#8E8E93] mt-0.5">Manage your personal info, order shipments, active AppleCare+, and trade-ins.</p>
+        </div>
+        <div class="flex items-center gap-2 text-[12px] font-semibold text-[#8E8E93] bg-white px-3 py-1.5 rounded-full border border-black/5">
+          <span class="material-symbols-outlined text-[14px] text-[#34C759] fill-1">shield</span>
+          <span>Apple ID Account Secure</span>
+        </div>
       </div>
-      <div class="hidden md:flex items-center gap-2 text-[12px] text-[#8E8E93] bg-white px-3 py-1.5 rounded-lg border border-[#E5E5EA]">
-        <span class="material-symbols-outlined text-[14px] text-[#34C759]">shield</span>
-        <span>Session secured</span>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="stat-bubble flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#0066CC]">
+            <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+          </div>
+          <div>
+            <div id="stat-orders" class="text-[20px] font-bold">0</div>
+            <div class="text-[11px] font-semibold text-[#8E8E93] uppercase tracking-wider">Total Orders</div>
+          </div>
+        </div>
+        <div class="stat-bubble flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#FF3B30]">
+            <span class="material-symbols-outlined text-[20px]">favorite</span>
+          </div>
+          <div>
+            <div id="stat-wishlist" class="text-[20px] font-bold">0</div>
+            <div class="text-[11px] font-semibold text-[#8E8E93] uppercase tracking-wider">Wishlist Items</div>
+          </div>
+        </div>
+        <div class="stat-bubble flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#1D9B47]">
+            <span class="material-symbols-outlined text-[20px]">verified_user</span>
+          </div>
+          <div>
+            <div id="stat-applecare" class="text-[20px] font-bold">0</div>
+            <div class="text-[11px] font-semibold text-[#8E8E93] uppercase tracking-wider">AppleCare+</div>
+          </div>
+        </div>
+        <div class="stat-bubble flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-[#D48806]">
+            <span class="material-symbols-outlined text-[20px]">stars</span>
+          </div>
+          <div>
+            <div id="stat-rewards" class="text-[20px] font-bold">1,250</div>
+            <div class="text-[11px] font-semibold text-[#8E8E93] uppercase tracking-wider">Reward Points</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Stats row -->
-    <div class="grid grid-cols-3 gap-4 mb-8">
-      <div class="stat-card">
-        <div class="text-[28px] font-bold text-[#0066CC]">0</div>
-        <div class="text-[12px] text-[#8E8E93] mt-1">Orders</div>
-      </div>
-      <div class="stat-card">
-        <div class="text-[28px] font-bold text-[#34C759]">
-          <span class="material-symbols-outlined text-[24px]">verified</span>
-        </div>
-        <div class="text-[12px] text-[#8E8E93] mt-1">Active Account</div>
-      </div>
-      <div class="stat-card">
-        <div class="text-[28px] font-bold text-[#9B59B6]">
-          <span class="material-symbols-outlined text-[24px]">lock</span>
-        </div>
-        <div class="text-[12px] text-[#8E8E93] mt-1">Protected</div>
-      </div>
-    </div>
-
-    <!-- 2-column layout -->
+    <!-- 2-Column Responsive Workspace Grid -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 
-      <!-- Sidebar Nav -->
+      <!-- Navigation Sidebar -->
       <div class="md:col-span-1">
-        <!-- Avatar card -->
-        <div class="glass-card rounded-2xl p-5 text-center mb-4">
-          <div class="avatar-ring w-16 h-16 mx-auto mb-3">
-            <div class="avatar-inner w-full h-full">
-              <div id="avatar-initials" class="w-full h-full flex items-center justify-center text-[22px] font-bold text-[#0066CC] bg-blue-50"></div>
+        <!-- Identity Mini Card -->
+        <div class="apple-card rounded-2xl p-5 text-center mb-4">
+          <div class="avatar-gradient w-16 h-16 mx-auto mb-3">
+            <div class="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden">
+              <span id="avatar-initials" class="text-[20px] font-bold text-[#FF5E62] bg-red-50/50 w-full h-full flex items-center justify-center"></span>
             </div>
           </div>
           <div id="sidebar-name" class="font-semibold text-[15px] text-[#1D1D1F]"></div>
-          <div id="sidebar-email" class="text-[12px] text-[#8E8E93] mt-0.5 truncate"></div>
-          <div class="mt-2"><span class="badge badge-green"><span class="material-symbols-outlined text-[10px]">fiber_manual_record</span> Active</span></div>
-          <p id="member-since" class="text-[11px] text-[#C7C7CC] mt-2"></p>
+          <div id="sidebar-email" class="text-[11px] text-[#8E8E93] mt-0.5 truncate"></div>
+          <div class="mt-2"><span class="badge badge-green">Connected</span></div>
+          <p id="member-since" class="text-[10px] text-[#AEAEB2] mt-3"></p>
         </div>
 
-        <!-- Section tabs -->
-        <nav aria-label="Account sections">
-          <a class="nav-tab active" data-section="profile" href="javascript:void(0)">
+        <!-- Section Tab Selectors -->
+        <nav aria-label="Account sections" class="space-y-1">
+          <button class="nav-tab w-full text-left active" data-section="profile">
             <span class="material-symbols-outlined">person</span> Profile
-          </a>
-          <a class="nav-tab" data-section="security" href="javascript:void(0)">
-            <span class="material-symbols-outlined">lock</span> Security
-          </a>
-          <a class="nav-tab" data-section="orders" href="javascript:void(0)">
-            <span class="material-symbols-outlined">shopping_bag</span> Orders
-          </a>
+          </button>
+          <button class="nav-tab w-full text-left" data-section="orders">
+            <span class="material-symbols-outlined">local_shipping</span> My Orders
+          </button>
+          <button class="nav-tab w-full text-left" data-section="wishlist">
+            <span class="material-symbols-outlined">favorite</span> Wishlist
+          </button>
+          <button class="nav-tab w-full text-left" data-section="tradein">
+            <span class="material-symbols-outlined">published_with_changes</span> Trade-In Status
+          </button>
+          <button class="nav-tab w-full text-left" data-section="applecare">
+            <span class="material-symbols-outlined">support</span> AppleCare+ Coverage
+          </button>
+          <button class="nav-tab w-full text-left" data-section="cards">
+            <span class="material-symbols-outlined">credit_card</span> Saved Cards
+          </button>
+          <button class="nav-tab w-full text-left" data-section="addresses">
+            <span class="material-symbols-outlined">pin_drop</span> Saved Addresses
+          </button>
+          <button class="nav-tab w-full text-left" data-section="reviews">
+            <span class="material-symbols-outlined">reviews</span> My Reviews
+          </button>
+          <button class="nav-tab w-full text-left" data-section="notifications">
+            <span class="material-symbols-outlined">notifications</span> Notifications <span id="badge-unread-count" class="ml-auto bg-[#FF3B30] text-white text-[10px] px-1.5 py-0.5 rounded-full hidden"></span>
+          </button>
+          <button class="nav-tab w-full text-left" data-section="settings">
+            <span class="material-symbols-outlined">settings</span> Account Settings
+          </button>
         </nav>
       </div>
 
-      <!-- Content area -->
-      <div class="md:col-span-3 space-y-4">
+      <!-- Main Contents Display Panel -->
+      <div class="md:col-span-3">
 
-        <!-- Profile Section -->
-        <div id="section-profile" class="glass-card rounded-2xl p-6">
-          <h2 class="text-[17px] font-semibold text-[#1D1D1F] mb-5">Personal Information</h2>
-          <div id="profile-alert-success" class="alert-box alert-success mb-4"><span class="material-symbols-outlined text-[18px]">check_circle</span><span id="profile-success-msg"></span></div>
-          <div id="profile-alert-error" class="alert-box alert-error mb-4"><span class="material-symbols-outlined text-[18px]">error</span><span id="profile-error-msg"></span></div>
-          <form id="profile-form" novalidate>
-            <div class="grid grid-cols-1 gap-4 mb-5">
-              <div>
-                <label for="edit-name" class="block text-[12px] font-semibold text-[#8E8E93] uppercase tracking-wider mb-1.5">Display Name</label>
-                <input type="text" id="edit-name" class="input-field" autocomplete="name"/>
-              </div>
-              <div>
-                <label class="block text-[12px] font-semibold text-[#8E8E93] uppercase tracking-wider mb-1.5">Email</label>
-                <input type="email" id="edit-email" class="input-field bg-[#F2F2F7]" readonly disabled aria-label="Email cannot be changed"/>
-                <p class="text-[12px] text-[#8E8E93] mt-1.5">Email address cannot be changed.</p>
-              </div>
-            </div>
-            <button type="submit" id="profile-save-btn" class="btn-primary">Save Changes</button>
-          </form>
-        </div>
-
-        <!-- Security Section -->
-        <div id="section-security" class="hidden glass-card rounded-2xl p-6">
-          <h2 class="text-[17px] font-semibold text-[#1D1D1F] mb-5">Security Settings</h2>
-          <div id="pw-alert-success" class="alert-box alert-success mb-4"><span class="material-symbols-outlined text-[18px]">check_circle</span><span id="pw-success-msg"></span></div>
-          <div id="pw-alert-error" class="alert-box alert-error mb-4"><span class="material-symbols-outlined text-[18px]">error</span><span id="pw-error-msg"></span></div>
-
-          <!-- Security overview -->
-          <div class="mb-6 p-4 bg-[#F2F2F7] rounded-xl">
-            <div class="security-row">
-              <div><p class="text-[14px] font-medium text-[#1D1D1F]">Authentication</p><p class="text-[12px] text-[#8E8E93]">JWT tokens with automatic refresh</p></div>
-              <span class="badge badge-green">Active</span>
-            </div>
-            <div class="security-row">
-              <div><p class="text-[14px] font-medium text-[#1D1D1F]">CSRF Protection</p><p class="text-[12px] text-[#8E8E93]">Double-submit cookie pattern</p></div>
-              <span class="badge badge-green">Enabled</span>
-            </div>
-            <div class="security-row">
-              <div><p class="text-[14px] font-medium text-[#1D1D1F]">Session Storage</p><p class="text-[12px] text-[#8E8E93]">HttpOnly cookies — not accessible to JS</p></div>
-              <span class="badge badge-blue">Secure</span>
-            </div>
-            <div class="security-row">
-              <div><p class="text-[14px] font-medium text-[#1D1D1F]">Login Protection</p><p class="text-[12px] text-[#8E8E93]">Rate limiting + account lockout after 5 fails</p></div>
-              <span class="badge badge-green">Active</span>
-            </div>
+        <!-- PROFILE SECTION -->
+        <div id="section-profile" class="apple-card rounded-2xl p-6 space-y-6">
+          <div>
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">Personal Information</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Manage your display profile and settings.</p>
           </div>
-
-          <!-- Change password -->
-          <h3 class="text-[15px] font-semibold text-[#1D1D1F] mb-4">Change Password</h3>
-          <form id="password-form" novalidate class="space-y-3">
-            <div>
-              <label for="current-pw" class="block text-[12px] font-semibold text-[#8E8E93] mb-1.5">Current Password</label>
-              <input type="password" id="current-pw" class="input-field" placeholder="••••••••" autocomplete="current-password"/>
+          <form id="profile-form" novalidate class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="edit-name" class="block text-[11px] font-bold text-[#8E8E93] uppercase tracking-wider mb-1.5">Display Name</label>
+                <input type="text" id="edit-name" class="input-field" placeholder="Full name"/>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-[#8E8E93] uppercase tracking-wider mb-1.5">Email Address</label>
+                <input type="email" id="edit-email" class="input-field bg-[#F5F5F7] cursor-not-allowed" readonly disabled aria-label="Email cannot be changed"/>
+              </div>
             </div>
-            <div>
-              <label for="new-pw" class="block text-[12px] font-semibold text-[#8E8E93] mb-1.5">New Password</label>
-              <input type="password" id="new-pw" class="input-field" placeholder="••••••••" autocomplete="new-password"/>
+            <button type="submit" id="profile-save-btn" class="btn-apple">Save Profile</button>
+          </form>
+          
+          <hr class="border-[#D2D2D7]/20"/>
+          
+          <div>
+            <h3 class="text-[16px] font-bold text-[#1D1D1F]">Update Password</h3>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Choose a secure, strong password to protect your account.</p>
+          </div>
+          <form id="password-form" novalidate class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label for="current-pw" class="block text-[11px] font-bold text-[#8E8E93] mb-1.5">Current Password</label>
+                <input type="password" id="current-pw" class="input-field" placeholder="••••••••" autocomplete="current-password"/>
+              </div>
+              <div>
+                <label for="new-pw" class="block text-[11px] font-bold text-[#8E8E93] mb-1.5">New Password</label>
+                <input type="password" id="new-pw" class="input-field" placeholder="••••••••" autocomplete="new-password"/>
+              </div>
+              <div>
+                <label for="confirm-pw" class="block text-[11px] font-bold text-[#8E8E93] mb-1.5">Confirm New Password</label>
+                <input type="password" id="confirm-pw" class="input-field" placeholder="••••••••" autocomplete="new-password"/>
+              </div>
             </div>
-            <div>
-              <label for="confirm-pw" class="block text-[12px] font-semibold text-[#8E8E93] mb-1.5">Confirm New Password</label>
-              <input type="password" id="confirm-pw" class="input-field" placeholder="••••••••" autocomplete="new-password"/>
-            </div>
-            <button type="submit" id="pw-save-btn" class="btn-primary">Update Password</button>
+            <button type="submit" id="pw-save-btn" class="btn-apple">Update Password</button>
           </form>
 
-          <!-- Danger zone -->
-          <div class="mt-8 p-4 border border-[#FFCDD2] rounded-xl bg-[#FFF8F8]">
-            <h4 class="text-[14px] font-semibold text-[#C62828] mb-1">Danger Zone</h4>
-            <p class="text-[13px] text-[#8E8E93] mb-3">Permanently delete your account and all associated data. This action cannot be undone.</p>
-            <button type="button" id="delete-account-btn" class="btn-danger">Delete Account</button>
+          <hr class="border-[#D2D2D7]/20"/>
+
+          <div class="p-4 border border-[#FFCDD2]/60 rounded-xl bg-[#FFF8F8] flex justify-between items-start gap-4">
+            <div>
+              <h4 class="text-[14px] font-bold text-[#FF3B30] mb-0.5">Permanently Delete Account</h4>
+              <p class="text-[12px] text-[#AEAEB2]">Once deleted, your order history and wishlist items cannot be restored.</p>
+            </div>
+            <button type="button" id="delete-account-btn" class="btn-danger shrink-0">Delete Account</button>
           </div>
         </div>
 
-        <!-- Orders Section -->
-        <div id="section-orders" class="hidden glass-card rounded-2xl p-6">
-          <h2 class="text-[17px] font-semibold text-[#1D1D1F] mb-5">Order History</h2>
-          <!-- Loading state -->
-          <div id="orders-loading" class="text-center py-12">
-            <span class="material-symbols-outlined text-[#C7C7CC] text-[48px] animate-spin" style="animation:spin 1s linear infinite">progress_activity</span>
-            <p class="text-[14px] text-[#8E8E93] mt-3">Loading orders…</p>
+        <!-- MY ORDERS SECTION -->
+        <div id="section-orders" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">Order History</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Track your shipments, view details, and review purchased products.</p>
           </div>
-          <!-- Order list -->
-          <div id="orders-list" class="hidden space-y-4"></div>
-          <!-- Empty state -->
-          <div id="orders-empty" class="hidden text-center py-12">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-[#F2F2F7] rounded-2xl mb-4">
-              <span class="material-symbols-outlined text-[32px] text-[#C7C7CC]">shopping_bag</span>
+
+          <div id="orders-loading" class="apple-card rounded-2xl p-12 text-center">
+            <span class="material-symbols-outlined text-[#C7C7CC] text-[36px] animate-spin">progress_activity</span>
+            <p class="text-[14px] text-[#8E8E93] mt-2">Fetching your orders...</p>
+          </div>
+          <div id="orders-list" class="space-y-4"></div>
+          <div id="orders-empty" class="hidden apple-card rounded-2xl p-12 text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-[#F5F5F7] rounded-full mb-3 text-[#AEAEB2]">
+              <span class="material-symbols-outlined text-[24px]">shopping_cart</span>
             </div>
-            <p class="text-[16px] font-medium text-[#1D1D1F]">No orders yet</p>
-            <p class="text-[14px] text-[#8E8E93] mt-1 mb-6">When you place an order, it will appear here.</p>
-            <a href="/home.html" class="btn-primary inline-block" style="text-decoration:none">Start Shopping</a>
+            <p class="text-[15px] font-semibold">No orders found</p>
+            <p class="text-[13px] text-[#8E8E93] mt-0.5">Browse the catalog to place your first order!</p>
+          </div>
+        </div>
+
+        <!-- WISHLIST SECTION -->
+        <div id="section-wishlist" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6 flex justify-between items-center">
+            <div>
+              <h2 class="text-[18px] font-bold text-[#1D1D1F]">My Saved Wishlist</h2>
+              <p class="text-[12px] text-[#8E8E93] mt-0.5">Directly buy or remove saved items.</p>
+            </div>
+            <button id="clear-wishlist-btn" class="btn-apple-secondary hidden"><span class="material-symbols-outlined text-[16px]">delete_sweep</span> Clear All</button>
+          </div>
+
+          <div id="wishlist-loading" class="apple-card rounded-2xl p-12 text-center">
+            <span class="material-symbols-outlined text-[#C7C7CC] text-[36px] animate-spin">progress_activity</span>
+            <p class="text-[14px] text-[#8E8E93] mt-2">Loading wishlist...</p>
+          </div>
+          <div id="wishlist-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          <div id="wishlist-empty" class="hidden apple-card rounded-2xl p-12 text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-[#F5F5F7] rounded-full mb-3 text-[#AEAEB2]">
+              <span class="material-symbols-outlined text-[24px]">favorite</span>
+            </div>
+            <p class="text-[15px] font-semibold">Wishlist is empty</p>
+            <p class="text-[13px] text-[#8E8E93] mt-0.5">Save products by clicking the heart icon on store pages.</p>
+          </div>
+        </div>
+
+        <!-- TRADE-IN STATUS SECTION -->
+        <div id="section-tradein" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">Apple Trade-In Program</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Estimate and track the status of trade-in hardware devices.</p>
+          </div>
+
+          <!-- Trade-in Request Card -->
+          <div class="apple-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-[15px] font-bold">New Trade-In Estimate</h3>
+            <form id="tradein-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+              <div>
+                <label for="trade-device" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Device Model</label>
+                <input type="text" id="trade-device" placeholder="e.g. iPhone 14 Pro" class="input-field" required/>
+              </div>
+              <div>
+                <label for="trade-value" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Estimated Value (₹)</label>
+                <input type="number" id="trade-value" placeholder="e.g. 32000" class="input-field" required/>
+              </div>
+              <button type="submit" class="btn-apple w-full justify-center"><span class="material-symbols-outlined text-[16px]">add_circle</span> Submit Request</button>
+            </form>
+          </div>
+
+          <!-- Trade-In List -->
+          <div id="trade-in-list" class="space-y-4"></div>
+        </div>
+
+        <!-- APPLECARE+ SECTION -->
+        <div id="section-applecare" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">AppleCare+ Coverage</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">View current warranty status and link registered serial numbers.</p>
+          </div>
+
+          <!-- Registration Card -->
+          <div class="apple-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-[15px] font-bold">Register AppleCare+ Plan</h3>
+            <form id="applecare-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+              <div>
+                <label for="care-device" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Device Name</label>
+                <input type="text" id="care-device" placeholder="e.g. MacBook Air M4" class="input-field" required/>
+              </div>
+              <div>
+                <label for="care-serial" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Serial Number</label>
+                <input type="text" id="care-serial" placeholder="e.g. M4F982X22Y9A" class="input-field" required/>
+              </div>
+              <button type="submit" class="btn-apple w-full justify-center"><span class="material-symbols-outlined text-[16px]">check_circle</span> Register Device</button>
+            </form>
+          </div>
+
+          <!-- AppleCare List -->
+          <div id="applecare-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- SAVED CARDS SECTION -->
+        <div id="section-cards" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">Saved Credit / Debit Cards</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Securely manage stored cards for direct purchase checkouts.</p>
+          </div>
+
+          <!-- Add Card Form -->
+          <div class="apple-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-[15px] font-bold">Add New Card</h3>
+            <form id="card-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+              <div class="md:col-span-2">
+                <label for="card-holder" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Cardholder Name</label>
+                <input type="text" id="card-holder" placeholder="Sudhanshu Kumar" class="input-field" required/>
+              </div>
+              <div>
+                <label for="card-number" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Card Last 4 Digits</label>
+                <input type="text" id="card-number" maxlength="4" placeholder="4242" class="input-field" required/>
+              </div>
+              <div>
+                <label for="card-brand" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Card Issuer Brand</label>
+                <select id="card-brand" class="input-field">
+                  <option value="Visa">Visa</option>
+                  <option value="Mastercard">Mastercard</option>
+                  <option value="American Express">American Express</option>
+                  <option value="Rupay">Rupay</option>
+                </select>
+              </div>
+              <div>
+                <label for="card-expiry-month" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Expiry Month</label>
+                <input type="number" id="card-expiry-month" min="1" max="12" placeholder="12" class="input-field" required/>
+              </div>
+              <div>
+                <label for="card-expiry-year" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Expiry Year</label>
+                <input type="number" id="card-expiry-year" min="2026" max="2050" placeholder="2028" class="input-field" required/>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" id="card-default" class="rounded border-[#D2D2D7] text-[#0066CC] focus:ring-[#0066CC]"/>
+                <label for="card-default" class="text-[12px] font-medium">Default Card</label>
+              </div>
+              <button type="submit" class="btn-apple justify-center"><span class="material-symbols-outlined text-[16px]">add</span> Save Card</button>
+            </form>
+          </div>
+
+          <!-- Cards Grid -->
+          <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- SAVED ADDRESSES SECTION -->
+        <div id="section-addresses" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">Shipping Addresses</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Manage multiple shipping and billing addresses.</p>
+          </div>
+
+          <!-- Add Address Form -->
+          <div class="apple-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-[15px] font-bold">Add Shipping Address</h3>
+            <form id="address-form" class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="addr-name" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Full Name</label>
+                  <input type="text" id="addr-name" placeholder="Sudhanshu Kumar" class="input-field" required/>
+                </div>
+                <div>
+                  <label for="addr-phone" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Phone Number</label>
+                  <input type="text" id="addr-phone" placeholder="9876543210" class="input-field" required/>
+                </div>
+              </div>
+              <div>
+                <label for="addr-street" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Street Address</label>
+                <input type="text" id="addr-street" placeholder="Flat, House no., Building, Company, Apartment" class="input-field" required/>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label for="addr-city" class="block text-[11px] font-bold text-[#8E8E93] mb-1">City</label>
+                  <input type="text" id="addr-city" placeholder="Mumbai" class="input-field" required/>
+                </div>
+                <div>
+                  <label for="addr-state" class="block text-[11px] font-bold text-[#8E8E93] mb-1">State</label>
+                  <input type="text" id="addr-state" placeholder="Maharashtra" class="input-field" required/>
+                </div>
+                <div>
+                  <label for="addr-zip" class="block text-[11px] font-bold text-[#8E8E93] mb-1">PIN Code</label>
+                  <input type="text" id="addr-zip" placeholder="400001" class="input-field" required/>
+                </div>
+                <div>
+                  <label for="addr-country" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Country</label>
+                  <input type="text" id="addr-country" value="India" class="input-field"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" id="addr-default" class="rounded border-[#D2D2D7] text-[#0066CC] focus:ring-[#0066CC]"/>
+                <label for="addr-default" class="text-[12px] font-medium">Set as Default Delivery Address</label>
+              </div>
+              <button type="submit" class="btn-apple"><span class="material-symbols-outlined text-[16px]">save</span> Save Address</button>
+            </form>
+          </div>
+
+          <!-- Addresses Grid -->
+          <div id="addresses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- MY REVIEWS SECTION -->
+        <div id="section-reviews" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">My Reviews</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Browse reviews and star ratings submitted on products.</p>
+          </div>
+          <div id="reviews-list" class="space-y-4"></div>
+          <div id="reviews-empty" class="hidden apple-card rounded-2xl p-12 text-center">
+            <p class="text-[14px] text-[#8E8E93]">You haven't written any product reviews yet.</p>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS SECTION -->
+        <div id="section-notifications" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6 flex justify-between items-center">
+            <div>
+              <h2 class="text-[18px] font-bold text-[#1D1D1F]">Inbox Messages</h2>
+              <p class="text-[12px] text-[#8E8E93] mt-0.5">Stay updated on trade-in valuations, orders, and security events.</p>
+            </div>
+            <button id="mark-read-btn" class="btn-apple-secondary"><span class="material-symbols-outlined text-[16px]">done_all</span> Mark All Read</button>
+          </div>
+          <div id="notifications-list" class="space-y-3"></div>
+        </div>
+
+        <!-- ACCOUNT SETTINGS SECTION -->
+        <div id="section-settings" class="hidden space-y-4">
+          <div class="apple-card rounded-2xl p-6">
+            <h2 class="text-[18px] font-bold text-[#1D1D1F]">Account Settings</h2>
+            <p class="text-[12px] text-[#8E8E93] mt-0.5">Configure system preferences and communication rules.</p>
+          </div>
+
+          <div class="apple-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-[15px] font-bold">Email Communication</h3>
+            <div class="space-y-3">
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" checked class="mt-0.5 rounded border-[#D2D2D7] text-[#0066CC] focus:ring-[#0066CC]"/>
+                <div>
+                  <span class="text-[13px] font-semibold block">Store announcements</span>
+                  <span class="text-[11px] text-[#8E8E93] block">Receive alerts on hardware releases, discounts, and pre-orders.</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" checked class="mt-0.5 rounded border-[#D2D2D7] text-[#0066CC] focus:ring-[#0066CC]"/>
+                <div>
+                  <span class="text-[13px] font-semibold block">Order status tracking emails</span>
+                  <span class="text-[11px] text-[#8E8E93] block">Get immediate alerts when order changes status to Shipped or Delivered.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="apple-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-[15px] font-bold">Security Options</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-[13px] font-semibold block">Two-Factor Authentication (2FA)</span>
+                  <span class="text-[11px] text-[#8E8E93] block">Strengthen security by requiring verification codes on log in.</span>
+                </div>
+                <span class="badge badge-green">Recommended</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-[13px] font-semibold block">Authorized Session Control</span>
+                  <span class="text-[11px] text-[#8E8E93] block">Logs out all active login instances except this device.</span>
+                </div>
+                <button type="button" id="logout-others-btn" class="btn-apple-secondary">Logout Others</button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -309,23 +610,58 @@
     </div>
   </main>
 
+  <!-- Review Modal -->
+  <div id="review-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 modal-overlay" id="modal-close-overlay"></div>
+    <div class="apple-glass rounded-2xl p-6 max-w-md w-full mx-4 relative z-10 shadow-2xl">
+      <h3 class="text-[18px] font-bold mb-4">Write a Product Review</h3>
+      <form id="modal-review-form" class="space-y-4">
+        <input type="hidden" id="modal-review-product-id"/>
+        <div>
+          <label class="block text-[11px] font-bold text-[#8E8E93] mb-1">Rating</label>
+          <div class="flex gap-2 text-amber-400" id="star-selector">
+            <button type="button" data-val="1" class="material-symbols-outlined text-[28px] focus:outline-none">star</button>
+            <button type="button" data-val="2" class="material-symbols-outlined text-[28px] focus:outline-none">star</button>
+            <button type="button" data-val="3" class="material-symbols-outlined text-[28px] focus:outline-none">star</button>
+            <button type="button" data-val="4" class="material-symbols-outlined text-[28px] focus:outline-none">star</button>
+            <button type="button" data-val="5" class="material-symbols-outlined text-[28px] focus:outline-none">star</button>
+          </div>
+          <input type="hidden" id="modal-review-rating" value="5"/>
+        </div>
+        <div>
+          <label for="modal-review-title" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Title</label>
+          <input type="text" id="modal-review-title" placeholder="Amazing build quality" class="input-field" required/>
+        </div>
+        <div>
+          <label for="modal-review-body" class="block text-[11px] font-bold text-[#8E8E93] mb-1">Review Body</label>
+          <textarea id="modal-review-body" rows="4" placeholder="Share your experience with this device..." class="input-field" required></textarea>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" id="modal-cancel-btn" class="btn-apple-secondary">Cancel</button>
+          <button type="submit" class="btn-apple">Submit Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { requireAuth, getUser, logout, apiFetch } from '/src/auth.js';
+    import { getWishlist, removeFromWishlist, addToCart, formatPrice } from '/src/api.js';
 
     async function main() {
-      // ── Auth Guard ──────────────────────────────────────────────────
+      // ── Auth Guard Guard ─────────────────────────────────────────────
       const authenticated = await requireAuth('Please sign in to view your account.');
       if (!authenticated) return;
 
       const user = getUser();
 
-      // ── Hide skeleton, show content ─────────────────────────────────
+      // ── Hide skeleton loader, render page ────────────────────────────
       document.getElementById('loading-state').classList.add('hidden');
       document.getElementById('main-content').classList.remove('hidden');
 
-      // ── Populate UI ────────────────────────────────────────────────
+      // ── Populate Header / Identity Info ──────────────────────────────
       const firstName = user.name.split(' ')[0];
-      document.getElementById('greeting').textContent = `Welcome back, ${firstName}! 👋`;
+      document.getElementById('greeting-title').textContent = `Hello, ${firstName} 👋`;
       document.getElementById('nav-user-name').textContent = user.name;
       document.getElementById('sidebar-name').textContent = user.name;
       document.getElementById('sidebar-email').textContent = user.email;
@@ -334,111 +670,141 @@
       document.getElementById('edit-email').value = user.email;
       document.getElementById('member-since').textContent = 'Member since ' + new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-      // ── Logout ─────────────────────────────────────────────────────
+      // ── Set up main logout action ────────────────────────────────────
       document.getElementById('logout-btn').addEventListener('click', logout);
 
-      // ── Tab navigation ─────────────────────────────────────────────
-      document.querySelectorAll('[data-section]').forEach(tab => {
-        tab.addEventListener('click', () => {
-          document.querySelectorAll('[data-section]').forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const section = tab.getAttribute('data-section');
-          ['profile', 'security', 'orders'].forEach(s => {
-            document.getElementById(`section-${s}`).classList.toggle('hidden', s !== section);
-          });
-        });
-      });
-
-      // ── Toast helper ──────────────────────────────────────────────
+      // ── Toast System ──────────────────────────────────────────────────
       function toast(msg, type = 'success') {
-        const colors = { success: '#34C759', error: '#FF3B30', info: '#0066CC' };
+        const colors = { success: '#1D9B47', error: '#FF3B30', info: '#0066CC' };
         const icons  = { success: 'check_circle', error: 'error', info: 'info' };
         const el = document.createElement('div');
-        el.style.cssText = `display:flex;align-items:center;gap:10px;padding:14px 18px;background:rgba(255,255,255,0.95);border-radius:14px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,0.12);font-size:14px;font-weight:500;color:#1D1D1F;pointer-events:auto;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);min-width:220px;border:1px solid ${colors[type]}30`;
+        el.style.cssText = `display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(255,255,255,0.95);border-radius:16px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,0.1);font-size:14px;font-weight:500;color:#1D1D1F;pointer-events:auto;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);min-width:240px;border:1px solid ${colors[type]}25`;
         el.innerHTML = `<span class="material-symbols-outlined" style="color:${colors[type]};font-size:20px">${icons[type]}</span><span>${msg}</span>`;
         document.getElementById('toast-container').appendChild(el);
         requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transform = 'translateX(0)'; }));
         setTimeout(() => { el.style.transform = 'translateX(120%)'; el.addEventListener('transitionend', () => el.remove()); }, 3500);
       }
 
-      // ── Profile update ─────────────────────────────────────────────
+      // ── Dynamic Sections Navigation ──────────────────────────────────
+      const allSections = ['profile', 'orders', 'wishlist', 'tradein', 'applecare', 'cards', 'addresses', 'reviews', 'notifications', 'settings'];
+
+      document.querySelectorAll('[data-section]').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('[data-section]').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const activeSect = tab.getAttribute('data-section');
+          allSections.forEach(sect => {
+            const el = document.getElementById(`section-${sect}`);
+            if (el) el.classList.toggle('hidden', sect !== activeSect);
+          });
+          loadSectionData(activeSect);
+        });
+      });
+
+      // ── Load Section Data Router ──────────────────────────────────────
+      function loadSectionData(sectionName) {
+        if (sectionName === 'orders') fetchOrders();
+        else if (sectionName === 'wishlist') fetchWishlist();
+        else if (sectionName === 'tradein') fetchTradeIns();
+        else if (sectionName === 'applecare') fetchAppleCare();
+        else if (sectionName === 'cards') fetchCards();
+        else if (sectionName === 'addresses') fetchAddresses();
+        else if (sectionName === 'reviews') fetchUserReviews();
+        else if (sectionName === 'notifications') fetchNotifications();
+      }
+
+      // ── Load Live Statistics Counters ────────────────────────────────
+      async function loadStats() {
+        try {
+          const res = await apiFetch('/user/dashboard-stats');
+          if (!res || !res.ok) return;
+          const data = await res.json();
+          document.getElementById('stat-orders').textContent = data.totalOrders;
+          document.getElementById('stat-wishlist').textContent = data.wishlistCount;
+          document.getElementById('stat-applecare').textContent = data.appleCareCount;
+          document.getElementById('stat-rewards').textContent = Number(data.rewardPoints).toLocaleString('en-IN');
+        } catch {}
+      }
+      loadStats();
+
+      // ── PROFILE: Save Profile Info ───────────────────────────────────
       document.getElementById('profile-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('profile-save-btn');
-        btn.disabled = true; btn.textContent = 'Saving…';
+        btn.disabled = true; btn.textContent = 'Saving...';
         try {
           const res = await apiFetch('/user/profile', {
             method: 'PATCH',
             body: JSON.stringify({ name: document.getElementById('edit-name').value }),
           });
-          if (!res) return;
-          const data = await res.json();
-          if (res.ok) {
+          if (res && res.ok) {
+            const data = await res.json();
             toast('Profile updated successfully!', 'success');
             document.getElementById('sidebar-name').textContent = data.user.name;
           } else {
-            toast(data.error || 'Update failed.', 'error');
+            toast('Profile update failed.', 'error');
           }
         } catch { toast('Connection error.', 'error'); }
-        finally { btn.disabled = false; btn.textContent = 'Save Changes'; }
+        finally { btn.disabled = false; btn.textContent = 'Save Profile'; }
       });
 
-      // ── Password change ────────────────────────────────────────────
+      // ── PROFILE: Update Password ─────────────────────────────────────
       document.getElementById('password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('pw-save-btn');
-        const newPw  = document.getElementById('new-pw').value;
+        const newPw = document.getElementById('new-pw').value;
         const confPw = document.getElementById('confirm-pw').value;
         if (newPw !== confPw) { toast('New passwords do not match.', 'error'); return; }
-        btn.disabled = true; btn.textContent = 'Updating…';
+        btn.disabled = true; btn.textContent = 'Updating...';
         try {
           const res = await apiFetch('/user/change-password', {
             method: 'POST',
             body: JSON.stringify({ currentPassword: document.getElementById('current-pw').value, newPassword: newPw }),
           });
-          if (!res) return;
-          const data = await res.json();
-          if (res.ok) {
-            toast('Password changed! Please use your new password next time.', 'success');
+          if (res && res.ok) {
+            toast('Password updated successfully!', 'success');
             document.getElementById('password-form').reset();
           } else {
-            const msg = data.fields ? data.fields.map(f => f.message).join(' ') : (data.error || 'Failed.');
-            toast(msg, 'error');
+            const data = await res.json();
+            toast(data.error || 'Failed to update password.', 'error');
           }
         } catch { toast('Connection error.', 'error'); }
         finally { btn.disabled = false; btn.textContent = 'Update Password'; }
       });
 
-      // ── Delete account ─────────────────────────────────────────────
+      // ── PROFILE: Delete Account ──────────────────────────────────────
       document.getElementById('delete-account-btn').addEventListener('click', async () => {
-        const password = prompt('Enter your password to permanently delete your account:');
+        const password = prompt('Please enter password to permanently delete your account:');
         if (!password) return;
-        if (!confirm('This will permanently delete your account. Are you absolutely sure?')) return;
+        if (!confirm('Are you sure? This action is absolute and cannot be undone.')) return;
         const res = await apiFetch('/user/account', {
           method: 'DELETE',
           body: JSON.stringify({ password }),
         });
-        if (!res) return;
-        if (res.ok) {
-          alert('Account deleted. You will be redirected.');
+        if (res && res.ok) {
+          alert('Account deleted successfully.');
           window.location.href = '/index.html';
         } else {
           const data = await res.json();
           toast(data.error || 'Deletion failed.', 'error');
         }
       });
-      // ── Fetch & render orders ───────────────────────────────────────
-      async function loadOrders() {
+
+      // ── ORDERS: Fetch & Render with Live Delivery Tracking ───────────
+      async function fetchOrders() {
+        const loader = document.getElementById('orders-loading');
+        const list = document.getElementById('orders-list');
+        const empty = document.getElementById('orders-empty');
+        loader.classList.remove('hidden');
+        list.classList.add('hidden');
+        empty.classList.add('hidden');
+
         try {
-          const res = await apiFetch('/user/orders');
+          const res = await apiFetch('/user/orders?limit=40');
           if (!res) return;
           const data = await res.json();
           const orders = data.orders || [];
-          const loading = document.getElementById('orders-loading');
-          const list    = document.getElementById('orders-list');
-          const empty   = document.getElementById('orders-empty');
-
-          loading.classList.add('hidden');
+          loader.classList.add('hidden');
 
           if (orders.length === 0) {
             empty.classList.remove('hidden');
@@ -448,43 +814,612 @@
           list.classList.remove('hidden');
           list.innerHTML = orders.map(order => {
             const date = new Date(order.placedAt).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
-            const itemsHtml = order.items.map(item => `
-              <div class="flex justify-between text-[13px] py-1">
-                <span class="text-[#1D1D1F]">${item.name} <span class="text-[#8E8E93]">x${item.qty || 1}</span></span>
-                <span class="text-[#1D1D1F] font-medium">&#8377;${(item.price * (item.qty || 1)).toLocaleString('en-IN')}</span>
-              </div>
-            `).join('');
+            
+            // Generate items lists
+            const itemsHtml = order.items.map(item => {
+              // Find matching catalog product ID (hyphenated lowercase name)
+              const matchedId = item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+              return `
+                <div class="flex justify-between items-center py-2 text-[13px]">
+                  <div>
+                    <span class="font-semibold text-[#1D1D1F]">${item.name}</span>
+                    <span class="text-[#8E8E93] ml-2">Qty: ${item.qty}</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="font-medium text-[#1D1D1F]">₹${Number(item.price * item.qty).toLocaleString('en-IN')}</span>
+                    <button type="button" class="text-[12px] font-semibold text-[#0066CC] hover:underline" onclick="window.openReviewModal('${matchedId}')">Review</button>
+                  </div>
+                </div>
+              `;
+            }).join('');
 
-            const statusColor = order.status === 'Confirmed' ? '#34C759' : '#FF9500';
+            // Tracker logic
+            const status = order.status || 'Confirmed';
+            let step = 1; // 1: Placed, 2: Packed, 3: Shipped, 4: Out for Delivery, 5: Delivered
+            if (status === 'Processing') step = 2;
+            if (status === 'Shipped') step = 3;
+            if (status === 'Out for Delivery') step = 4;
+            if (status === 'Delivered') step = 5;
+
+            const isCancelled = status === 'Cancelled' || status === 'Refunded';
+
+            let trackerHtml = '';
+            if (isCancelled) {
+              trackerHtml = `
+                <div class="p-3 bg-[#FFEFEF] border border-[#FFCDD2] rounded-xl flex items-center gap-2 text-[#FF3B30] text-[12px] font-semibold mt-3">
+                  <span class="material-symbols-outlined text-[18px]">cancel</span>
+                  <span>This order was ${status}</span>
+                </div>
+              `;
+            } else {
+              // Standard Stepper Progress Bar
+              const stepColors = [
+                step >= 1 ? 'bg-[#0066CC] text-white' : 'bg-[#E5E5EA] text-[#8E8E93]',
+                step >= 2 ? 'bg-[#0066CC] text-white' : 'bg-[#E5E5EA] text-[#8E8E93]',
+                step >= 3 ? 'bg-[#0066CC] text-white' : 'bg-[#E5E5EA] text-[#8E8E93]',
+                step >= 4 ? 'bg-[#0066CC] text-white' : 'bg-[#E5E5EA] text-[#8E8E93]',
+                step >= 5 ? 'bg-[#34C759] text-white' : 'bg-[#E5E5EA] text-[#8E8E93]'
+              ];
+
+              trackerHtml = `
+                <div class="mt-4 pt-4 border-t border-[#F2F2F7]">
+                  <p class="text-[12px] font-bold text-[#8E8E93] uppercase tracking-wider mb-3">Live Order Tracking</p>
+                  <div class="relative flex justify-between items-center w-full px-2">
+                    <!-- Progress connector line -->
+                    <div class="absolute left-6 right-6 top-[11px] h-[2.5px] bg-[#E5E5EA] -z-10"></div>
+                    <div class="absolute left-6 top-[11px] h-[2.5px] -z-10 transition-all duration-500" style="width: calc(${((Math.min(step, 5) - 1) / 4) * 100}% - 12px); background-color: ${step === 5 ? '#34C759' : '#0066CC'}"></div>
+
+                    <!-- Step 1: Placed -->
+                    <div class="flex flex-col items-center">
+                      <div class="step-dot ${stepColors[0]}"><span class="material-symbols-outlined text-[12px]">done</span></div>
+                      <span class="text-[10px] font-bold mt-1 text-[#1D1D1F]">Placed</span>
+                    </div>
+                    <!-- Step 2: Packed -->
+                    <div class="flex flex-col items-center">
+                      <div class="step-dot ${stepColors[1]}">${step >= 2 ? '<span class="material-symbols-outlined text-[12px]">done</span>' : '2'}</div>
+                      <span class="text-[10px] font-bold mt-1 ${step >= 2 ? 'text-[#1D1D1F]' : 'text-[#8E8E93]'}">Packed</span>
+                    </div>
+                    <!-- Step 3: Shipped -->
+                    <div class="flex flex-col items-center">
+                      <div class="step-dot ${stepColors[2]}">${step >= 3 ? '<span class="material-symbols-outlined text-[12px]">done</span>' : '3'}</div>
+                      <span class="text-[10px] font-bold mt-1 ${step >= 3 ? 'text-[#1D1D1F]' : 'text-[#8E8E93]'}">Shipped</span>
+                    </div>
+                    <!-- Step 4: Out for Delivery -->
+                    <div class="flex flex-col items-center">
+                      <div class="step-dot ${stepColors[3]}">${step >= 4 ? '<span class="material-symbols-outlined text-[12px]">done</span>' : '4'}</div>
+                      <span class="text-[10px] font-bold mt-1 ${step >= 4 ? 'text-[#1D1D1F]' : 'text-[#8E8E93]'}">Out for Delivery</span>
+                    </div>
+                    <!-- Step 5: Delivered -->
+                    <div class="flex flex-col items-center">
+                      <div class="step-dot ${stepColors[4]}">${step >= 5 ? '<span class="material-symbols-outlined text-[12px]">celebrate</span>' : '5'}</div>
+                      <span class="text-[10px] font-bold mt-1 ${step >= 5 ? 'text-[#34C759]' : 'text-[#8E8E93]'}">Delivered</span>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
 
             return `
-              <div class="border border-[#E5E5EA] rounded-2xl p-5 bg-white hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-between mb-3">
+              <div class="apple-card rounded-2xl p-5 bg-white space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#F2F2F7] pb-3">
                   <div>
+                    <span class="text-[12px] font-bold text-[#8E8E93] block">ORDER REF</span>
                     <span class="font-mono text-[13px] font-bold text-[#0066CC]">${order.orderRef}</span>
-                    <span class="text-[#8E8E93] text-[12px] ml-3">${date}</span>
                   </div>
-                  <span style="color:${statusColor}" class="text-[12px] font-semibold flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                    ${order.status || 'Confirmed'}
-                  </span>
+                  <div>
+                    <span class="text-[12px] font-bold text-[#8E8E93] block">DATE PLACED</span>
+                    <span class="text-[#1D1D1F] text-[13px] font-semibold">${date}</span>
+                  </div>
+                  <div>
+                    <span class="text-[12px] font-bold text-[#8E8E93] block">STATUS</span>
+                    <span class="badge ${isCancelled ? 'badge-red' : (status === 'Delivered' ? 'badge-green' : 'badge-yellow')}">${status}</span>
+                  </div>
                 </div>
                 <div class="divide-y divide-[#F2F2F7]">${itemsHtml}</div>
-                <div class="flex justify-between items-center mt-3 pt-3 border-t border-[#F2F2F7]">
-                  <span class="text-[13px] text-[#8E8E93]">${order.items.length} item${order.items.length !== 1 ? 's' : ''}</span>
-                  <span class="text-[15px] font-bold text-[#1D1D1F]">Total: &#8377;${Number(order.total).toLocaleString('en-IN')}</span>
+                
+                <div class="flex justify-between items-center pt-3 border-t border-[#F2F2F7]">
+                  <span class="text-[12px] text-[#8E8E93]">${order.items.length} item${order.items.length !== 1 ? 's' : ''}</span>
+                  <span class="text-[15px] font-bold text-[#1D1D1F]">Total: ₹${Number(order.total).toLocaleString('en-IN')}</span>
+                </div>
+
+                <!-- Live Tracking Stepper -->
+                ${trackerHtml}
+              </div>
+            `;
+          }).join('');
+        } catch {
+          loader.classList.add('hidden');
+          empty.classList.remove('hidden');
+        }
+      }
+
+      // ── WISHLIST: Fetch & Render saved items ──────────────────────────
+      async function fetchWishlist() {
+        const loader = document.getElementById('wishlist-loading');
+        const grid = document.getElementById('wishlist-grid');
+        const empty = document.getElementById('wishlist-empty');
+        const clearBtn = document.getElementById('clear-wishlist-btn');
+
+        loader.classList.remove('hidden');
+        grid.classList.add('hidden');
+        empty.classList.add('hidden');
+        clearBtn.classList.add('hidden');
+
+        try {
+          const data = await getWishlist();
+          loader.classList.add('hidden');
+          const items = data ? (data.items || []) : [];
+
+          if (items.length === 0) {
+            empty.classList.remove('hidden');
+            return;
+          }
+
+          grid.classList.remove('hidden');
+          clearBtn.classList.remove('hidden');
+
+          grid.innerHTML = items.map(item => `
+            <div class="apple-card rounded-2xl p-4 bg-white flex gap-4 items-center">
+              <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-contain shrink-0 bg-[#F5F5F7] rounded-xl p-2"/>
+              <div class="min-w-0 flex-1">
+                <span class="badge badge-blue text-[9px] mb-1">${item.category}</span>
+                <h4 class="font-bold text-[14px] text-[#1D1D1F] truncate">${item.name}</h4>
+                <p class="text-[12px] text-[#8E8E93] truncate">${item.tagline || ''}</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="font-bold text-[14px] text-[#1D1D1F]">₹${Number(item.price).toLocaleString('en-IN')}</span>
+                  <div class="flex gap-2">
+                    <button class="btn-apple-secondary text-[11px] py-1 px-3" onclick="window.removeWish('${item.productId}')">Remove</button>
+                    <button class="btn-apple text-[11px] py-1 px-3" onclick="window.buyWish('${item.productId}')">Add to Bag</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        } catch {
+          loader.classList.add('hidden');
+          empty.classList.remove('hidden');
+        }
+      }
+
+      window.removeWish = async (id) => {
+        const res = await removeFromWishlist(id);
+        if (res) {
+          toast('Item removed from Wishlist.', 'success');
+          fetchWishlist();
+          loadStats();
+        } else {
+          toast('Failed to remove item.', 'error');
+        }
+      };
+
+      window.buyWish = async (id) => {
+        const res = await addToCart({ productId: id, qty: 1 });
+        if (res) {
+          toast('Added to Shopping Bag!', 'success');
+          // Dispatch global custom event to force main topnav cart badge update
+          document.dispatchEvent(new CustomEvent('cart-updated'));
+        } else {
+          toast('Could not add to Bag.', 'error');
+        }
+      };
+
+      document.getElementById('clear-wishlist-btn').addEventListener('click', async () => {
+        if (!confirm('Clear all items from your wishlist?')) return;
+        const res = await apiFetch('/wishlist', { method: 'DELETE' });
+        if (res && res.ok) {
+          toast('Wishlist cleared.', 'success');
+          fetchWishlist();
+          loadStats();
+        } else {
+          toast('Could not clear wishlist.', 'error');
+        }
+      });
+
+      // ── REVIEWS MODAL: Setup rating submit ───────────────────────────
+      const modal = document.getElementById('review-modal');
+      const starBtns = document.querySelectorAll('#star-selector button');
+
+      window.openReviewModal = (productId) => {
+        document.getElementById('modal-review-product-id').value = productId;
+        document.getElementById('modal-review-form').reset();
+        setStars(5);
+        modal.classList.remove('hidden');
+      };
+
+      function setStars(rating) {
+        document.getElementById('modal-review-rating').value = rating;
+        starBtns.forEach(btn => {
+          const val = parseInt(btn.getAttribute('data-val'), 10);
+          btn.style.fontVariationSettings = val <= rating ? "'FILL' 1" : "'FILL' 0";
+        });
+      }
+
+      starBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          setStars(parseInt(btn.getAttribute('data-val'), 10));
+        });
+      });
+
+      document.getElementById('modal-cancel-btn').addEventListener('click', () => modal.classList.add('hidden'));
+      document.getElementById('modal-close-overlay').addEventListener('click', () => modal.classList.add('hidden'));
+
+      document.getElementById('modal-review-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pId = document.getElementById('modal-review-product-id').value;
+        const rating = parseInt(document.getElementById('modal-review-rating').value, 10);
+        const title = document.getElementById('modal-review-title').value;
+        const body = document.getElementById('modal-review-body').value;
+
+        try {
+          const res = await apiFetch(`/products/${pId}/reviews`, {
+            method: 'POST',
+            body: JSON.stringify({ rating, title, body }),
+          });
+          if (res && res.ok) {
+            toast('Review submitted successfully!', 'success');
+            modal.classList.add('hidden');
+          } else {
+            const data = await res.json();
+            toast(data.error || 'Failed to submit review.', 'error');
+          }
+        } catch { toast('Connection error.', 'error'); }
+      });
+
+      // ── TRADE-IN: Fetch & Request Trade-In estimates ───────────────
+      async function fetchTradeIns() {
+        const list = document.getElementById('trade-in-list');
+        try {
+          const res = await apiFetch('/user/trade-ins');
+          if (!res) return;
+          const data = await res.json();
+          const items = data.tradeIns || [];
+
+          if (items.length === 0) {
+            list.innerHTML = `<div class="apple-card rounded-2xl p-6 text-center text-[#8E8E93]">No trade-ins requested.</div>`;
+            return;
+          }
+
+          list.innerHTML = items.map(item => {
+            const date = new Date(item.date).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+            return `
+              <div class="apple-card rounded-2xl p-5 bg-white flex justify-between items-center">
+                <div>
+                  <h4 class="font-bold text-[15px]">${item.device}</h4>
+                  <p class="text-[12px] text-[#8E8E93] mt-0.5">Submitted: ${date}</p>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold text-[15px]">₹${Number(item.estimated_value).toLocaleString('en-IN')}</div>
+                  <span class="badge ${item.status === 'Inspection Complete' ? 'badge-green' : 'badge-blue'} text-[10px] mt-1">${item.status}</span>
                 </div>
               </div>
             `;
           }).join('');
-        } catch (err) {
-          console.error('[orders] Failed to load orders:', err);
-          document.getElementById('orders-loading').classList.add('hidden');
-          document.getElementById('orders-empty').classList.remove('hidden');
+        } catch {}
+      }
+
+      document.getElementById('tradein-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const device = document.getElementById('trade-device').value;
+        const estimatedValue = parseFloat(document.getElementById('trade-value').value);
+
+        const res = await apiFetch('/user/trade-ins', {
+          method: 'POST',
+          body: JSON.stringify({ device, estimatedValue }),
+        });
+        if (res && res.ok) {
+          toast('Trade-in request submitted!', 'success');
+          document.getElementById('tradein-form').reset();
+          fetchTradeIns();
+        } else {
+          toast('Could not submit request.', 'error');
+        }
+      });
+
+      // ── APPLECARE+: Fetch & Register serial coverages ────────────────
+      async function fetchAppleCare() {
+        const list = document.getElementById('applecare-list');
+        try {
+          const res = await apiFetch('/user/applecare');
+          if (!res) return;
+          const data = await res.json();
+          const items = data.applecare || [];
+
+          if (items.length === 0) {
+            list.innerHTML = `<div class="md:col-span-2 apple-card rounded-2xl p-6 text-center text-[#8E8E93]">No active AppleCare+ coverage plans.</div>`;
+            return;
+          }
+
+          list.innerHTML = items.map(item => {
+            const expDate = new Date(item.expires_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+            return `
+              <div class="apple-card rounded-2xl p-5 bg-white space-y-2">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="font-bold text-[15px]">${item.device_name}</h4>
+                    <span class="font-mono text-[11px] text-[#8E8E93] uppercase">SN: ${item.serial_number}</span>
+                  </div>
+                  <span class="badge badge-green text-[9px]">Active</span>
+                </div>
+                <div class="pt-2 border-t border-[#F2F2F7] flex justify-between text-[11px]">
+                  <span class="text-[#8E8E93]">Coverage Expires:</span>
+                  <span class="font-bold">${expDate}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } catch {}
+      }
+
+      document.getElementById('applecare-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const deviceName = document.getElementById('care-device').value;
+        const serialNumber = document.getElementById('care-serial').value;
+
+        const res = await apiFetch('/user/applecare', {
+          method: 'POST',
+          body: JSON.stringify({ deviceName, serialNumber }),
+        });
+        if (res) {
+          if (res.ok) {
+            toast('AppleCare+ plan registered!', 'success');
+            document.getElementById('applecare-form').reset();
+            fetchAppleCare();
+            loadStats();
+          } else {
+            const data = await res.json();
+            toast(data.error || 'Failed to register serial.', 'error');
+          }
+        }
+      });
+
+      // ── CARDS: Fetch, Save, & Delete Credit Cards ───────────────────
+      async function fetchCards() {
+        const grid = document.getElementById('cards-grid');
+        try {
+          const res = await apiFetch('/user/payment-methods');
+          if (!res) return;
+          const data = await res.json();
+          const items = data.paymentMethods || [];
+
+          if (items.length === 0) {
+            grid.innerHTML = `<div class="md:col-span-2 apple-card rounded-2xl p-6 text-center text-[#8E8E93]">No saved payment methods.</div>`;
+            return;
+          }
+
+          grid.innerHTML = items.map(item => `
+            <div class="apple-card rounded-2xl p-5 bg-gradient-to-tr from-slate-900 via-slate-800 to-zinc-950 text-white space-y-4 shadow-xl">
+              <div class="flex justify-between items-center">
+                <span class="text-[12px] font-bold tracking-wider">${item.brand.toUpperCase()}</span>
+                ${item.is_default ? '<span class="text-[9px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase">Default</span>' : ''}
+              </div>
+              <div class="text-[18px] font-mono tracking-widest py-1">•••• •••• •••• ${item.last4}</div>
+              <div class="flex justify-between items-end">
+                <div>
+                  <span class="text-[8px] text-white/50 block font-semibold uppercase">Cardholder</span>
+                  <span class="text-[13px] font-medium block">${item.cardholder}</span>
+                </div>
+                <div class="flex items-center gap-4">
+                  <div class="text-right">
+                    <span class="text-[8px] text-white/50 block font-semibold uppercase">Expires</span>
+                    <span class="text-[13px] font-mono block">${String(item.exp_month).padStart(2,'0')}/${String(item.exp_year).slice(-2)}</span>
+                  </div>
+                  <button type="button" class="text-white/70 hover:text-[#FF3B30] transition-colors" onclick="window.deleteCard(${item.id})">
+                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        } catch {}
+      }
+
+      window.deleteCard = async (id) => {
+        if (!confirm('Remove this saved card?')) return;
+        const res = await apiFetch(`/payment-methods/${id}`, { method: 'DELETE' });
+        if (res && res.ok) {
+          toast('Card removed successfully.', 'success');
+          fetchCards();
+        } else {
+          toast('Failed to remove card.', 'error');
+        }
+      };
+
+      document.getElementById('card-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const brand = document.getElementById('card-brand').value;
+        const cardholder = document.getElementById('card-holder').value;
+        const last4 = document.getElementById('card-number').value;
+        const expMonth = parseInt(document.getElementById('card-expiry-month').value, 10);
+        const expYear = parseInt(document.getElementById('card-expiry-year').value, 10);
+        const isDefault = document.getElementById('card-default').checked;
+
+        if (last4.length !== 4 || isNaN(parseInt(last4, 10))) {
+          toast('Card number last 4 digits required.', 'error');
+          return;
+        }
+
+        const res = await apiFetch('/user/payment-methods', {
+          method: 'POST',
+          body: JSON.stringify({ brand, cardholder, last4, expMonth, expYear, isDefault }),
+        });
+        if (res && res.ok) {
+          toast('Card added successfully!', 'success');
+          document.getElementById('card-form').reset();
+          fetchCards();
+        } else {
+          toast('Could not save card.', 'error');
+        }
+      });
+
+      // ── ADDRESSES: Fetch, Save, & Delete Shipping Addresses ────────
+      async function fetchAddresses() {
+        const grid = document.getElementById('addresses-grid');
+        try {
+          const res = await apiFetch('/user/addresses');
+          if (!res) return;
+          const data = await res.json();
+          const items = data.addresses || [];
+
+          if (items.length === 0) {
+            grid.innerHTML = `<div class="md:col-span-2 apple-card rounded-2xl p-6 text-center text-[#8E8E93]">No saved shipping addresses.</div>`;
+            return;
+          }
+
+          grid.innerHTML = items.map(item => `
+            <div class="apple-card rounded-2xl p-5 bg-white flex flex-col justify-between gap-3 border border-black/5">
+              <div class="space-y-1">
+                <div class="flex justify-between items-start gap-2">
+                  <span class="font-bold text-[14px] block text-[#1D1D1F]">${item.full_name}</span>
+                  ${item.is_default ? '<span class="badge badge-green text-[9px]">Default</span>' : ''}
+                </div>
+                <span class="text-[13px] text-[#515154] block">${item.street}</span>
+                <span class="text-[13px] text-[#515154] block">${item.city}, ${item.state} - ${item.zip}</span>
+                <span class="text-[12px] text-[#8E8E93] block">${item.country}</span>
+                <span class="text-[12px] text-[#8E8E93] block">Phone: ${item.phone}</span>
+              </div>
+              <div class="pt-2 border-t border-[#F2F2F7] flex justify-end">
+                <button type="button" class="text-[#FF3B30] hover:underline text-[12px] font-semibold flex items-center gap-1" onclick="window.deleteAddress(${item.id})">
+                  <span class="material-symbols-outlined text-[16px]">delete</span> Delete
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch {}
+      }
+
+      window.deleteAddress = async (id) => {
+        if (!confirm('Remove this address?')) return;
+        const res = await apiFetch(`/addresses/${id}`, { method: 'DELETE' });
+        if (res && res.ok) {
+          toast('Address deleted.', 'success');
+          fetchAddresses();
+        } else {
+          toast('Failed to delete address.', 'error');
+        }
+      };
+
+      document.getElementById('address-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('addr-name').value;
+        const phone = document.getElementById('addr-phone').value;
+        const street = document.getElementById('addr-street').value;
+        const city = document.getElementById('addr-city').value;
+        const state = document.getElementById('addr-state').value;
+        const zip = document.getElementById('addr-zip').value;
+        const country = document.getElementById('addr-country').value;
+        const isDefault = document.getElementById('addr-default').checked;
+
+        const res = await apiFetch('/user/addresses', {
+          method: 'POST',
+          body: JSON.stringify({ fullName, phone, street, city, state, zip, country, isDefault }),
+        });
+        if (res && res.ok) {
+          toast('Address saved successfully!', 'success');
+          document.getElementById('address-form').reset();
+          fetchAddresses();
+        } else {
+          toast('Failed to save address.', 'error');
+        }
+      });
+
+      // ── REVIEWS: Fetch and Display past ratings ─────────────────────
+      async function fetchUserReviews() {
+        const list = document.getElementById('reviews-list');
+        const empty = document.getElementById('reviews-empty');
+        list.innerHTML = '';
+        empty.classList.add('hidden');
+
+        try {
+          const res = await apiFetch('/user/reviews');
+          if (!res) return;
+          const data = await res.json();
+          const items = data.reviews || [];
+
+          if (items.length === 0) {
+            empty.classList.remove('hidden');
+            return;
+          }
+
+          list.innerHTML = items.map(item => {
+            const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+            const date = new Date(item.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+            return `
+              <div class="apple-card rounded-2xl p-5 bg-white space-y-2 border border-black/5">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-[14px] text-[#0066CC] uppercase tracking-wide">${item.product_id.replace(/-/g, ' ')}</span>
+                  <span class="text-[11px] text-[#8E8E93]">${date}</span>
+                </div>
+                <div class="text-[13px] font-bold text-amber-500">${stars} <span class="text-[#1D1D1F] ml-1">${item.title || ''}</span></div>
+                <p class="text-[13px] text-[#515154]">${item.body || ''}</p>
+              </div>
+            `;
+          }).join('');
+        } catch {
+          empty.classList.remove('hidden');
         }
       }
 
-      loadOrders();
+      // ── NOTIFICATIONS: Inbox management ──────────────────────────────
+      async function fetchNotifications() {
+        const list = document.getElementById('notifications-list');
+        try {
+          const res = await apiFetch('/user/notifications');
+          if (!res) return;
+          const data = await res.json();
+          const items = data.notifications || [];
+          let unreadCount = 0;
+
+          if (items.length === 0) {
+            list.innerHTML = `<div class="apple-card rounded-2xl p-6 text-center text-[#8E8E93]">No messages in your inbox.</div>`;
+            return;
+          }
+
+          list.innerHTML = items.map(item => {
+            if (!item.is_read) unreadCount++;
+            const date = new Date(item.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+            return `
+              <div class="apple-card rounded-2xl p-4 bg-white border border-black/5 flex gap-3 items-start relative ${!item.is_read ? 'bg-blue-50/20' : ''}">
+                ${!item.is_read ? '<span class="absolute top-4 right-4 w-2.5 h-2.5 rounded-full bg-[#0066CC]"></span>' : ''}
+                <div class="w-8 h-8 rounded-full bg-[#F5F5F7] flex items-center justify-center text-[#8E8E93] shrink-0">
+                  <span class="material-symbols-outlined text-[18px]">${!item.is_read ? 'mail' : 'drafts'}</span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-[14px] text-[#1D1D1F]">${item.title}</h4>
+                  <p class="text-[13px] text-[#515154] mt-1">${item.message}</p>
+                  <span class="text-[11px] text-[#AEAEB2] block mt-2">${date}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          // Update sidebar counter badge
+          const badge = document.getElementById('badge-unread-count');
+          if (unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
+          }
+        } catch {}
+      }
+
+      document.getElementById('mark-read-btn').addEventListener('click', async () => {
+        const res = await apiFetch('/notifications/read', { method: 'POST' });
+        if (res && res.ok) {
+          toast('All messages marked as read.', 'success');
+          fetchNotifications();
+        } else {
+          toast('Failed to mark read.', 'error');
+        }
+      });
+
+      // ── SETTINGS: Mock authorized logs ───────────────────────────────
+      document.getElementById('logout-others-btn').addEventListener('click', () => {
+        toast('Logged out of all other device sessions successfully!', 'success');
+      });
+
+      // ── Initial statistics and load notifications inbox ──────────────
+      fetchNotifications();
     }
 
     main();

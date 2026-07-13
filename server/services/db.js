@@ -106,6 +106,62 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_wishlist_user ON wishlist(user_id);
+
+  CREATE TABLE IF NOT EXISTS addresses (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    full_name  TEXT NOT NULL,
+    phone      TEXT NOT NULL,
+    street     TEXT NOT NULL,
+    city       TEXT NOT NULL,
+    state      TEXT NOT NULL,
+    zip        TEXT NOT NULL,
+    country    TEXT NOT NULL DEFAULT 'India',
+    is_default INTEGER NOT NULL DEFAULT 0
+  );
+  CREATE INDEX IF NOT EXISTS idx_addresses_user ON addresses(user_id);
+
+  CREATE TABLE IF NOT EXISTS payment_methods (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    brand      TEXT NOT NULL,
+    cardholder TEXT NOT NULL,
+    last4      TEXT NOT NULL,
+    exp_month  INTEGER NOT NULL,
+    exp_year   INTEGER NOT NULL,
+    is_default INTEGER NOT NULL DEFAULT 0
+  );
+  CREATE INDEX IF NOT EXISTS idx_payment_user ON payment_methods(user_id);
+
+  CREATE TABLE IF NOT EXISTS trade_ins (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id         TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    device          TEXT NOT NULL,
+    estimated_value REAL NOT NULL,
+    status          TEXT NOT NULL DEFAULT 'Estimated',
+    date            TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_trade_user ON trade_ins(user_id);
+
+  CREATE TABLE IF NOT EXISTS applecare (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id       TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    device_name   TEXT NOT NULL,
+    serial_number TEXT NOT NULL UNIQUE,
+    expires_at    TEXT NOT NULL,
+    status        TEXT NOT NULL DEFAULT 'Active'
+  );
+  CREATE INDEX IF NOT EXISTS idx_applecare_user ON applecare(user_id);
+
+  CREATE TABLE IF NOT EXISTS notifications (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title      TEXT NOT NULL,
+    message    TEXT NOT NULL,
+    is_read    INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
 `);
 
 // ─── JSON → SQLite Migration (runs once on first startup) ─────────────
