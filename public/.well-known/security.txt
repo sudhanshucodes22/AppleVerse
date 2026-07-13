@@ -1,0 +1,6 @@
+Contact: mailto:security@appleverse.example.com
+Expires: 2027-12-31T23:59:59.000Z
+Encryption: https://appleverse.example.com/pgp-key.txt
+Acknowledgements: https://appleverse.example.com/security/hall-of-fame
+Preferred-Languages: en
+Policy: https://appleverse.example.com/security-policy

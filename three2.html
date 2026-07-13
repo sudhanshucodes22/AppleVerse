@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_5 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_5" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_5');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+container.appendChild(renderer.domElement);
+
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(0, 10, 10);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+// AirPods Case
+const caseGroup = new THREE.Group();
+const caseGeom = new THREE.BoxGeometry(1.5, 1.8, 0.8);
+const caseMat = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 100 });
+const caseBody = new THREE.Mesh(caseGeom, caseMat);
+caseGroup.add(caseBody);
+
+const lid = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.4, 0.8), caseMat);
+lid.position.y = 0.9;
+lid.rotation.x = 0;
+caseGroup.add(lid);
+
+// Buds
+const budGeom = new THREE.SphereGeometry(0.3, 32, 32);
+const budMat = new THREE.MeshPhongMaterial({ color: 0xffffff });
+const bud1 = new THREE.Mesh(budGeom, budMat);
+const bud2 = new THREE.Mesh(budGeom, budMat);
+bud1.position.set(-0.4, 0.6, 0);
+bud2.position.set(0.4, 0.6, 0);
+caseGroup.add(bud1);
+caseGroup.add(bud2);
+
+scene.add(caseGroup);
+camera.position.z = 6;
+
+let scrollY = 0;
+window.addEventListener('scroll', () => {
+    scrollY = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+    const time = performance.now() * 0.001;
+
+    if (scrollY > 0.75) {
+        caseGroup.visible = true;
+        const p = (scrollY - 0.75) / 0.25;
+        
+        caseGroup.position.y = -5 + (p * 5);
+        caseGroup.rotation.y = time * 0.5;
+        
+        // Open lid and lift buds
+        lid.rotation.x = -p * Math.PI * 0.7;
+        bud1.position.y = 0.6 + p * 2;
+        bud2.position.y = 0.6 + p * 2.5;
+        bud1.rotation.z = p * Math.PI;
+    } else {
+        caseGroup.visible = false;
+    }
+
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_5 -->
+</body>
+</html>

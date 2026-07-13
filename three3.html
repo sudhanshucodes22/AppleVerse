@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+container.appendChild(renderer.domElement);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
+
+const blueLight = new THREE.PointLight(0x5E5CE6, 2, 10);
+blueLight.position.set(-2, 2, 2);
+scene.add(blueLight);
+
+// iPhone 17 - Titanium Body
+const iphone = new THREE.Group();
+const bodyGeom = new THREE.BoxGeometry(2, 4, 0.2);
+const bodyMat = new THREE.MeshStandardMaterial({ 
+    color: 0x888888, 
+    metalness: 0.9, 
+    roughness: 0.1 
+});
+const body = new THREE.Mesh(bodyGeom, bodyMat);
+iphone.add(body);
+
+// Exploded View Components
+const screen = new THREE.Mesh(new THREE.BoxGeometry(1.9, 3.9, 0.05), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+screen.position.z = 0.15;
+iphone.add(screen);
+
+scene.add(iphone);
+
+camera.position.z = 8;
+
+let scrollY = 0;
+window.addEventListener('scroll', () => {
+    scrollY = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+    const time = performance.now() * 0.001;
+    
+    // Show only when in view
+    if (scrollY > 0.4 && scrollY < 0.8) {
+        iphone.visible = true;
+        const p = (scrollY - 0.4) / 0.4;
+        
+        iphone.position.y = -5 + (p * 5);
+        iphone.rotation.y = p * Math.PI * 4;
+        
+        // Explode effect
+        screen.position.z = 0.15 + (p * 1.5);
+        body.scale.set(1 - p*0.2, 1 - p*0.2, 1);
+    } else {
+        iphone.visible = false;
+    }
+
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+</body>
+</html>

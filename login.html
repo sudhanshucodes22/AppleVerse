@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Sign In — AppleVerse</title>
+  <meta name="description" content="Sign in to your AppleVerse account to track orders and manage your profile."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet"/>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #FAFAFA; }
+
+    .glass-form {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: saturate(180%) blur(28px);
+      -webkit-backdrop-filter: saturate(180%) blur(28px);
+      border: 1px solid rgba(210,210,215,0.4);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.9);
+      border: 1.5px solid #D2D2D7;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #1D1D1F;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus {
+      border-color: #0066CC;
+      box-shadow: 0 0 0 3px rgba(0,102,204,0.12);
+    }
+    .input-field.error {
+      border-color: #FF3B30;
+      box-shadow: 0 0 0 3px rgba(255,59,48,0.12);
+    }
+    .input-field.success {
+      border-color: #34C759;
+    }
+    .input-wrapper { position: relative; }
+    .input-icon {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 20px; color: #8E8E93; cursor: pointer; user-select: none;
+    }
+
+    .btn-primary {
+      width: 100%; padding: 15px;
+      background: #0066CC; color: white;
+      border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary:hover { background: #0056b3; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { background: #D2D2D7; cursor: not-allowed; transform: none; }
+
+    .error-msg { color: #FF3B30; font-size: 12px; margin-top: 5px; display: none; }
+    .error-msg.show { display: block; }
+
+    .alert-box {
+      padding: 12px 16px; border-radius: 10px; font-size: 14px;
+      display: none; align-items: center; gap: 10px;
+    }
+    .alert-box.show { display: flex; }
+    .alert-error { background: #FFF2F2; border: 1px solid #FFCDD2; color: #C62828; }
+    .alert-success { background: #F1FFF4; border: 1px solid #C8E6C9; color: #2E7D32; }
+    .alert-warning { background: #FFF8E1; border: 1px solid #FFE082; color: #E65100; }
+
+    /* Attempt counter bar */
+    .attempt-bar { height: 3px; border-radius: 2px; background: #E5E5EA; overflow: hidden; }
+    .attempt-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease, background 0.4s ease; width: 0; }
+
+    /* Background blobs */
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(80px);
+      animation: drift 12s ease-in-out infinite alternate; z-index: -1;
+    }
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.05); }
+    }
+
+    .divider { display: flex; align-items: center; gap: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #E5E5EA; }
+  </style>
+</head>
+<body>
+  <!-- Background blobs -->
+  <div class="blob w-[500px] h-[500px] bg-blue-200/30 top-[-100px] right-[-100px]" style="animation-delay:0s"></div>
+  <div class="blob w-[400px] h-[400px] bg-purple-200/20 bottom-[-80px] left-[-80px]" style="animation-delay:3s"></div>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-8 py-4 flex items-center justify-between border-b border-[#D2D2D7]/20 bg-white/60 backdrop-blur-xl">
+    <a href="/index.html" class="flex items-center gap-3">
+      <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-10 w-auto object-contain">
+      <div class="flex flex-col leading-none">
+        <span class="font-bold text-[19px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
+        <span class="text-[9px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
+      </div>
+    </a>
+    <div class="flex items-center gap-4">
+      <span class="text-[13px] text-[#8E8E93] hidden sm:inline">New to AppleVerse?</span>
+      <a href="/signup.html" class="text-[13px] font-semibold text-[#0066CC] hover:underline" style="text-decoration: none;">Create Account</a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="min-h-screen flex items-center justify-center px-4 pt-16">
+    <div class="w-full max-w-[420px]">
+
+      <!-- Header -->
+      <div class="text-center mb-8 flex flex-col items-center">
+        <img src="/images/appleverse_logo.png" alt="AppleVerse Logo" class="h-24 w-auto object-contain mb-3">
+        <h1 class="text-[28px] font-bold text-[#1D1D1F] tracking-tight">AppleVerse</h1>
+        <p class="text-[11px] uppercase tracking-widest text-[#8E8E93] font-semibold mb-2">Digital Store</p>
+        <p class="text-[15px] text-[#8E8E93]">Sign in to your account to continue</p>
+      </div>
+
+      <!-- Flash message from URL -->
+      <div id="alert-flash" class="alert-box alert-warning mb-4" role="alert" aria-live="polite">
+        <span class="material-symbols-outlined text-[18px]">info</span>
+        <span id="alert-flash-msg"></span>
+      </div>
+
+      <!-- Form Card -->
+      <div class="glass-form rounded-[24px] shadow-2xl shadow-black/8 p-8">
+
+        <!-- Error Alert -->
+        <div id="alert-error" class="alert-box alert-error mb-5" role="alert" aria-live="assertive">
+          <span class="material-symbols-outlined text-[18px] flex-shrink-0">error</span>
+          <span id="alert-error-msg">Invalid email or password.</span>
+        </div>
+
+        <form id="login-form" novalidate>
+          <!-- Email -->
+          <div class="mb-4">
+            <label for="email" class="block text-[13px] font-semibold text-[#1D1D1F] mb-2">Email</label>
+            <div class="input-wrapper">
+              <input type="email" id="email" name="email" autocomplete="email"
+                class="input-field" placeholder="you@example.com"
+                required aria-describedby="email-error"/>
+              <span class="material-symbols-outlined input-icon" aria-hidden="true">mail</span>
+            </div>
+            <p class="error-msg" id="email-error" role="alert"></p>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-5">
+            <div class="flex justify-between items-center mb-2">
+              <label for="password" class="block text-[13px] font-semibold text-[#1D1D1F]">Password</label>
+              <a href="#" class="text-[12px] text-[#0066CC] hover:underline" tabindex="0">Forgot password?</a>
+            </div>
+            <div class="input-wrapper">
+              <input type="password" id="password" name="password" autocomplete="current-password"
+                class="input-field pr-12" placeholder="Your password"
+                required aria-describedby="password-error"/>
+              <button type="button" id="toggle-pw" class="input-icon focus:outline-none"
+                aria-label="Toggle password visibility" tabindex="0">
+                <span class="material-symbols-outlined" id="pw-icon">visibility_off</span>
+              </button>
+            </div>
+            <p class="error-msg" id="password-error" role="alert"></p>
+          </div>
+
+          <!-- Failed attempts warning -->
+          <div id="attempt-section" class="hidden mb-4">
+            <div class="attempt-bar mb-1">
+              <div id="attempt-fill" class="attempt-fill"></div>
+            </div>
+            <p id="attempt-text" class="text-[12px] text-[#FF9500]"></p>
+          </div>
+
+          <!-- Remember me -->
+          <div class="flex items-center gap-2 mb-6">
+            <input type="checkbox" id="remember" name="remember"
+              class="w-4 h-4 rounded border-gray-300 text-[#0066CC] focus:ring-[#0066CC]"/>
+            <label for="remember" class="text-[13px] text-[#3A3A3C]">Keep me signed in for 7 days</label>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="submit-btn" class="btn-primary" aria-label="Sign in to your account">
+            <span id="btn-text">Sign In</span>
+            <span id="btn-spinner" class="hidden">
+              <svg class="animate-spin inline w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
+              Signing in…
+            </span>
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider my-6 text-[12px] text-[#8E8E93]">or</div>
+
+        <!-- Sign up link -->
+        <p class="text-center text-[14px] text-[#3A3A3C]">
+          Don't have an account?
+          <a href="/signup.html" class="text-[#0066CC] font-semibold hover:underline ml-1">Create Account</a>
+        </p>
+      </div>
+
+      <!-- Security badge -->
+      <div class="flex items-center justify-center gap-2 mt-6 text-[12px] text-[#8E8E93]">
+        <span class="material-symbols-outlined text-[14px]">shield</span>
+        <span>Protected by JWT + CSRF + rate limiting</span>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { login, redirectIfAuthenticated } from '/src/auth.js';
+
+    // Redirect if already logged in
+    redirectIfAuthenticated('/home.html');
+
+    // Show URL message
+    const msg = new URLSearchParams(location.search).get('msg');
+    if (msg) {
+      document.getElementById('alert-flash').classList.add('show');
+      document.getElementById('alert-flash-msg').textContent = msg;
+    }
+
+    const form       = document.getElementById('login-form');
+    const submitBtn  = document.getElementById('submit-btn');
+    const btnText    = document.getElementById('btn-text');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const alertError = document.getElementById('alert-error');
+    const alertMsg   = document.getElementById('alert-error-msg');
+
+    let failedAttempts = 0;
+    const MAX_CLIENT_ATTEMPTS = 5;
+
+    // Toggle password visibility
+    document.getElementById('toggle-pw').addEventListener('click', () => {
+      const input = document.getElementById('password');
+      const icon  = document.getElementById('pw-icon');
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      icon.textContent = isHidden ? 'visibility' : 'visibility_off';
+    });
+
+    // Real-time validation
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+
+    function clearFieldError(id) {
+      document.getElementById(id).classList.remove('error');
+      document.getElementById(id + '-error').classList.remove('show');
+    }
+    function showFieldError(id, msg) {
+      document.getElementById(id).classList.add('error');
+      const el = document.getElementById(id + '-error');
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+
+    email.addEventListener('input', () => clearFieldError('email'));
+    password.addEventListener('input', () => clearFieldError('password'));
+
+    function validate() {
+      let valid = true;
+      if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        showFieldError('email', 'Please enter a valid email address.');
+        valid = false;
+      }
+      if (!password.value || password.value.length < 1) {
+        showFieldError('password', 'Password is required.');
+        valid = false;
+      }
+      return valid;
+    }
+
+    function setLoading(loading) {
+      submitBtn.disabled = loading;
+      btnText.classList.toggle('hidden', loading);
+      btnSpinner.classList.toggle('hidden', !loading);
+    }
+
+    function showAlert(message, type = 'error') {
+      alertError.className = `alert-box alert-${type} mb-5 show`;
+      alertMsg.textContent = message;
+    }
+    function hideAlert() { alertError.classList.remove('show'); }
+
+    function updateAttemptBar(count) {
+      const section = document.getElementById('attempt-section');
+      const fill    = document.getElementById('attempt-fill');
+      const text    = document.getElementById('attempt-text');
+      if (count === 0) { section.classList.add('hidden'); return; }
+      section.classList.remove('hidden');
+      const pct = (count / MAX_CLIENT_ATTEMPTS) * 100;
+      fill.style.width = pct + '%';
+      fill.style.background = pct < 60 ? '#FF9500' : '#FF3B30';
+      const left = MAX_CLIENT_ATTEMPTS - count;
+      text.textContent = left === 1
+        ? '1 attempt remaining before temporary lockout.'
+        : `${left} attempts remaining.`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      if (!validate()) return;
+
+      setLoading(true);
+      try {
+        const result = await login({ email: email.value.trim(), password: password.value });
+
+        if (result.ok) {
+          showAlert('Login successful! Redirecting…', 'success');
+          setTimeout(() => { window.location.href = '/home.html'; }, 800);
+          return;
+        }
+
+        failedAttempts++;
+        updateAttemptBar(failedAttempts);
+
+        const { code, error, lockedUntil } = result.data || {};
+
+        if (code === 'ACCOUNT_LOCKED') {
+          const lockTime = lockedUntil ? new Date(lockedUntil).toLocaleTimeString() : '';
+          showAlert(`Account locked. Try again after ${lockTime}.`);
+        } else if (code === 'RATE_LIMIT_EXCEEDED') {
+          showAlert('Too many attempts. Please wait 15 minutes and try again.');
+        } else if (code === 'VALIDATION_ERROR') {
+          result.data.fields?.forEach(f => showFieldError(f.field, f.message));
+        } else {
+          showAlert(error || 'Invalid email or password.');
+        }
+      } catch {
+        showAlert('Connection error. Please check your internet and try again.');
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>

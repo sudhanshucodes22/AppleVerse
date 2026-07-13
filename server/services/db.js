@@ -1,0 +1,166 @@
+// ─── server/services/db.js ────────────────────────────────────────────
+// SQLite database — single connection, auto-migrates schema on startup
+import Database from 'better-sqlite3';
+import { readFileSync, existsSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const DB_PATH   = join(__dirname, '..', 'data', 'appleverse.db');
+const JSON_PATH = join(__dirname, '..', 'data', 'users.json');
+
+// ─── Open DB ──────────────────────────────────────────────────────────
+export const db = new Database(DB_PATH);
+
+// Enable WAL mode for concurrency + performance
+db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
+
+// ─── Schema Migrations ────────────────────────────────────────────────
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id                    TEXT PRIMARY KEY,
+    name                  TEXT NOT NULL,
+    email                 TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    password_hash         TEXT NOT NULL,
+    created_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    last_login_at         TEXT,
+    failed_login_attempts INTEGER NOT NULL DEFAULT 0,
+    locked_until          TEXT,
+    is_verified           INTEGER NOT NULL DEFAULT 0,
+    deleted_at            TEXT
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+  CREATE TABLE IF NOT EXISTS refresh_tokens (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token      TEXT NOT NULL UNIQUE,
+    expires_at TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user  ON refresh_tokens(user_id);
+  CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token);
+
+  CREATE TABLE IF NOT EXISTS blacklist (
+    jti        TEXT PRIMARY KEY,
+    expires_at TEXT NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_blacklist_expires ON blacklist(expires_at);
+
+  CREATE TABLE IF NOT EXISTS orders (
+    id         TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    order_ref  TEXT NOT NULL,
+    items      TEXT NOT NULL,
+    total      REAL NOT NULL,
+    currency   TEXT NOT NULL DEFAULT 'INR',
+    status     TEXT NOT NULL DEFAULT 'Confirmed',
+    placed_at  TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id);
+
+  CREATE TABLE IF NOT EXISTS cart (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    product_id TEXT NOT NULL,
+    qty        INTEGER NOT NULL DEFAULT 1,
+    color      TEXT,
+    storage    TEXT,
+    added_at   TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(user_id, product_id, color, storage)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_cart_user ON cart(user_id);
+
+  CREATE TABLE IF NOT EXISTS wishlist (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    product_id TEXT NOT NULL,
+    added_at   TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(user_id, product_id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_wishlist_user ON wishlist(user_id);
+`);
+
+// ─── JSON → SQLite Migration (runs once on first startup) ─────────────
+function migrateFromJson() {
+  if (!existsSync(JSON_PATH)) return;
+  try {
+    const raw    = JSON.parse(readFileSync(JSON_PATH, 'utf-8'));
+    const users  = raw.users || [];
+    const tokens = raw.refreshTokens || [];
+    const blist  = raw.blacklist || [];
+    if (users.length === 0) return;
+    const existingCount = db.prepare('SELECT COUNT(*) as n FROM users').get().n;
+    if (existingCount > 0) return;
+
+    console.log(`[db] Migrating ${users.length} user(s) from users.json to SQLite...`);
+
+    const insertUser = db.prepare(`
+      INSERT OR IGNORE INTO users
+        (id, name, email, password_hash, created_at, updated_at, last_login_at,
+         failed_login_attempts, locked_until, is_verified, deleted_at)
+      VALUES
+        (@id, @name, @email, @passwordHash, @createdAt, @updatedAt, @lastLoginAt,
+         @failedLoginAttempts, @lockedUntil, @isVerified, @deletedAt)
+    `);
+    const insertToken = db.prepare(`
+      INSERT OR IGNORE INTO refresh_tokens (user_id, token, expires_at)
+      VALUES (@userId, @token, @expiresAt)
+    `);
+    const insertOrder = db.prepare(`
+      INSERT OR IGNORE INTO orders (id, user_id, order_ref, items, total, currency, status, placed_at)
+      VALUES (@id, @userId, @orderRef, @items, @total, @currency, @status, @placedAt)
+    `);
+    const insertBlack = db.prepare(`
+      INSERT OR IGNORE INTO blacklist (jti, expires_at) VALUES (@jti, @expiresAt)
+    `);
+
+    db.transaction(() => {
+      for (const u of users) {
+        insertUser.run({
+          id: u.id, name: u.name, email: u.email, passwordHash: u.passwordHash,
+          createdAt: u.createdAt || new Date().toISOString(),
+          updatedAt: u.updatedAt || new Date().toISOString(),
+          lastLoginAt: u.lastLoginAt || null,
+          failedLoginAttempts: u.failedLoginAttempts || 0,
+          lockedUntil: u.lockedUntil || null,
+          isVerified: u.isVerified ? 1 : 0,
+          deletedAt: u.deletedAt || null,
+        });
+        if (Array.isArray(u.orders)) {
+          for (const o of u.orders) {
+            insertOrder.run({
+              id: o.id, userId: u.id, orderRef: o.orderRef,
+              items: JSON.stringify(o.items), total: o.total,
+              currency: o.currency || 'INR', status: o.status || 'Confirmed',
+              placedAt: o.placedAt || new Date().toISOString(),
+            });
+          }
+        }
+      }
+      for (const t of tokens) {
+        if (new Date(t.expiresAt) > new Date())
+          insertToken.run({ userId: t.userId, token: t.token, expiresAt: t.expiresAt });
+      }
+      for (const b of blist) {
+        if (new Date(b.expiresAt) > new Date())
+          insertBlack.run({ jti: b.jti, expiresAt: b.expiresAt });
+      }
+    })();
+
+    console.log('[db] Migration complete.');
+  } catch (err) {
+    console.error('[db] Migration from JSON failed (non-fatal):', err.message);
+  }
+}
+
+migrateFromJson();
+console.log(`[db] SQLite ready: ${DB_PATH}`);

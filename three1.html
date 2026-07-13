@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_3 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_3" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_3');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+scene.add(ambientLight);
+
+const spotLight = new THREE.SpotLight(0xffffff, 1.5);
+spotLight.position.set(5, 5, 5);
+spotLight.castShadow = true;
+scene.add(spotLight);
+
+// MacBook Pro M5 Representation (Sleek Box + Display)
+const group = new THREE.Group();
+
+// Lower Body
+const bodyGeom = new THREE.BoxGeometry(4, 0.2, 2.8);
+const metalMat = new THREE.MeshPhongMaterial({ color: 0x333333, shininess: 100, specular: 0x555555 });
+const body = new THREE.Mesh(bodyGeom, metalMat);
+group.add(body);
+
+// Screen
+const screenGroup = new THREE.Group();
+screenGroup.position.set(0, 0.1, -1.4);
+const lidGeom = new THREE.BoxGeometry(4, 0.1, 2.8);
+const lid = new THREE.Mesh(lidGeom, metalMat);
+lid.position.set(0, 0.05, 1.4);
+screenGroup.add(lid);
+
+const displayGeom = new THREE.PlaneGeometry(3.8, 2.6);
+const displayMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+const display = new THREE.Mesh(displayGeom, displayMat);
+display.position.set(0, 0.11, 1.4);
+display.rotation.x = -Math.PI / 2;
+screenGroup.add(display);
+
+group.add(screenGroup);
+scene.add(group);
+
+// M5 Chip (Hidden inside)
+const chipGeom = new THREE.BoxGeometry(0.6, 0.1, 0.6);
+const chipMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 });
+const chip = new THREE.Mesh(chipGeom, chipMat);
+chip.position.y = -2; // Start hidden below
+scene.add(chip);
+
+camera.position.z = 8;
+camera.position.y = 2;
+camera.lookAt(0, 0, 0);
+
+let scrollY = 0;
+window.addEventListener('scroll', () => {
+    scrollY = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+    
+    // Idle Float
+    const time = performance.now() * 0.001;
+    group.position.y = Math.sin(time) * 0.1;
+    group.rotation.y += 0.005;
+    
+    // Scroll Animations
+    // 0.0 - 0.3: Rotate & Open
+    if (scrollY < 0.3) {
+        const p = scrollY / 0.3;
+        screenGroup.rotation.x = -p * (Math.PI * 0.6);
+        group.rotation.y = p * Math.PI * 2;
+        chip.position.y = -2;
+    } 
+    // 0.3 - 0.6: Chip Reveal
+    else if (scrollY < 0.6) {
+        const p = (scrollY - 0.3) / 0.3;
+        group.visible = true;
+        group.position.y = -p * 5; // Laptop goes down
+        chip.position.y = Math.sin(time * 2) * 0.1 + (p * 2); // Chip rises
+        chip.rotation.y += 0.02;
+    }
+    // 0.6+: Exit
+    else {
+        const p = (scrollY - 0.6) / 0.4;
+        chip.position.y = 2 + (p * 5);
+        group.visible = false;
+    }
+
+    renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_3 -->
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="description" content="AppleVerse — Discover the future of Apple innovation. Explore iPhone, Mac, Apple Watch, AirPods, and Apple Vision Pro in one place."/>
+<meta name="robots" content="index, follow"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="AppleVerse | The Future of Innovation"/>
+<meta property="og:description" content="AppleVerse — Discover the future of Apple innovation. Explore iPhone, Mac, Apple Watch, AirPods, and Apple Vision Pro in one place."/>
+<meta property="og:url" content="https://appleverse.example.com/"/>
+<meta property="og:image" content="https://appleverse.example.com/og-image.jpg"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://lh3.googleusercontent.com data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="X-Frame-Options" content="DENY"/>
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link rel="dns-prefetch" href="https://lh3.googleusercontent.com"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AppleVerse | The Future of Innovation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="/js/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#f0edef",
+                    "on-secondary": "#ffffff",
+                    "apple-blue": "#0066CC",
+                    "tertiary": "#4f5054",
+                    "on-secondary-fixed-variant": "#454747",
+                    "primary-container": "#0066cc",
+                    "surface-container-highest": "#e4e2e4",
+                    "primary": "#004e9f",
+                    "primary-fixed": "#d7e3ff",
+                    "outline-variant": "#c1c6d5",
+                    "silver-highlight": "#D2D2D7",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fcf8fb",
+                    "surface-container-high": "#eae7ea",
+                    "surface-dim": "#dcd9dc",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "inverse-on-surface": "#f3f0f2",
+                    "tertiary-fixed-dim": "#c7c6cb",
+                    "surface-tint": "#005cba",
+                    "error": "#ba1a1a",
+                    "secondary": "#5d5f5f",
+                    "on-tertiary-fixed-variant": "#46464b",
+                    "on-tertiary-fixed": "#1a1b1f",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e4e2e4",
+                    "on-background": "#1b1b1d",
+                    "surface-main": "#FAFAFA",
+                    "primary-fixed-dim": "#aac7ff",
+                    "surface-secondary": "#F2F2F5",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1b1b1d",
+                    "secondary-fixed": "#e2e2e2",
+                    "tertiary-fixed": "#e3e2e7",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#dfe8ff",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "on-surface-variant": "#414753",
+                    "outline": "#727784",
+                    "surface-container-low": "#f6f3f5",
+                    "secondary-container": "#dfe0e0",
+                    "inverse-surface": "#303032",
+                    "deep-charcoal": "#1D1D1F",
+                    "on-secondary-container": "#616363",
+                    "on-primary-fixed": "#001b3e",
+                    "surface": "#fcf8fb",
+                    "on-tertiary-container": "#e9e8ed",
+                    "on-primary-fixed-variant": "#00458e",
+                    "tertiary-container": "#68686d",
+                    "surface-glass": "rgba(255, 255, 255, 0.72)",
+                    "background": "#fcf8fb",
+                    "inverse-primary": "#aac7ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "section-gap": "160px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "margin-desktop": "40px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["19px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "display-lg": ["80px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "0em", "fontWeight": "600"}],
+                    "body-md": ["17px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "display-md": ["56px", {"lineHeight": "1.1", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; color: #1D1D1F; overflow-x: hidden; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            border: 1px solid rgba(210, 210, 215, 0.3);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(0, 102, 204, 0.05) 0%, rgba(250, 250, 250, 0) 70%);
+        }
+        .floating-anim {
+            animation: floating 6s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        /* New Reveal Animation Styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 800ms ease-out, transform 800ms ease-out;
+        }
+        .reveal-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface-main">
+<!-- TopNavBar (Shared Component) -->
+<!-- Unified TopNavBar -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] rounded-full backdrop-blur-xl border border-[#D2D2D7]/30 bg-white/95 shadow-2xl shadow-black/5 flex justify-between items-center px-8 py-3 z-50 transition-all duration-300" id="main-nav">
+        <a href="home.html" class="flex items-center gap-3">
+          <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-10 w-auto object-contain">
+          <div class="flex flex-col leading-none">
+            <span class="font-bold text-[19px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
+            <span class="text-[9px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
+          </div>
+        </a>
+<div class="hidden md:flex items-center gap-8 font-medium text-[14px]">
+<a class="text-[#0066CC] font-semibold border-b border-[#0066CC] transition-all duration-300" href="home.html">Home</a>
+<a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="mac.html">Mac</a>
+<a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="iphone.html">iPhone</a>
+<a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="ipad.html">iPad</a>
+<a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="watch.html">Watch</a>
+<a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="audio-vision.html">Audio & Vision</a>
+<a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="stores.html">Stores</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#1D1D1F] hover:text-[#0066CC] transition-colors" data-cart-btn aria-label="Shopping Bag" type="button">shopping_bag</button>
+<button class="md:hidden material-symbols-outlined text-[#1D1D1F] hover:text-[#0066CC]" id="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu" type="button">menu</button>
+</div>
+</nav>
+
+<!-- Mobile Menu Panel -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu" class="fixed inset-0 bg-[#FAFAFA]/98 backdrop-blur-xl z-50 hidden flex-col justify-center items-center gap-8 text-[20px] font-medium transition-all duration-300">
+<button class="absolute top-6 right-6 material-symbols-outlined text-[32px]" id="mobile-menu-close" aria-label="Close navigation menu" type="button">close</button>
+<a class="hover:text-[#0066CC] transition-colors" href="home.html">Home</a>
+<a class="hover:text-[#0066CC] transition-colors" href="mac.html">Mac</a>
+<a class="hover:text-[#0066CC] transition-colors" href="iphone.html">iPhone</a>
+<a class="hover:text-[#0066CC] transition-colors" href="ipad.html">iPad</a>
+<a class="hover:text-[#0066CC] transition-colors" href="watch.html">Watch</a>
+<a class="hover:text-[#0066CC] transition-colors" href="audio-vision.html">Audio & Vision</a>
+<a class="hover:text-[#0066CC] transition-colors" href="stores.html">Stores</a>
+</div>
+
+<!-- Hero Section -->
+<section class="relative min-h-screen pt-40 flex flex-col items-center justify-start text-center px-margin-mobile md:px-margin-desktop hero-gradient overflow-hidden">
+<div class="max-w-4xl z-10 reveal-on-scroll active">
+<h1 class="font-display-md md:font-display-lg text-display-md md:text-display-lg mb-6 leading-tight tracking-tight">
+                Meet the Future.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+                Experience Apple's next generation of innovation. Designed for performance, built for simplicity.
+            </p>
+<button id="explore-btn" type="button" class="bg-apple-blue text-on-primary px-10 py-4 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-apple-blue/20">
+                Explore Products
+            </button>
+</div>
+<!-- Hero MacBook Visual -->
+<div class="relative w-full max-w-[1100px] mt-12 floating-anim reveal-on-scroll active transition-delay-300">
+<img alt="MacBook Pro" class="w-full h-auto drop-shadow-[0_50px_80px_rgba(0,0,0,0.12)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpinYpveVk_EIdTGZarYWWpAjWHXaEXqmzkf829n1CKEL4MWE_-R-5HzvY9lrTNiN2XH9P9Vxq0azM5Cn6gpH4ZDy_36IWTHX1Mjl0NTnrMRkdWub4JWGCs2TITd7io2isan8ZOeyqR-V-_ZgnBLwX2-44hCkR4pXacNX59qWPMzC5AtV5sSkBD3i7qHtFq8iqATFzjuNGDifLxi9yfzSQktc-cnI7GnbzfqDp52J11ZlOa8Ie8fLquQ" loading="eager" decoding="async"/>
+<!-- Ambient Glow -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-main via-transparent to-transparent z-10 pointer-events-none"></div>
+</div>
+<!-- MacBook Features & CTA -->
+<div id="shop-section" class="max-w-4xl mx-auto text-center mt-16 mb-8 relative z-20 reveal">
+    <h3 class="font-headline-lg text-[28px] mb-4 text-[#1D1D1F] dark:text-white">MacBook. Power to go.</h3>
+    <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto mb-8">
+        Supercharged by the revolutionary Apple Silicon M3/M5 chips, the MacBook lineup delivers mind-blowing performance, a gorgeous Liquid Retina XDR display, and up to 22 hours of battery life. Designed to be incredibly thin and light, they are built to work, play, and create anywhere.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto mb-10 text-left">
+        <div class="glass-card p-4 rounded-2xl flex items-start gap-3">
+            <span class="material-symbols-outlined text-apple-blue">memory</span>
+            <div>
+                <p class="font-label-md font-bold">M3/M5 Chips</p>
+                <p class="text-xs text-on-surface-variant">Breakthrough speeds.</p>
+            </div>
+        </div>
+        <div class="glass-card p-4 rounded-2xl flex items-start gap-3">
+            <span class="material-symbols-outlined text-apple-blue">battery_charging_full</span>
+            <div>
+                <p class="font-label-md font-bold">22h Battery</p>
+                <p class="text-xs text-on-surface-variant">Go all day and night.</p>
+            </div>
+        </div>
+        <div class="glass-card p-4 rounded-2xl flex items-start gap-3">
+            <span class="material-symbols-outlined text-apple-blue">laptop_mac</span>
+            <div>
+                <p class="font-label-md font-bold">Retina XDR</p>
+                <p class="text-xs text-on-surface-variant">Stunning visuals.</p>
+            </div>
+        </div>
+    </div>
+    <a href="mac.html" class="inline-block bg-apple-blue text-white px-10 py-4 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-apple-blue/20">Buy Now</a>
+</div>
+</section>
+<!-- iPhone Section (Asymmetric Bento) -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto overflow-hidden reveal">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<div class="lg:col-span-7">
+<img alt="iPhone" class="w-full h-auto drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7i9H1pIxERUi4SetrB0IUgRuZDTreXSzl6ZZOKxns9AHU1tAQK_otMPpD3m8y_ssDqLFKm-4xnfLuFoejCe4vSBRuDgXV1Re2khf0zAZPXlo8902CvEZj9JHX6jh7hlad0fUzm37XXkcVSPovt6HP0x2OSdQghm7ZwJPzceHIuWsMMpjtF6rdg0m2q2mhBynPzEsIsRITO2RZ2YdwtWmNmLEdVyhNSV0pwym_Di8Aj0i_LZSSOOFQFg" loading="lazy" decoding="async"/>
+</div>
+<div class="lg:col-span-5 flex flex-col gap-8">
+<div data-no-price="true" class="glass-card p-10 rounded-[32px] shadow-2xl shadow-deep-charcoal/5">
+<span class="font-label-sm text-label-sm text-apple-blue mb-4 block uppercase">iPhone Family</span>
+<h2 class="font-headline-lg text-headline-lg mb-4">iPhone</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                        Designed to be loved. Powered by advanced Apple-designed silicon, featuring industry-leading cameras, beautiful durable designs, and the new Apple Intelligence.
+                    </p>
+<div class="grid grid-cols-2 gap-4 mb-10">
+<div class="p-4 bg-surface-secondary rounded-2xl">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">SILICON</p>
+<p class="font-label-md text-label-md font-bold">A-Series Chips</p>
+</div>
+<div class="p-4 bg-surface-secondary rounded-2xl">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">CAMERA</p>
+<p class="font-label-md text-label-md font-bold">Pro-Level Systems</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<a href="iphone.html" class="inline-block bg-apple-blue text-white px-8 py-3 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all text-center" style="text-decoration: none;">Buy Now</a>
+<a href="iphone.html" class="inline-block text-apple-blue font-label-md text-label-md px-8 py-3 rounded-full border border-silver-highlight hover:bg-surface-secondary transition-all text-center" style="text-decoration: none;">Learn More</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- iPad Section (Asymmetric Bento Reversed) -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto overflow-hidden reveal">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<div class="lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1">
+<div data-no-price="true" class="glass-card p-10 rounded-[32px] shadow-2xl shadow-deep-charcoal/5">
+<span class="font-label-sm text-label-sm text-apple-blue mb-4 block uppercase">iPad Family</span>
+<h2 class="font-headline-lg text-headline-lg mb-4">iPad Pro &amp; Air</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">
+Thinpossible. Supercharged by the breakthrough M5 and M4 processors, featuring stunning Tandem OLED Ultra Retina XDR displays and full Apple Pencil Pro compatibility.
+</p>
+<div class="grid grid-cols-2 gap-4 mb-10">
+<div class="p-4 bg-surface-secondary rounded-2xl">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">CHIP</p>
+<p class="font-label-md text-label-md font-bold">M5 &amp; M4 Power</p>
+</div>
+<div class="p-4 bg-surface-secondary rounded-2xl">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">DISPLAY</p>
+<p class="font-label-md text-label-md font-bold">Tandem OLED</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<a href="ipad.html" class="inline-block bg-apple-blue text-white px-8 py-3 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all text-center" style="text-decoration: none;">Buy Now</a>
+<a href="ipad.html" class="inline-block text-apple-blue font-label-md text-label-md px-8 py-3 rounded-full border border-silver-highlight hover:bg-surface-secondary transition-all text-center" style="text-decoration: none;">Learn More</a>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7 order-1 lg:order-2">
+<img alt="iPad Pro M5" class="w-full h-auto drop-shadow-2xl rounded-[2rem] hover:scale-105 transition-all duration-700" src="/images/ipad_pro_11_m5.jpg" loading="lazy" decoding="async"/>
+</div>
+</div>
+</section>
+<!-- Watch Section (Centered/Floating) -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto reveal">
+<div class="text-center mb-16">
+<h2 class="font-display-md text-display-md mb-4">AirPods Pro</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg max-w-xl mx-auto">The ultimate listening experience. Now with Adaptive Audio.</p>
+</div>
+<div class="relative flex flex-col items-center">
+<div class="w-full max-w-4xl mb-16 floating-anim">
+<img alt="AirPods Pro" class="w-full h-auto drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB71LqOm8dG7j5FNh2dWQRzyTReo0gcQ9CVxlU576Tot2udZb7Xln8FGfso3is4A6hdpP_oZbtVH4L6NXhWR_YEYHHoHNXoOH3ObwPLKCFys_qQM5pZUSce73lJ36wFUXxpZ5HSWAtTFFt47HYAMMsARlq1xOow5tzkKXfFuJb7ZBDf2JMHP4WJ4Agu3hsQ0mrnYu2vuVpwBFjJjLOmlnDN_FCePBFk9ZkVeK1xOX2YWisY3l07P_68Ag" loading="lazy" decoding="async"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-16">
+<div class="glass-card p-6 rounded-2xl shadow-xl border border-silver-highlight/30 text-center">
+<span class="material-symbols-outlined text-apple-blue mb-3" data-icon="noise_control_on">noise_control_on</span>
+<p class="font-label-md text-label-md font-bold">Active Noise Cancellation</p>
+</div>
+<div class="glass-card p-6 rounded-2xl shadow-xl border border-silver-highlight/30 text-center">
+<span class="material-symbols-outlined text-apple-blue mb-3" data-icon="graphic_eq">graphic_eq</span>
+<p class="font-label-md text-label-md font-bold">Adaptive Audio</p>
+</div>
+<div class="glass-card p-6 rounded-2xl shadow-xl border border-silver-highlight/30 text-center">
+<span class="material-symbols-outlined text-apple-blue mb-3" data-icon="spatial_audio">spatial_audio</span>
+<p class="font-label-md text-label-md font-bold">Spatial Audio</p>
+</div>
+<div class="glass-card p-6 rounded-2xl shadow-xl border border-silver-highlight/30 text-center">
+<span class="material-symbols-outlined text-apple-blue mb-3" data-icon="hearing">hearing</span>
+<p class="font-label-md text-label-md font-bold">Transparency Mode</p>
+</div>
+<div class="glass-card p-6 rounded-2xl shadow-xl border border-silver-highlight/30 text-center">
+<span class="material-symbols-outlined text-apple-blue mb-3" data-icon="usb">usb</span>
+<p class="font-label-md text-label-md font-bold">USB-C Charging</p>
+</div>
+<div class="glass-card p-6 rounded-2xl shadow-xl border border-silver-highlight/30 text-center">
+<span class="material-symbols-outlined text-apple-blue mb-3" data-icon="battery_very_low">battery_very_low</span>
+<p class="font-label-md text-label-md font-bold">Long Battery Life</p>
+</div>
+</div>
+<div class="flex items-center gap-4 justify-center">
+<a href="audio-vision.html" class="bg-apple-blue text-white px-10 py-4 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-apple-blue/20">Buy Now</a>
+<a href="audio-vision.html" class="text-apple-blue font-label-md text-label-md px-10 py-4 rounded-full border border-silver-highlight hover:bg-surface-secondary transition-all">Learn More</a>
+</div>
+</div>
+</section><!-- Watch Hero Section (Static Showcase) -->
+<!-- Watch Hero Section (Static Light Showcase) -->
+<section id="watch-hero-section" class="relative w-full bg-white text-[#1D1D1F] py-20 md:py-32 overflow-hidden border-t border-silver-highlight/10">
+  <div class="relative z-30 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    
+    <!-- Left Column: Hero Text (5 cols) -->
+    <div class="lg:col-span-5 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+      <span class="font-label-sm text-label-sm uppercase tracking-widest text-[#0066CC] mb-4 block">Watch Ultra 2</span>
+      <h2 class="font-display-md text-display-md-mobile md:text-display-md text-[#1D1D1F] mb-6 leading-tight">Apple Watch Ultra</h2>
+      <p class="text-[#5d5f5f] font-body-lg text-body-lg max-w-md mb-8">
+        The rugged powerhouse returns. Apple Watch Ultra 2 in Satin Black Titanium features the brightest display ever, an advanced dual-frequency GPS, and a robust battery built for extreme adventure.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full">
+        <a href="watch.html" class="bg-apple-blue text-white font-label-md text-label-md px-10 py-4 rounded-full text-center hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-apple-blue/20">Buy Now</a>
+        <a href="watch.html" class="text-apple-blue font-label-md text-label-md px-10 py-4 rounded-full border border-silver-highlight text-center hover:bg-surface-secondary transition-all">Learn More</a>
+      </div>
+    </div>
+    
+    <!-- Right Column: Premium Image (7 cols) -->
+    <div class="lg:col-span-7 flex justify-center items-center w-full">
+      <img src="/images/watch_ultra_white_bg.jpg" alt="Apple Watch Ultra 2 Black Titanium" class="w-full max-w-[500px] object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.12)] hover:scale-105 transition-all duration-700" />
+    </div>
+
+  </div>
+</section>
+<!-- Vision Pro Section (Immersive Wide) -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop reveal">
+<div class="max-w-container-max mx-auto glass-card rounded-[40px] overflow-hidden flex flex-col lg:flex-row items-center">
+<div class="lg:w-1/2 p-12 lg:p-20 order-2 lg:order-1">
+<h2 class="font-headline-lg text-headline-lg mb-6">Apple Vision Pro</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed">
+                    Welcome to the era of spatial computing. Vision Pro seamlessly blends digital content with your physical space, and you navigate simply by using your eyes, hands, and voice.
+                </p>
+<div class="flex flex-wrap gap-4 mb-12">
+<span class="px-5 py-2 bg-white/50 border border-silver-highlight/50 rounded-full font-label-md text-label-md">Dual-chip design</span>
+<span class="px-5 py-2 bg-white/50 border border-silver-highlight/50 rounded-full font-label-md text-label-md">micro-OLED Display</span>
+<span class="px-5 py-2 bg-white/50 border border-silver-highlight/50 rounded-full font-label-md text-label-md">EyeSight</span>
+</div>
+<div class="flex flex-wrap items-center gap-4">
+<button type="button" class="bg-deep-charcoal text-white px-8 py-3.5 rounded-full font-label-md text-label-md hover:bg-black active:scale-95 transition-all">Pre-order</button>
+<a href="audio-vision.html" class="inline-block bg-apple-blue text-white px-8 py-3.5 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all text-center" style="text-decoration: none;">Buy Now</a>
+<p class="font-label-md text-label-md text-on-surface-variant">Starting at ₹2,90,417</p>
+</div>
+</div>
+<div class="lg:w-1/2 order-1 lg:order-2 bg-surface-secondary/30">
+<img alt="Vision Pro" class="w-full h-full object-cover scale-110 translate-x-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnl01yhegu9Okl9XfmbBGdJhtlSNdadhgnnrqDh-Hvqh98xlejTrCNpCda2gU5X3DyUNNoWD2pHZzTYu9z9ROh_VdTq4sK_3t1MiBW6_L-DeNOaUKb0PhxU_KuUyd1iZgK0MsvvfFJLO7n94pHNMthRl-fXbY-5Zs_AfCyHnUAn-SVTbj96gRZHEgR52nIBnWUG7rvfF4uvAX1KQZcUFiZOswebKHd0uYFtk4tlcxGxystEHQc58mg3Q" loading="lazy" decoding="async"/>
+</div>
+</div>
+</section>
+<!-- Footer (Shared Component) -->
+<footer class="w-full pt-section-gap pb-12 border-t border-outline-variant/20 bg-surface-main">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="font-headline-sm text-headline-sm text-deep-charcoal font-bold">AppleVerse</div>
+<p class="font-label-sm text-label-sm text-tertiary">© 2026 AppleVerse. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8 font-label-sm text-label-sm text-on-surface-variant">
+<a class="hover:text-apple-blue underline transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-apple-blue underline transition-colors" href="#">Terms of Use</a>
+<a class="hover:text-apple-blue underline transition-colors" href="#">Sales Policy</a>
+<a class="hover:text-apple-blue underline transition-colors" href="#">Legal</a>
+<a class="hover:text-apple-blue underline transition-colors" href="#">Site Map</a>
+</div>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-tertiary hover:text-apple-blue transition-colors" aria-label="Select language" type="button">language</button>
+<span class="font-label-sm text-label-sm text-tertiary">United States</span>
+</div>
+</div>
+</footer>
+<script>
+        // Scroll Reveal Logic (Intersection Observer)
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                        // Optional: stop observing once revealed
+                        // revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+            
+            // Add click listener for Explore Products button to scroll smoothly to the shop section
+            const exploreBtn = document.getElementById('explore-btn');
+            if (exploreBtn) {
+                exploreBtn.addEventListener('click', () => {
+                    const shopSec = document.getElementById('shop-section');
+                    if (shopSec) {
+                        shopSec.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+        });
+
+        // Legacy reveal-on-scroll (preserving existing behavior for hero elements)
+        const legacyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => legacyObserver.observe(el));
+    // Nav scroll handled by /src/main.js
+    </script>
+<script type="module" src="/src/main.js"></script>
+</body></html>
+

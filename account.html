@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>My Account — AppleVerse</title>
+  <meta name="description" content="Manage your AppleVerse account, view orders, and update your profile."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet"/>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #F2F2F7; min-height: 100vh; }
+
+    .glass-card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgba(210,210,215,0.3);
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(210,210,215,0.4);
+    }
+
+    .input-field {
+      width: 100%; padding: 12px 14px;
+      background: #F2F2F7; border: 1.5px solid #D2D2D7;
+      border-radius: 10px; font-size: 15px; color: #1D1D1F; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus { border-color: #0066CC; box-shadow: 0 0 0 3px rgba(0,102,204,0.1); background: white; }
+
+    .btn-primary {
+      padding: 12px 24px; background: #0066CC; color: white;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #0056b3; }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { background: #D2D2D7; cursor: not-allowed; }
+
+    .btn-danger {
+      padding: 11px 24px; background: transparent; color: #FF3B30;
+      border: 1.5px solid #FF3B30; border-radius: 10px;
+      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-danger:hover { background: #FFF2F2; }
+
+    .nav-tab {
+      display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+      border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500;
+      color: #3A3A3C; transition: all 0.15s; text-decoration: none;
+    }
+    .nav-tab:hover { background: #F2F2F7; }
+    .nav-tab.active { background: #0066CC; color: white; }
+    .nav-tab .material-symbols-outlined { font-size: 20px; }
+
+    .security-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 0; border-bottom: 1px solid #F2F2F7;
+    }
+    .security-row:last-child { border-bottom: none; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-green { background: #EDFAF2; color: #34C759; }
+    .badge-blue  { background: #EBF4FF; color: #0066CC; }
+
+    /* Avatar gradient */
+    .avatar-ring {
+      background: linear-gradient(135deg, #0066CC, #9B59B6);
+      padding: 3px; border-radius: 50%;
+    }
+    .avatar-inner {
+      background: white; border-radius: 50%; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .alert-box {
+      padding: 12px 16px; border-radius: 10px; font-size: 14px;
+      display: none; align-items: center; gap: 10px;
+    }
+    .alert-box.show { display: flex; }
+    .alert-error   { background: #FFF2F2; border: 1px solid #FFCDD2; color: #C62828; }
+    .alert-success { background: #F1FFF4; border: 1px solid #C8E6C9; color: #2E7D32; }
+
+    #toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 9999; display: flex; flex-direction: column;
+      gap: 10px; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Top Nav -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-[#D2D2D7]/30 px-6 py-3 flex items-center justify-between">
+    <a href="/index.html" class="flex items-center gap-3">
+      <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-10 w-auto object-contain">
+      <div class="flex flex-col leading-none">
+        <span class="font-bold text-[19px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
+        <span class="text-[9px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
+      </div>
+    </a>
+    <div class="flex items-center gap-3">
+      <span id="nav-user-name" class="hidden md:block text-[13px] font-medium text-[#3A3A3C]"></span>
+      <button id="logout-btn" type="button" aria-label="Sign out"
+        class="flex items-center gap-1.5 text-[13px] font-medium text-[#FF3B30] hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        <span class="hidden md:inline">Sign Out</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Loading Skeleton -->
+  <div id="loading-state" class="max-w-5xl mx-auto px-4 py-8">
+    <div class="skeleton h-8 w-48 mb-8"></div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="skeleton h-64 rounded-2xl"></div>
+      <div class="md:col-span-3 skeleton h-64 rounded-2xl"></div>
+    </div>
+  </div>
+
+  <!-- Main Content (hidden until auth) -->
+  <main id="main-content" class="hidden max-w-5xl mx-auto px-4 py-8">
+
+    <!-- Page header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-[26px] font-bold text-[#1D1D1F] tracking-tight" id="greeting">Welcome back!</h1>
+        <p class="text-[14px] text-[#8E8E93] mt-0.5">Manage your account and security settings</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 text-[12px] text-[#8E8E93] bg-white px-3 py-1.5 rounded-lg border border-[#E5E5EA]">
+        <span class="material-symbols-outlined text-[14px] text-[#34C759]">shield</span>
+        <span>Session secured</span>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="stat-card">
+        <div class="text-[28px] font-bold text-[#0066CC]">0</div>
+        <div class="text-[12px] text-[#8E8E93] mt-1">Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-[28px] font-bold text-[#34C759]">
+          <span class="material-symbols-outlined text-[24px]">verified</span>
+        </div>
+        <div class="text-[12px] text-[#8E8E93] mt-1">Active Account</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-[28px] font-bold text-[#9B59B6]">
+          <span class="material-symbols-outlined text-[24px]">lock</span>
+        </div>
+        <div class="text-[12px] text-[#8E8E93] mt-1">Protected</div>
+      </div>
+    </div>
+
+    <!-- 2-column layout -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+      <!-- Sidebar Nav -->
+      <div class="md:col-span-1">
+        <!-- Avatar card -->
+        <div class="glass-card rounded-2xl p-5 text-center mb-4">
+          <div class="avatar-ring w-16 h-16 mx-auto mb-3">
+            <div class="avatar-inner w-full h-full">
+              <div id="avatar-initials" class="w-full h-full flex items-center justify-center text-[22px] font-bold text-[#0066CC] bg-blue-50"></div>
+            </div>
+          </div>
+          <div id="sidebar-name" class="font-semibold text-[15px] text-[#1D1D1F]"></div>
+          <div id="sidebar-email" class="text-[12px] text-[#8E8E93] mt-0.5 truncate"></div>
+          <div class="mt-2"><span class="badge badge-green"><span class="material-symbols-outlined text-[10px]">fiber_manual_record</span> Active</span></div>
+          <p id="member-since" class="text-[11px] text-[#C7C7CC] mt-2"></p>
+        </div>
+
+        <!-- Section tabs -->
+        <nav aria-label="Account sections">
+          <a class="nav-tab active" data-section="profile" href="javascript:void(0)">
+            <span class="material-symbols-outlined">person</span> Profile
+          </a>
+          <a class="nav-tab" data-section="security" href="javascript:void(0)">
+            <span class="material-symbols-outlined">lock</span> Security
+          </a>
+          <a class="nav-tab" data-section="orders" href="javascript:void(0)">
+            <span class="material-symbols-outlined">shopping_bag</span> Orders
+          </a>
+        </nav>
+      </div>
+
+      <!-- Content area -->
+      <div class="md:col-span-3 space-y-4">
+
+        <!-- Profile Section -->
+        <div id="section-profile" class="glass-card rounded-2xl p-6">
+          <h2 class="text-[17px] font-semibold text-[#1D1D1F] mb-5">Personal Information</h2>
+          <div id="profile-alert-success" class="alert-box alert-success mb-4"><span class="material-symbols-outlined text-[18px]">check_circle</span><span id="profile-success-msg"></span></div>
+          <div id="profile-alert-error" class="alert-box alert-error mb-4"><span class="material-symbols-outlined text-[18px]">error</span><span id="profile-error-msg"></span></div>
+          <form id="profile-form" novalidate>
+            <div class="grid grid-cols-1 gap-4 mb-5">
+              <div>
+                <label for="edit-name" class="block text-[12px] font-semibold text-[#8E8E93] uppercase tracking-wider mb-1.5">Display Name</label>
+                <input type="text" id="edit-name" class="input-field" autocomplete="name"/>
+              </div>
+              <div>
+                <label class="block text-[12px] font-semibold text-[#8E8E93] uppercase tracking-wider mb-1.5">Email</label>
+                <input type="email" id="edit-email" class="input-field bg-[#F2F2F7]" readonly disabled aria-label="Email cannot be changed"/>
+                <p class="text-[12px] text-[#8E8E93] mt-1.5">Email address cannot be changed.</p>
+              </div>
+            </div>
+            <button type="submit" id="profile-save-btn" class="btn-primary">Save Changes</button>
+          </form>
+        </div>
+
+        <!-- Security Section -->
+        <div id="section-security" class="hidden glass-card rounded-2xl p-6">
+          <h2 class="text-[17px] font-semibold text-[#1D1D1F] mb-5">Security Settings</h2>
+          <div id="pw-alert-success" class="alert-box alert-success mb-4"><span class="material-symbols-outlined text-[18px]">check_circle</span><span id="pw-success-msg"></span></div>
+          <div id="pw-alert-error" class="alert-box alert-error mb-4"><span class="material-symbols-outlined text-[18px]">error</span><span id="pw-error-msg"></span></div>
+
+          <!-- Security overview -->
+          <div class="mb-6 p-4 bg-[#F2F2F7] rounded-xl">
+            <div class="security-row">
+              <div><p class="text-[14px] font-medium text-[#1D1D1F]">Authentication</p><p class="text-[12px] text-[#8E8E93]">JWT tokens with automatic refresh</p></div>
+              <span class="badge badge-green">Active</span>
+            </div>
+            <div class="security-row">
+              <div><p class="text-[14px] font-medium text-[#1D1D1F]">CSRF Protection</p><p class="text-[12px] text-[#8E8E93]">Double-submit cookie pattern</p></div>
+              <span class="badge badge-green">Enabled</span>
+            </div>
+            <div class="security-row">
+              <div><p class="text-[14px] font-medium text-[#1D1D1F]">Session Storage</p><p class="text-[12px] text-[#8E8E93]">HttpOnly cookies — not accessible to JS</p></div>
+              <span class="badge badge-blue">Secure</span>
+            </div>
+            <div class="security-row">
+              <div><p class="text-[14px] font-medium text-[#1D1D1F]">Login Protection</p><p class="text-[12px] text-[#8E8E93]">Rate limiting + account lockout after 5 fails</p></div>
+              <span class="badge badge-green">Active</span>
+            </div>
+          </div>
+
+          <!-- Change password -->
+          <h3 class="text-[15px] font-semibold text-[#1D1D1F] mb-4">Change Password</h3>
+          <form id="password-form" novalidate class="space-y-3">
+            <div>
+              <label for="current-pw" class="block text-[12px] font-semibold text-[#8E8E93] mb-1.5">Current Password</label>
+              <input type="password" id="current-pw" class="input-field" placeholder="••••••••" autocomplete="current-password"/>
+            </div>
+            <div>
+              <label for="new-pw" class="block text-[12px] font-semibold text-[#8E8E93] mb-1.5">New Password</label>
+              <input type="password" id="new-pw" class="input-field" placeholder="••••••••" autocomplete="new-password"/>
+            </div>
+            <div>
+              <label for="confirm-pw" class="block text-[12px] font-semibold text-[#8E8E93] mb-1.5">Confirm New Password</label>
+              <input type="password" id="confirm-pw" class="input-field" placeholder="••••••••" autocomplete="new-password"/>
+            </div>
+            <button type="submit" id="pw-save-btn" class="btn-primary">Update Password</button>
+          </form>
+
+          <!-- Danger zone -->
+          <div class="mt-8 p-4 border border-[#FFCDD2] rounded-xl bg-[#FFF8F8]">
+            <h4 class="text-[14px] font-semibold text-[#C62828] mb-1">Danger Zone</h4>
+            <p class="text-[13px] text-[#8E8E93] mb-3">Permanently delete your account and all associated data. This action cannot be undone.</p>
+            <button type="button" id="delete-account-btn" class="btn-danger">Delete Account</button>
+          </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="section-orders" class="hidden glass-card rounded-2xl p-6">
+          <h2 class="text-[17px] font-semibold text-[#1D1D1F] mb-5">Order History</h2>
+          <!-- Loading state -->
+          <div id="orders-loading" class="text-center py-12">
+            <span class="material-symbols-outlined text-[#C7C7CC] text-[48px] animate-spin" style="animation:spin 1s linear infinite">progress_activity</span>
+            <p class="text-[14px] text-[#8E8E93] mt-3">Loading orders…</p>
+          </div>
+          <!-- Order list -->
+          <div id="orders-list" class="hidden space-y-4"></div>
+          <!-- Empty state -->
+          <div id="orders-empty" class="hidden text-center py-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-[#F2F2F7] rounded-2xl mb-4">
+              <span class="material-symbols-outlined text-[32px] text-[#C7C7CC]">shopping_bag</span>
+            </div>
+            <p class="text-[16px] font-medium text-[#1D1D1F]">No orders yet</p>
+            <p class="text-[14px] text-[#8E8E93] mt-1 mb-6">When you place an order, it will appear here.</p>
+            <a href="/home.html" class="btn-primary inline-block" style="text-decoration:none">Start Shopping</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { requireAuth, getUser, logout, apiFetch } from '/src/auth.js';
+
+    async function main() {
+      // ── Auth Guard ──────────────────────────────────────────────────
+      const authenticated = await requireAuth('Please sign in to view your account.');
+      if (!authenticated) return;
+
+      const user = getUser();
+
+      // ── Hide skeleton, show content ─────────────────────────────────
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('main-content').classList.remove('hidden');
+
+      // ── Populate UI ────────────────────────────────────────────────
+      const firstName = user.name.split(' ')[0];
+      document.getElementById('greeting').textContent = `Welcome back, ${firstName}! 👋`;
+      document.getElementById('nav-user-name').textContent = user.name;
+      document.getElementById('sidebar-name').textContent = user.name;
+      document.getElementById('sidebar-email').textContent = user.email;
+      document.getElementById('avatar-initials').textContent = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('edit-name').value = user.name;
+      document.getElementById('edit-email').value = user.email;
+      document.getElementById('member-since').textContent = 'Member since ' + new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      // ── Logout ─────────────────────────────────────────────────────
+      document.getElementById('logout-btn').addEventListener('click', logout);
+
+      // ── Tab navigation ─────────────────────────────────────────────
+      document.querySelectorAll('[data-section]').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('[data-section]').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const section = tab.getAttribute('data-section');
+          ['profile', 'security', 'orders'].forEach(s => {
+            document.getElementById(`section-${s}`).classList.toggle('hidden', s !== section);
+          });
+        });
+      });
+
+      // ── Toast helper ──────────────────────────────────────────────
+      function toast(msg, type = 'success') {
+        const colors = { success: '#34C759', error: '#FF3B30', info: '#0066CC' };
+        const icons  = { success: 'check_circle', error: 'error', info: 'info' };
+        const el = document.createElement('div');
+        el.style.cssText = `display:flex;align-items:center;gap:10px;padding:14px 18px;background:rgba(255,255,255,0.95);border-radius:14px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,0.12);font-size:14px;font-weight:500;color:#1D1D1F;pointer-events:auto;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);min-width:220px;border:1px solid ${colors[type]}30`;
+        el.innerHTML = `<span class="material-symbols-outlined" style="color:${colors[type]};font-size:20px">${icons[type]}</span><span>${msg}</span>`;
+        document.getElementById('toast-container').appendChild(el);
+        requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transform = 'translateX(0)'; }));
+        setTimeout(() => { el.style.transform = 'translateX(120%)'; el.addEventListener('transitionend', () => el.remove()); }, 3500);
+      }
+
+      // ── Profile update ─────────────────────────────────────────────
+      document.getElementById('profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('profile-save-btn');
+        btn.disabled = true; btn.textContent = 'Saving…';
+        try {
+          const res = await apiFetch('/user/profile', {
+            method: 'PATCH',
+            body: JSON.stringify({ name: document.getElementById('edit-name').value }),
+          });
+          if (!res) return;
+          const data = await res.json();
+          if (res.ok) {
+            toast('Profile updated successfully!', 'success');
+            document.getElementById('sidebar-name').textContent = data.user.name;
+          } else {
+            toast(data.error || 'Update failed.', 'error');
+          }
+        } catch { toast('Connection error.', 'error'); }
+        finally { btn.disabled = false; btn.textContent = 'Save Changes'; }
+      });
+
+      // ── Password change ────────────────────────────────────────────
+      document.getElementById('password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('pw-save-btn');
+        const newPw  = document.getElementById('new-pw').value;
+        const confPw = document.getElementById('confirm-pw').value;
+        if (newPw !== confPw) { toast('New passwords do not match.', 'error'); return; }
+        btn.disabled = true; btn.textContent = 'Updating…';
+        try {
+          const res = await apiFetch('/user/change-password', {
+            method: 'POST',
+            body: JSON.stringify({ currentPassword: document.getElementById('current-pw').value, newPassword: newPw }),
+          });
+          if (!res) return;
+          const data = await res.json();
+          if (res.ok) {
+            toast('Password changed! Please use your new password next time.', 'success');
+            document.getElementById('password-form').reset();
+          } else {
+            const msg = data.fields ? data.fields.map(f => f.message).join(' ') : (data.error || 'Failed.');
+            toast(msg, 'error');
+          }
+        } catch { toast('Connection error.', 'error'); }
+        finally { btn.disabled = false; btn.textContent = 'Update Password'; }
+      });
+
+      // ── Delete account ─────────────────────────────────────────────
+      document.getElementById('delete-account-btn').addEventListener('click', async () => {
+        const password = prompt('Enter your password to permanently delete your account:');
+        if (!password) return;
+        if (!confirm('This will permanently delete your account. Are you absolutely sure?')) return;
+        const res = await apiFetch('/user/account', {
+          method: 'DELETE',
+          body: JSON.stringify({ password }),
+        });
+        if (!res) return;
+        if (res.ok) {
+          alert('Account deleted. You will be redirected.');
+          window.location.href = '/index.html';
+        } else {
+          const data = await res.json();
+          toast(data.error || 'Deletion failed.', 'error');
+        }
+      });
+      // ── Fetch & render orders ───────────────────────────────────────
+      async function loadOrders() {
+        try {
+          const res = await apiFetch('/user/orders');
+          if (!res) return;
+          const data = await res.json();
+          const orders = data.orders || [];
+          const loading = document.getElementById('orders-loading');
+          const list    = document.getElementById('orders-list');
+          const empty   = document.getElementById('orders-empty');
+
+          loading.classList.add('hidden');
+
+          if (orders.length === 0) {
+            empty.classList.remove('hidden');
+            return;
+          }
+
+          list.classList.remove('hidden');
+          list.innerHTML = orders.map(order => {
+            const date = new Date(order.placedAt).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+            const itemsHtml = order.items.map(item => `
+              <div class="flex justify-between text-[13px] py-1">
+                <span class="text-[#1D1D1F]">${item.name} <span class="text-[#8E8E93]">x${item.qty || 1}</span></span>
+                <span class="text-[#1D1D1F] font-medium">&#8377;${(item.price * (item.qty || 1)).toLocaleString('en-IN')}</span>
+              </div>
+            `).join('');
+
+            const statusColor = order.status === 'Confirmed' ? '#34C759' : '#FF9500';
+
+            return `
+              <div class="border border-[#E5E5EA] rounded-2xl p-5 bg-white hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <span class="font-mono text-[13px] font-bold text-[#0066CC]">${order.orderRef}</span>
+                    <span class="text-[#8E8E93] text-[12px] ml-3">${date}</span>
+                  </div>
+                  <span style="color:${statusColor}" class="text-[12px] font-semibold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                    ${order.status || 'Confirmed'}
+                  </span>
+                </div>
+                <div class="divide-y divide-[#F2F2F7]">${itemsHtml}</div>
+                <div class="flex justify-between items-center mt-3 pt-3 border-t border-[#F2F2F7]">
+                  <span class="text-[13px] text-[#8E8E93]">${order.items.length} item${order.items.length !== 1 ? 's' : ''}</span>
+                  <span class="text-[15px] font-bold text-[#1D1D1F]">Total: &#8377;${Number(order.total).toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } catch (err) {
+          console.error('[orders] Failed to load orders:', err);
+          document.getElementById('orders-loading').classList.add('hidden');
+          document.getElementById('orders-empty').classList.remove('hidden');
+        }
+      }
+
+      loadOrders();
+    }
+
+    main();
+  </script>
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Explore the AppleVerse iPad line-up. Discover the ultimate iPad Pro with M5 chip, the powerful iPad Air with M4 chip, and the compact iPad mini."/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="AppleVerse iPad | Pro, Air, and mini"/>
+  <meta property="og:description" content="Experience premium tablet technology with the latest M-series processors and stunning OLED screens."/>
+  <meta property="og:image" content="/images/ipad_pro_11_m5.jpg"/>
+  
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://lh3.googleusercontent.com data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <title>AppleVerse | iPad</title>
+  
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#004e9f",
+            "silver-highlight": "#D2D2D7",
+            "on-tertiary": "#ffffff",
+            "on-primary-container": "#dfe8ff",
+            "secondary": "#5d5f5f",
+            "surface-glass": "rgba(255, 255, 255, 0.72)",
+            "tertiary-fixed": "#e3e2e7",
+            "secondary-container": "#dfe0e0",
+            "apple-blue": "#0066CC",
+            "inverse-surface": "#303032",
+            "surface-container-low": "#f6f3f5",
+            "on-tertiary-container": "#e9e8ed",
+            "primary-container": "#0066cc",
+            "primary-fixed-dim": "#aac7ff",
+            "inverse-primary": "#aac7ff",
+            "on-secondary-container": "#616363",
+            "on-error-container": "#93000a",
+            "surface-secondary": "#F2F2F5",
+            "on-surface": "#1b1b1d",
+            "background": "#fcf8fb",
+            "on-tertiary-fixed-variant": "#46464b",
+            "surface-dim": "#dcd9dc",
+            "on-surface-variant": "#414753",
+            "tertiary": "#4f5054",
+            "outline-variant": "#c1c6d5",
+            "surface-container-highest": "#e4e2e4",
+            "surface-main": "#FAFAFA",
+            "surface": "#fcf8fb",
+            "on-primary": "#ffffff",
+            "outline": "#727784",
+            "on-primary-fixed-variant": "#00458e",
+            "primary-fixed": "#d7e3ff",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#f3f0f2",
+            "surface-variant": "#e4e2e4",
+            "tertiary-container": "#68686d",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#454747",
+            "tertiary-fixed-dim": "#c7c6cb",
+            "on-tertiary-fixed": "#1a1b1f",
+            "surface-tint": "#005cba",
+            "on-secondary-fixed": "#1a1c1c",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#eae7ea",
+            "secondary-fixed": "#e2e2e2",
+            "on-secondary": "#ffffff",
+            "surface-bright": "#fcf8fb",
+            "on-primary-fixed": "#001b3e",
+            "on-background": "#1b1b1d",
+            "surface-container": "#f0edef",
+            "secondary-fixed-dim": "#c6c6c7",
+            "deep-charcoal": "#1D1D1F",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "stack-gap-md": "16px",
+            "section-gap": "120px",
+            "container-max": "1200px",
+            "margin-desktop": "40px",
+            "stack-gap-sm": "8px",
+            "stack-gap-lg": "32px",
+            "margin-mobile": "20px",
+            "gutter": "24px"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-xl": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "display-xl": ["80px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "display-lg": ["56px", {"lineHeight": "1.15", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "body-md": ["17px", {"lineHeight": "1.47", "fontWeight": "400"}],
+            "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgba(210, 210, 215, 0.5);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.03);
+    }
+    .text-gradient-blue {
+      background: linear-gradient(135deg, #0066CC 0%, #004e9f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-[#FAFAFA] dark:bg-zinc-950 font-body-md text-on-surface antialiased overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] rounded-full backdrop-blur-xl border border-[#D2D2D7]/30 bg-white/95 shadow-2xl shadow-black/5 flex justify-between items-center px-8 py-3 z-50 transition-all duration-300" id="main-nav">
+    <a href="home.html" class="flex items-center gap-3">
+      <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-10 w-auto object-contain">
+      <div class="flex flex-col leading-none">
+        <span class="font-bold text-[19px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
+        <span class="text-[9px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-8 font-medium text-[14px]">
+      <a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="home.html">Home</a>
+      <a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="mac.html">Mac</a>
+      <a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="iphone.html">iPhone</a>
+      <a class="text-[#0066CC] font-semibold border-b border-[#0066CC] transition-all duration-300" href="ipad.html">iPad</a>
+      <a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="watch.html">Watch</a>
+      <a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="audio-vision.html">Audio &amp; Vision</a>
+      <a class="text-[#1D1D1F] opacity-80 hover:opacity-100 hover:text-[#0066CC] transition-all duration-300" href="stores.html">Stores</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="material-symbols-outlined text-[#1D1D1F] hover:text-[#0066CC] transition-colors" data-cart-btn aria-label="Shopping Bag" type="button">shopping_bag</button>
+      <button class="md:hidden material-symbols-outlined text-[#1D1D1F] hover:text-[#0066CC]" id="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu" type="button">menu</button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Panel -->
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu" class="fixed inset-0 bg-[#FAFAFA]/98 backdrop-blur-xl z-50 hidden flex-col justify-center items-center gap-8 text-[20px] font-medium transition-all duration-300">
+    <button class="absolute top-6 right-6 material-symbols-outlined text-[32px]" id="mobile-menu-close" aria-label="Close navigation menu" type="button">close</button>
+    <a class="hover:text-[#0066CC] transition-colors" href="home.html">Home</a>
+    <a class="hover:text-[#0066CC] transition-colors" href="mac.html">Mac</a>
+    <a class="hover:text-[#0066CC] transition-colors" href="iphone.html">iPhone</a>
+    <a class="hover:text-[#0066CC] transition-colors" href="ipad.html">iPad</a>
+    <a class="hover:text-[#0066CC] transition-colors" href="watch.html">Watch</a>
+    <a class="hover:text-[#0066CC] transition-colors" href="audio-vision.html">Audio &amp; Vision</a>
+    <a class="hover:text-[#0066CC] transition-colors" href="stores.html">Stores</a>
+  </div>
+
+  <main class="pt-16">
+    <!-- Hero Section -->
+    <section class="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop overflow-hidden">
+      <div class="z-10 mt-12 animate-fade-in-up">
+        <h1 class="font-display-xl text-display-xl text-primary tracking-tighter mb-4 max-w-3xl mx-auto md:block hidden">Explore iPad</h1>
+        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-4 md:hidden">Explore iPad</h1>
+        <p class="font-body-lg text-body-lg text-secondary max-w-2xl mx-auto mb-10">
+          Thinpossible. Powered by the next generation M5 and M4 processors, designed for creators, builders, and learners.
+        </p>
+        <div class="flex flex-wrap justify-center items-center gap-4">
+          <button onclick="document.getElementById('ipad-models-section').scrollIntoView({ behavior: 'smooth' })" type="button" class="px-8 py-3 bg-primary text-on-primary rounded-full font-label-md text-label-md hover:scale-105 transition-all shadow-xl active:scale-95">Explore Models</button>
+          <button id="watch-film-btn" type="button" class="group relative flex items-center gap-3 bg-white/70 dark:bg-zinc-900/70 border border-[#D2D2D7]/50 dark:border-zinc-800/50 px-8 py-3 rounded-full font-label-md text-label-md text-primary dark:text-white shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 backdrop-blur-md">
+            <span class="absolute inset-0 rounded-full bg-primary/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></span>
+            Watch the film
+            <span class="relative flex h-6 w-6">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/30 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-6 w-6 items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+                <span class="material-symbols-outlined text-[22px]">play_circle</span>
+              </span>
+            </span>
+          </button>
+          <button onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })" type="button" class="px-8 py-3 text-secondary hover:bg-secondary/5 rounded-full font-label-md text-label-md transition-all active:scale-95">Compare Specs</button>
+        </div>
+      </div>
+      <div class="mt-12 w-full max-w-5xl transition-transform hover:scale-[1.01] duration-700">
+        <img class="w-full h-auto object-contain rounded-[32px] shadow-2xl" alt="iPad Pro M5 Showcase" src="/images/ipad_pro_11_m5.jpg" loading="lazy" decoding="async"/>
+      </div>
+    </section>
+
+    <!-- iPad Cards / Retail Showcase Section -->
+    <section id="ipad-models-section" class="py-20 bg-[#F5F5F7] dark:bg-zinc-900 border-t border-zinc-200/50 dark:border-zinc-800 px-margin-mobile md:px-margin-desktop">
+      <div class="max-w-container-max mx-auto">
+        <div class="text-center mb-16">
+          <span class="text-[#0066CC] font-bold text-xs uppercase tracking-widest block mb-2">Find your perfect iPad</span>
+          <h2 class="font-display-md text-display-md mb-4 tracking-tight">The iPad Family.</h2>
+          <p class="font-body-md text-body-md text-secondary max-w-lg mx-auto">
+            From the ultra-thin iPad Pro with M5 chip to the compact iPad mini, find the right fit for your workflows.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          <!-- Card 1: iPad Pro 11-inch (M5) -->
+          <div class="bg-white dark:bg-zinc-950 rounded-3xl p-6 border border-zinc-200/40 dark:border-zinc-800/40 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div class="overflow-hidden rounded-2xl mb-6 relative bg-zinc-55 dark:bg-zinc-900">
+                <img src="/images/ipad_pro_11_m5.jpg" alt="iPad Pro 11-inch M5" class="w-full h-[240px] object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md text-white text-[9px] font-bold tracking-wider px-3 py-1 rounded-full uppercase">Ultra Retina XDR</div>
+              </div>
+              <span class="text-[#0066CC] font-bold text-[10px] uppercase tracking-widest block mb-1">M5 Chip performance</span>
+              <h3 class="font-bold text-xl text-primary dark:text-white leading-snug">iPad Pro 11-inch</h3>
+              <p class="text-xs text-secondary mt-2 line-clamp-3">The ultimate compact iPad experience. Astonishingly thin design featuring the breakthrough Tandem OLED Ultra Retina XDR display, outrageous M5 graphics speed, and Pro camera arrays.</p>
+              
+              <!-- Specs preview -->
+              <div class="mt-6 space-y-2 text-xs text-zinc-500">
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Display Size</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">11" Ultra Retina XDR OLED</span>
+                </div>
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Processor</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple M5 Chip</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Pencil Support</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple Pencil Pro</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col gap-3">
+              <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-secondary font-medium">Starting from</span>
+                <span class="font-bold text-lg text-primary dark:text-white">₹99,900</span>
+              </div>
+              <div class="flex gap-3">
+                <button onclick="addToCart({ name: 'iPad Pro 11-inch (M5)', price: 99900.00, image: '/images/ipad_pro_11_m5.jpg' })" class="flex-grow py-3 bg-[#0066CC] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs tracking-wider transition-all active:scale-95 text-center">Add to Bag</button>
+                <button onclick="openSpecsModal('pro11')" class="px-4 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-primary dark:text-white rounded-xl font-bold text-xs transition-colors" aria-label="Specs"><span class="material-symbols-outlined text-sm block">info</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: iPad Pro 13-inch (M5) -->
+          <div class="bg-white dark:bg-zinc-950 rounded-3xl p-6 border border-zinc-200/40 dark:border-zinc-800/40 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div class="overflow-hidden rounded-2xl mb-6 relative bg-zinc-55 dark:bg-zinc-900">
+                <img src="/images/ipad_pro_13_m5.jpg" alt="iPad Pro 13-inch M5" class="w-full h-[240px] object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md text-white text-[9px] font-bold tracking-wider px-3 py-1 rounded-full uppercase">Ultra Retina XDR</div>
+              </div>
+              <span class="text-[#0066CC] font-bold text-[10px] uppercase tracking-widest block mb-1">M5 Chip performance</span>
+              <h3 class="font-bold text-xl text-primary dark:text-white leading-snug">iPad Pro 13-inch</h3>
+              <p class="text-xs text-secondary mt-2 line-clamp-3">The ultimate expansive iPad experience. Astonishingly thin design featuring a massive Tandem OLED Ultra Retina XDR display, outrageous M5 graphics speed, and Pro camera arrays.</p>
+              
+              <!-- Specs preview -->
+              <div class="mt-6 space-y-2 text-xs text-zinc-500">
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Display Size</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">13" Ultra Retina XDR OLED</span>
+                </div>
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Processor</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple M5 Chip</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Pencil Support</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple Pencil Pro</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col gap-3">
+              <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-secondary font-medium">Starting from</span>
+                <span class="font-bold text-lg text-primary dark:text-white">₹129,900</span>
+              </div>
+              <div class="flex gap-3">
+                <button onclick="addToCart({ name: 'iPad Pro 13-inch (M5)', price: 129900.00, image: '/images/ipad_pro_13_m5.jpg' })" class="flex-grow py-3 bg-[#0066CC] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs tracking-wider transition-all active:scale-95 text-center">Add to Bag</button>
+                <button onclick="openSpecsModal('pro13')" class="px-4 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-primary dark:text-white rounded-xl font-bold text-xs transition-colors" aria-label="Specs"><span class="material-symbols-outlined text-sm block">info</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: iPad Air 11-inch (M4) -->
+          <div class="bg-white dark:bg-zinc-950 rounded-3xl p-6 border border-zinc-200/40 dark:border-zinc-800/40 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div class="overflow-hidden rounded-2xl mb-6 relative bg-zinc-55 dark:bg-zinc-900">
+                <img src="/images/ipad_air_11_m4.jpg" alt="iPad Air 11-inch M4" class="w-full h-[240px] object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md text-white text-[9px] font-bold tracking-wider px-3 py-1 rounded-full uppercase">Liquid Retina</div>
+              </div>
+              <span class="text-[#0066CC] font-bold text-[10px] uppercase tracking-widest block mb-1">M4 Chip productivity</span>
+              <h3 class="font-bold text-xl text-primary dark:text-white leading-snug">iPad Air 11-inch</h3>
+              <p class="text-xs text-secondary mt-2 line-clamp-3">Redesigned with the high performance driven by the Apple M4 chip, a landscape front camera, and seamless Apple Pencil Pro capabilities in an 11-inch footprint.</p>
+              
+              <!-- Specs preview -->
+              <div class="mt-6 space-y-2 text-xs text-zinc-500">
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Display Size</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">11" Liquid Retina</span>
+                </div>
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Processor</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple M4 Chip</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Pencil Support</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple Pencil Pro</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col gap-3">
+              <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-secondary font-medium">Starting from</span>
+                <span class="font-bold text-lg text-primary dark:text-white">₹64,900</span>
+              </div>
+              <div class="flex gap-3">
+                <button onclick="addToCart({ name: 'iPad Air 11-inch (M4)', price: 64900.00, image: '/images/ipad_air_11_m4.jpg' })" class="flex-grow py-3 bg-[#0066CC] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs tracking-wider transition-all active:scale-95 text-center">Add to Bag</button>
+                <button onclick="openSpecsModal('air11')" class="px-4 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-primary dark:text-white rounded-xl font-bold text-xs transition-colors" aria-label="Specs"><span class="material-symbols-outlined text-sm block">info</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: iPad Air 13-inch (M4) -->
+          <div class="bg-white dark:bg-zinc-950 rounded-3xl p-6 border border-zinc-200/40 dark:border-zinc-800/40 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div class="overflow-hidden rounded-2xl mb-6 relative bg-zinc-55 dark:bg-zinc-900">
+                <img src="/images/ipad_air_13_m4.jpg" alt="iPad Air 13-inch M4" class="w-full h-[240px] object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md text-white text-[9px] font-bold tracking-wider px-3 py-1 rounded-full uppercase">Liquid Retina</div>
+              </div>
+              <span class="text-[#0066CC] font-bold text-[10px] uppercase tracking-widest block mb-1">M4 Chip productivity</span>
+              <h3 class="font-bold text-xl text-primary dark:text-white leading-snug">iPad Air 13-inch</h3>
+              <p class="text-xs text-secondary mt-2 line-clamp-3">Redesigned with the high performance driven by the Apple M4 chip, a landscape front camera, and seamless Apple Pencil Pro capabilities in a spacious 13-inch footprint.</p>
+              
+              <!-- Specs preview -->
+              <div class="mt-6 space-y-2 text-xs text-zinc-500">
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Display Size</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">13" Liquid Retina</span>
+                </div>
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Processor</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple M4 Chip</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Pencil Support</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple Pencil Pro</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col gap-3">
+              <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-secondary font-medium">Starting from</span>
+                <span class="font-bold text-lg text-primary dark:text-white">₹84,900</span>
+              </div>
+              <div class="flex gap-3">
+                <button onclick="addToCart({ name: 'iPad Air 13-inch (M4)', price: 84900.00, image: '/images/ipad_air_13_m4.jpg' })" class="flex-grow py-3 bg-[#0066CC] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs tracking-wider transition-all active:scale-95 text-center">Add to Bag</button>
+                <button onclick="openSpecsModal('air13')" class="px-4 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-primary dark:text-white rounded-xl font-bold text-xs transition-colors" aria-label="Specs"><span class="material-symbols-outlined text-sm block">info</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: iPad 11th Gen (A16) -->
+          <div class="bg-white dark:bg-zinc-950 rounded-3xl p-6 border border-zinc-200/40 dark:border-zinc-800/40 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div class="overflow-hidden rounded-2xl mb-6 relative bg-zinc-55 dark:bg-zinc-900">
+                <img src="/images/ipad_11th_gen.jpg" alt="iPad 11th Gen" class="w-full h-[240px] object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md text-white text-[9px] font-bold tracking-wider px-3 py-1 rounded-full uppercase">A16 Bionic</div>
+              </div>
+              <span class="text-[#0066CC] font-bold text-[10px] uppercase tracking-widest block mb-1">A16 Chip study &amp; creation</span>
+              <h3 class="font-bold text-xl text-primary dark:text-white leading-snug">iPad (11th Generation)</h3>
+              <p class="text-xs text-secondary mt-2 line-clamp-3">Colorfully designed for all the things you do every day. Backed by the rapid performance of the A16 Bionic chip, 11-inch Liquid Retina display, and landscape front camera.</p>
+              
+              <!-- Specs preview -->
+              <div class="mt-6 space-y-2 text-xs text-zinc-500">
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Display Size</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">11" Liquid Retina</span>
+                </div>
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Processor</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">A16 Bionic Chip</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Pencil Support</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple Pencil (USB-C)</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col gap-3">
+              <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-secondary font-medium">Starting from</span>
+                <span class="font-bold text-lg text-primary dark:text-white">₹34,900</span>
+              </div>
+              <div class="flex gap-3">
+                <button onclick="addToCart({ name: 'iPad 11th Gen (A16)', price: 34900.00, image: '/images/ipad_11th_gen.jpg' })" class="flex-grow py-3 bg-[#0066CC] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs tracking-wider transition-all active:scale-95 text-center">Add to Bag</button>
+                <button onclick="openSpecsModal('ipad11')" class="px-4 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-primary dark:text-white rounded-xl font-bold text-xs transition-colors" aria-label="Specs"><span class="material-symbols-outlined text-sm block">info</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6: iPad mini 7th Gen (A17 Pro) -->
+          <div class="bg-white dark:bg-zinc-950 rounded-3xl p-6 border border-zinc-200/40 dark:border-zinc-800/40 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div class="overflow-hidden rounded-2xl mb-6 relative bg-zinc-55 dark:bg-zinc-900">
+                <img src="/images/ipad_mini_7.jpg" alt="iPad mini 7th Gen" class="w-full h-[240px] object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md text-white text-[9px] font-bold tracking-wider px-3 py-1 rounded-full uppercase">A17 Pro</div>
+              </div>
+              <span class="text-[#0066CC] font-bold text-[10px] uppercase tracking-widest block mb-1">A17 Pro compact power</span>
+              <h3 class="font-bold text-xl text-primary dark:text-white leading-snug">iPad mini (7th Gen)</h3>
+              <p class="text-xs text-secondary mt-2 line-clamp-3">Mega power in a palm-sized portable form. Features the ultra-efficient A17 Pro chip supporting modern Apple Intelligence, high-speed USB-C, and Apple Pencil Pro compatibility.</p>
+              
+              <!-- Specs preview -->
+              <div class="mt-6 space-y-2 text-xs text-zinc-500">
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Display Size</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">8.3" Liquid Retina</span>
+                </div>
+                <div class="flex justify-between border-b border-zinc-100 dark:border-zinc-800 pb-1.5">
+                  <span>Processor</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">A17 Pro Chip</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Pencil Support</span>
+                  <span class="font-semibold text-zinc-800 dark:text-zinc-200">Apple Pencil Pro</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col gap-3">
+              <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-secondary font-medium">Starting from</span>
+                <span class="font-bold text-lg text-primary dark:text-white">₹49,900</span>
+              </div>
+              <div class="flex gap-3">
+                <button onclick="addToCart({ name: 'iPad mini 7th Gen (A17 Pro)', price: 49900.00, image: '/images/ipad_mini_7.jpg' })" class="flex-grow py-3 bg-[#0066CC] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs tracking-wider transition-all active:scale-95 text-center">Add to Bag</button>
+                <button onclick="openSpecsModal('mini7')" class="px-4 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-primary dark:text-white rounded-xl font-bold text-xs transition-colors" aria-label="Specs"><span class="material-symbols-outlined text-sm block">info</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Specification Table (Compare Section) -->
+    <section class="py-20 bg-white dark:bg-zinc-950 px-margin-mobile md:px-margin-desktop border-t border-zinc-200/40 dark:border-zinc-850/40">
+      <div class="max-w-container-max mx-auto">
+        <div class="text-center mb-16">
+          <span class="text-secondary font-bold text-xs uppercase tracking-widest block mb-2">Compare Models</span>
+          <h2 class="font-display-md text-display-md mb-4 tracking-tight">Full iPad Specifications.</h2>
+        </div>
+
+        <div class="overflow-x-auto rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xl bg-white dark:bg-zinc-900">
+          <table class="w-full min-w-[700px] border-collapse text-left text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <thead>
+              <tr class="bg-zinc-55 dark:bg-zinc-950 text-primary dark:text-white font-bold border-b border-zinc-200 dark:border-zinc-800">
+                <th class="p-6">Feature</th>
+                <th class="p-6">iPad Pro (M5)</th>
+                <th class="p-6">iPad Air (M4)</th>
+                <th class="p-6">iPad (11th Gen)</th>
+                <th class="p-6">iPad mini (7th Gen)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-850">
+              <tr>
+                <td class="p-6 font-semibold text-zinc-850 dark:text-zinc-200">Display</td>
+                <td class="p-6">11" or 13" Ultra Retina XDR OLED<br>Tandem OLED, ProMotion 120Hz</td>
+                <td class="p-6">11" or 13" Liquid Retina LED<br>500 nits, Wide color (P3)</td>
+                <td class="p-6">11" Liquid Retina LED<br>Fully laminated display</td>
+                <td class="p-6">8.3" Liquid Retina LED<br>500 nits, True Tone display</td>
+              </tr>
+              <tr>
+                <td class="p-6 font-semibold text-zinc-850 dark:text-zinc-200">Processor</td>
+                <td class="p-6">Apple M5 Chip<br>Outrageous performance and graphics speed</td>
+                <td class="p-6">Apple M4 Chip<br>10-core CPU, 10-core GPU</td>
+                <td class="p-6">A16 Bionic Chip<br>6-core CPU, 5-core GPU</td>
+                <td class="p-6">A17 Pro Chip<br>6-core CPU, 5-core GPU</td>
+              </tr>
+              <tr>
+                <td class="p-6 font-semibold text-zinc-850 dark:text-zinc-200">Thickness &amp; Weight</td>
+                <td class="p-6">5.1 mm (13-inch: 579g)</td>
+                <td class="p-6">6.1 mm (13-inch: 617g)</td>
+                <td class="p-6">7.0 mm (477g)</td>
+                <td class="p-6">6.3 mm (293g)</td>
+              </tr>
+              <tr>
+                <td class="p-6 font-semibold text-zinc-850 dark:text-zinc-200">Starting Price</td>
+                <td class="p-6">₹99,900 (11") / ₹129,900 (13")</td>
+                <td class="p-6">₹64,900 (11") / ₹84,900 (13")</td>
+                <td class="p-6">₹34,900</td>
+                <td class="p-6">₹49,900</td>
+              </tr>
+              <tr>
+                <td class="p-6 font-semibold text-zinc-850 dark:text-zinc-200">Pencil Compatibility</td>
+                <td class="p-6">Apple Pencil Pro &amp; Pencil (USB-C)</td>
+                <td class="p-6">Apple Pencil Pro &amp; Pencil (USB-C)</td>
+                <td class="p-6">Apple Pencil (USB-C)</td>
+                <td class="p-6">Apple Pencil Pro &amp; Pencil (USB-C)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section (Scroll to Top) -->
+    <section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-[#FAFAFA] dark:bg-zinc-900 border-t border-zinc-200/50 dark:border-zinc-800/50">
+      <div class="max-w-container-max mx-auto bg-surface-container rounded-[3rem] p-16 text-center relative overflow-hidden group">
+        <div class="z-10 relative">
+          <h2 class="font-display-lg text-display-lg text-primary tracking-tighter mb-4">Choose your new iPad.</h2>
+          <div class="flex flex-wrap justify-center gap-4 mt-6">
+            <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" type="button" class="px-12 py-4 bg-primary text-on-primary rounded-full font-label-md text-label-md hover:scale-105 transition-all shadow-xl active:scale-95">Compare Models</button>
+            <button onclick="document.getElementById('ipad-models-section').scrollIntoView({ behavior: 'smooth' })" type="button" class="px-12 py-4 text-secondary hover:bg-secondary/5 rounded-full font-label-md text-label-md transition-all active:scale-95">Shop Now</button>
+          </div>
+        </div>
+        <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[100px] -z-0"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 blur-[100px] -z-0"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Technical Specifications Details Overlay Modal -->
+  <div id="specs-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[9995] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="bg-white dark:bg-zinc-900 rounded-[32px] max-w-lg w-full p-8 shadow-2xl border border-zinc-200 dark:border-zinc-800 transform scale-95 transition-transform duration-300">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-primary dark:text-white flex items-center gap-2" id="specs-title">Model Specifications</h3>
+        <button onclick="closeSpecsModal()" class="material-symbols-outlined p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full text-zinc-500 transition-colors">close</button>
+      </div>
+      
+      <div class="space-y-4 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300" id="specs-content-body">
+        <!-- Injected spec rows -->
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-end">
+        <button onclick="closeSpecsModal()" class="px-6 py-2.5 bg-primary text-white rounded-xl font-semibold text-xs transition-colors">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full py-stack-gap-lg px-margin-desktop max-w-container-max mx-auto border-t border-outline-variant/50 bg-surface-container-low">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-stack-gap-lg">
+      <div class="font-headline-lg-mobile text-headline-lg-mobile text-primary">AppleVerse</div>
+      <div class="flex gap-stack-gap-md">
+        <a class="text-on-surface-variant font-label-sm text-label-sm hover:underline decoration-1" href="#">Privacy Policy</a>
+        <a class="text-on-surface-variant font-label-sm text-label-sm hover:underline decoration-1" href="#">Terms of Use</a>
+        <a class="text-on-surface-variant font-label-sm text-label-sm hover:underline decoration-1" href="#">Sales and Refunds</a>
+        <a class="text-on-surface-variant font-label-sm text-label-sm hover:underline decoration-1" href="#">Legal</a>
+        <a class="text-on-surface-variant font-label-sm text-label-sm hover:underline decoration-1" href="#">Site Map</a>
+      </div>
+    </div>
+    <div class="mt-stack-gap-lg text-center md:text-left text-on-surface-variant font-label-sm text-label-sm opacity-60">
+      Copyright © 2026 AppleVerse Inc. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const SPEC_SHEETS = {
+      pro11: {
+        title: "iPad Pro 11-inch (M5) Specifications",
+        rows: [
+          ["Display", "11\" Ultra Retina XDR Tandem OLED, up to 1600 nits peak, 120Hz ProMotion"],
+          ["Processor", "Apple M5 Chip (Next-gen CPU, GPU with Hardware RT, 16-core NPU)"],
+          ["Memory", "8GB or 16GB LPDDR5X RAM"],
+          ["Cameras", "12MP Wide rear camera with LiDAR Scanner, Landscape 12MP Ultra Wide TrueDepth camera with Face ID"],
+          ["Dimensions", "Ultra-thin 5.3 mm chassis"],
+          ["Accessories", "Apple Pencil Pro, Apple Pencil (USB-C), Magic Keyboard"]
+        ]
+      },
+      pro13: {
+        title: "iPad Pro 13-inch (M5) Specifications",
+        rows: [
+          ["Display", "13\" Ultra Retina XDR Tandem OLED, up to 1600 nits peak, 120Hz ProMotion"],
+          ["Processor", "Apple M5 Chip (Next-gen CPU, GPU with Hardware RT, 16-core NPU)"],
+          ["Memory", "8GB or 16GB LPDDR5X RAM"],
+          ["Cameras", "12MP Wide rear camera with LiDAR Scanner, Landscape 12MP Ultra Wide TrueDepth camera with Face ID"],
+          ["Dimensions", "Ultra-thin 5.1 mm chassis"],
+          ["Accessories", "Apple Pencil Pro, Apple Pencil (USB-C), Magic Keyboard"]
+        ]
+      },
+      air11: {
+        title: "iPad Air 11-inch (M4) Specifications",
+        rows: [
+          ["Display", "11\" Liquid Retina LED-backlit display, 500 nits, anti-reflective coating"],
+          ["Processor", "Apple M4 Chip (10-core CPU, 10-core GPU, 16-core NPU)"],
+          ["Memory", "8GB unified RAM"],
+          ["Cameras", "12MP Wide rear camera, Landscape 12MP Ultra Wide front camera with Center Stage"],
+          ["Dimensions", "Super thin 6.1 mm chassis"],
+          ["Accessories", "Apple Pencil Pro, Apple Pencil (USB-C), Magic Keyboard"]
+        ]
+      },
+      air13: {
+        title: "iPad Air 13-inch (M4) Specifications",
+        rows: [
+          ["Display", "13\" Liquid Retina LED-backlit display, 600 nits, anti-reflective coating"],
+          ["Processor", "Apple M4 Chip (10-core CPU, 10-core GPU, 16-core NPU)"],
+          ["Memory", "8GB unified RAM"],
+          ["Cameras", "12MP Wide rear camera, Landscape 12MP Ultra Wide front camera with Center Stage"],
+          ["Dimensions", "Super thin 6.1 mm chassis"],
+          ["Accessories", "Apple Pencil Pro, Apple Pencil (USB-C), Magic Keyboard"]
+        ]
+      },
+      ipad11: {
+        title: "iPad 11th Gen (A16) Specifications",
+        rows: [
+          ["Display", "11\" Liquid Retina display, 500 nits, wide color (P3)"],
+          ["Processor", "Apple A16 Bionic Chip (6-core CPU, 5-core GPU)"],
+          ["Memory", "6GB RAM"],
+          ["Cameras", "12MP Wide rear camera, Landscape 12MP Ultra Wide front camera"],
+          ["Dimensions", "Ultra-portable 7.0 mm chassis"],
+          ["Accessories", "Apple Pencil (USB-C)"]
+        ]
+      },
+      mini7: {
+        title: "iPad mini 7th Gen (A17 Pro) Specifications",
+        rows: [
+          ["Display", "8.3\" Liquid Retina display, 500 nits, wide color (P3)"],
+          ["Processor", "Apple A17 Pro Chip (6-core CPU, 5-core GPU, 16-core NPU)"],
+          ["Memory", "8GB RAM supporting Apple Intelligence"],
+          ["Cameras", "12MP Wide rear camera with Smart HDR 4, 12MP Ultra Wide front camera"],
+          ["Dimensions", "Ultra-portable 6.3 mm chassis"],
+          ["Accessories", "Apple Pencil Pro, Apple Pencil (USB-C)"]
+        ]
+      }
+    };
+
+    function openSpecsModal(key) {
+      const data = SPEC_SHEETS[key];
+      if (!data) return;
+      
+      document.getElementById('specs-title').textContent = data.title;
+      const body = document.getElementById('specs-content-body');
+      body.innerHTML = "";
+      
+      data.rows.forEach(([label, value]) => {
+        const div = document.createElement('div');
+        div.className = "pb-3 border-b border-zinc-100 dark:border-zinc-800 flex flex-col gap-1";
+        div.innerHTML = `<span class="font-bold text-primary dark:text-white uppercase tracking-wider text-[10px]">${label}</span><span class="text-zinc-600 dark:text-zinc-400 text-xs">${value}</span>`;
+        body.appendChild(div);
+      });
+
+      const modal = document.getElementById('specs-modal');
+      modal.classList.remove('pointer-events-none', 'opacity-0');
+      modal.querySelector('.bg-white, .dark\\:bg-zinc-900').classList.remove('scale-95');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSpecsModal() {
+      const modal = document.getElementById('specs-modal');
+      modal.classList.add('pointer-events-none', 'opacity-0');
+      modal.querySelector('.bg-white, .dark\\:bg-zinc-900').classList.add('scale-95');
+      document.body.style.overflow = '';
+    }
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('specs-modal');
+      if (e.target === modal) closeSpecsModal();
+    });
+
+    // Video film modal listeners
+    const videoModal = document.getElementById('video-modal');
+    const filmVideo = document.getElementById('ipad-film-video');
+    const audioInput = document.getElementById('user-audio-file');
+    const audioStatus = document.getElementById('audio-file-status');
+    const audioControls = document.getElementById('custom-audio-controls');
+    const audioVolume = document.getElementById('custom-audio-volume');
+    const audioLoop = document.getElementById('custom-audio-loop');
+    
+    let customAudio = null;
+    
+    // Handle custom audio file selection
+    audioInput?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (customAudio) {
+                customAudio.pause();
+            }
+            const objectUrl = URL.createObjectURL(file);
+            customAudio = new Audio(objectUrl);
+            customAudio.loop = audioLoop ? audioLoop.checked : true;
+            customAudio.volume = audioVolume ? parseFloat(audioVolume.value) : 0.8;
+            
+            audioStatus.textContent = file.name;
+            audioStatus.classList.remove('text-zinc-400');
+            audioStatus.classList.add('text-emerald-450', 'font-semibold');
+            audioControls.classList.remove('hidden');
+            
+            // If video is already playing, start playing audio too
+            if (filmVideo && !filmVideo.paused) {
+                customAudio.play().catch(() => {});
+            }
+        }
+    });
+    
+    // Handle audio volume change
+    audioVolume?.addEventListener('input', (e) => {
+        if (customAudio) {
+            customAudio.volume = parseFloat(e.target.value);
+        }
+    });
+    
+    // Handle audio loop toggle
+    audioLoop?.addEventListener('change', (e) => {
+        if (customAudio) {
+            customAudio.loop = e.target.checked;
+        }
+    });
+    
+    function openVideoModal() {
+        if (videoModal && filmVideo) {
+            videoModal.classList.remove('pointer-events-none', 'opacity-0');
+            videoModal.querySelector('.bg-zinc-950').classList.remove('scale-95');
+            filmVideo.muted = false;
+            filmVideo.volume = 1.0;
+            filmVideo.play();
+            if (customAudio) {
+                customAudio.currentTime = 0;
+                customAudio.play().catch(() => {});
+            }
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    function closeVideoModal() {
+        if (videoModal && filmVideo) {
+            videoModal.classList.add('pointer-events-none', 'opacity-0');
+            videoModal.querySelector('.bg-zinc-950').classList.add('scale-95');
+            filmVideo.pause();
+            filmVideo.currentTime = 0;
+            if (customAudio) {
+                customAudio.pause();
+                customAudio.currentTime = 0;
+            }
+            document.body.style.overflow = '';
+        }
+    }
+    
+    // Sync custom audio playback with video state changes
+    filmVideo?.addEventListener('play', () => {
+        if (customAudio) {
+            customAudio.play().catch(() => {});
+        }
+    });
+    filmVideo?.addEventListener('pause', () => {
+        if (customAudio) {
+            customAudio.pause();
+        }
+    });
+    
+    document.getElementById('watch-film-btn')?.addEventListener('click', openVideoModal);
+    document.getElementById('close-video-modal')?.addEventListener('click', closeVideoModal);
+    videoModal?.addEventListener('click', (e) => {
+        if (e.target === videoModal) {
+            closeVideoModal();
+        }
+    });
+  });
+  </script>
+
+<!-- Video Film Player Modal -->
+<div id="video-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9995] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+  <div class="bg-zinc-950 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-zinc-800 relative transform scale-95 transition-transform duration-300 flex flex-col">
+    <button id="close-video-modal" class="absolute top-4 right-4 z-50 bg-black/60 hover:bg-black/80 text-white rounded-full p-2.5 flex items-center justify-center transition-all shadow-md" aria-label="Close video film">
+      <span class="material-symbols-outlined text-[24px]">close</span>
+    </button>
+    <div class="w-full aspect-video bg-black">
+      <video id="ipad-film-video" class="w-full h-full object-contain" controls preload="metadata">
+        <source src="/videos/ipad_film.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    
+    <!-- Custom soundtrack control bar -->
+    <div class="bg-zinc-900 border-t border-zinc-800 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <label for="user-audio-file" class="cursor-pointer px-4 py-2 bg-[#0066CC] hover:bg-[#0077ED] active:scale-95 text-white rounded-full text-xs font-bold flex items-center gap-2 transition-all">
+          <span class="material-symbols-outlined text-[16px]">library_music</span>
+          Choose Background Music
+        </label>
+        <input type="file" id="user-audio-file" accept="audio/*" class="hidden">
+        <span id="audio-file-status" class="text-zinc-400 text-xs truncate max-w-[200px]">No track added</span>
+      </div>
+      
+      <!-- Audio volume and controls -->
+      <div id="custom-audio-controls" class="hidden flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-zinc-400 text-sm">volume_up</span>
+          <input type="range" id="custom-audio-volume" min="0" max="1" step="0.05" value="0.8" class="w-20 accent-[#0066CC] h-1 bg-zinc-700 rounded-lg appearance-none">
+        </div>
+        <label class="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer">
+          <input type="checkbox" id="custom-audio-loop" checked class="rounded border-zinc-700 bg-zinc-800 text-[#0066CC] focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5">
+          Loop Music
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

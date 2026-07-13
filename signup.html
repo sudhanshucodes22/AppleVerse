@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Create Account — AppleVerse</title>
+  <meta name="description" content="Create your AppleVerse account to start shopping Apple products."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet"/>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #FAFAFA; }
+    .glass-form {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: saturate(180%) blur(28px);
+      -webkit-backdrop-filter: saturate(180%) blur(28px);
+      border: 1px solid rgba(210,210,215,0.4);
+    }
+    .input-field {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,0.9);
+      border: 1.5px solid #D2D2D7; border-radius: 12px;
+      font-size: 15px; color: #1D1D1F; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus { border-color: #0066CC; box-shadow: 0 0 0 3px rgba(0,102,204,0.12); }
+    .input-field.error  { border-color: #FF3B30; box-shadow: 0 0 0 3px rgba(255,59,48,0.1); }
+    .input-field.valid  { border-color: #34C759; }
+    .input-wrapper { position: relative; }
+    .input-icon {
+      position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%); font-size: 20px; color: #8E8E93; cursor: pointer;
+    }
+    .btn-primary {
+      width: 100%; padding: 15px; background: #0066CC; color: white;
+      border: none; border-radius: 12px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary:hover:not(:disabled) { background: #0056b3; }
+    .btn-primary:active:not(:disabled) { transform: scale(0.98); }
+    .btn-primary:disabled { background: #D2D2D7; cursor: not-allowed; }
+    .error-msg { color: #FF3B30; font-size: 12px; margin-top: 5px; display: none; }
+    .error-msg.show { display: block; }
+    .alert-box {
+      padding: 12px 16px; border-radius: 10px; font-size: 14px;
+      display: none; align-items: center; gap: 10px;
+    }
+    .alert-box.show { display: flex; }
+    .alert-error   { background: #FFF2F2; border: 1px solid #FFCDD2; color: #C62828; }
+    .alert-success { background: #F1FFF4; border: 1px solid #C8E6C9; color: #2E7D32; }
+
+    /* Password strength meter */
+    .strength-bar { height: 4px; border-radius: 2px; background: #E5E5EA; overflow: hidden; margin-top: 8px; }
+    .strength-fill { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; width: 0; }
+
+    /* Requirements checklist */
+    .req { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8E8E93; transition: color 0.2s; }
+    .req.met { color: #34C759; }
+    .req .material-symbols-outlined { font-size: 14px; }
+
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(80px);
+      animation: drift 12s ease-in-out infinite alternate; z-index: -1;
+    }
+    @keyframes drift { from { transform: translate(0,0); } to { transform: translate(25px,20px); } }
+    .divider { display: flex; align-items: center; gap: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #E5E5EA; }
+  </style>
+</head>
+<body>
+  <div class="blob w-[450px] h-[450px] bg-purple-200/25 top-[-100px] left-[-80px]" style="animation-delay:0s"></div>
+  <div class="blob w-[350px] h-[350px] bg-blue-200/30 bottom-[-80px] right-[-60px]" style="animation-delay:4s"></div>
+
+  <nav class="fixed top-0 left-0 right-0 z-50 px-8 py-4 flex items-center justify-between border-b border-[#D2D2D7]/20 bg-white/60 backdrop-blur-xl">
+    <a href="/index.html" class="flex items-center gap-3">
+      <img src="/images/appleverse_logo.png" alt="AppleVerse" class="h-10 w-auto object-contain">
+      <div class="flex flex-col leading-none">
+        <span class="font-bold text-[19px] tracking-tight text-[#1D1D1F]">AppleVerse</span>
+        <span class="text-[9px] uppercase tracking-wider text-[#8E8E93] font-semibold mt-0.5">Digital Store</span>
+      </div>
+    </a>
+    <div class="flex items-center gap-4">
+      <span class="text-[13px] text-[#8E8E93] hidden sm:inline">Already have an account?</span>
+      <a href="/login.html" class="text-[13px] font-semibold text-[#0066CC] hover:underline" style="text-decoration: none;">Sign In</a>
+    </div>
+  </nav>
+
+  <main class="min-h-screen flex items-center justify-center px-4 pt-20 pb-8">
+    <div class="w-full max-w-[440px]">
+
+      <div class="text-center mb-8 flex flex-col items-center">
+        <img src="/images/appleverse_logo.png" alt="AppleVerse Logo" class="h-16 w-auto object-contain mb-3">
+        <h1 class="text-[28px] font-bold text-[#1D1D1F] tracking-tight">AppleVerse</h1>
+        <p class="text-[11px] uppercase tracking-widest text-[#8E8E93] font-semibold mb-2">Digital Store</p>
+        <p class="text-[15px] text-[#8E8E93]">Create your account to start shopping</p>
+      </div>
+
+      <div class="glass-form rounded-[24px] shadow-2xl shadow-black/8 p-8">
+        <div id="alert-error" class="alert-box alert-error mb-5" role="alert" aria-live="assertive">
+          <span class="material-symbols-outlined text-[18px] flex-shrink-0">error</span>
+          <span id="alert-error-msg"></span>
+        </div>
+        <div id="alert-success" class="alert-box alert-success mb-5" role="status">
+          <span class="material-symbols-outlined text-[18px] flex-shrink-0">check_circle</span>
+          <span id="alert-success-msg"></span>
+        </div>
+
+        <form id="signup-form" novalidate>
+          <!-- Full Name -->
+          <div class="mb-4">
+            <label for="name" class="block text-[13px] font-semibold text-[#1D1D1F] mb-2">Full Name</label>
+            <div class="input-wrapper">
+              <input type="text" id="name" name="name" autocomplete="name"
+                class="input-field" placeholder="Jane Appleseed" required aria-describedby="name-error"/>
+              <span class="material-symbols-outlined input-icon" aria-hidden="true">person</span>
+            </div>
+            <p class="error-msg" id="name-error" role="alert"></p>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-4">
+            <label for="email" class="block text-[13px] font-semibold text-[#1D1D1F] mb-2">Email</label>
+            <div class="input-wrapper">
+              <input type="email" id="email" name="email" autocomplete="email"
+                class="input-field" placeholder="you@example.com" required aria-describedby="email-error"/>
+              <span class="material-symbols-outlined input-icon" aria-hidden="true">mail</span>
+            </div>
+            <p class="error-msg" id="email-error" role="alert"></p>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label for="password" class="block text-[13px] font-semibold text-[#1D1D1F] mb-2">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="password" name="password" autocomplete="new-password"
+                class="input-field pr-12" placeholder="Create a strong password" required aria-describedby="password-error password-strength-label"/>
+              <button type="button" id="toggle-pw" class="input-icon focus:outline-none" aria-label="Toggle password visibility">
+                <span class="material-symbols-outlined" id="pw-icon">visibility_off</span>
+              </button>
+            </div>
+            <!-- Strength meter -->
+            <div class="strength-bar" aria-hidden="true"><div id="strength-fill" class="strength-fill"></div></div>
+            <p id="password-strength-label" class="text-[12px] mt-1 font-medium" aria-live="polite"></p>
+            <!-- Requirements -->
+            <div class="grid grid-cols-2 gap-1 mt-2" aria-live="polite" aria-label="Password requirements">
+              <div class="req" id="req-length"><span class="material-symbols-outlined">close</span> 8+ characters</div>
+              <div class="req" id="req-upper"><span class="material-symbols-outlined">close</span> Uppercase</div>
+              <div class="req" id="req-lower"><span class="material-symbols-outlined">close</span> Lowercase</div>
+              <div class="req" id="req-number"><span class="material-symbols-outlined">close</span> Number</div>
+              <div class="req" id="req-special"><span class="material-symbols-outlined">close</span> Special char</div>
+            </div>
+            <p class="error-msg" id="password-error" role="alert"></p>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-5">
+            <label for="confirm" class="block text-[13px] font-semibold text-[#1D1D1F] mb-2">Confirm Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="confirm" name="confirm" autocomplete="new-password"
+                class="input-field pr-12" placeholder="Repeat your password" required aria-describedby="confirm-error"/>
+              <button type="button" id="toggle-confirm" class="input-icon focus:outline-none" aria-label="Toggle confirm password visibility">
+                <span class="material-symbols-outlined" id="confirm-icon">visibility_off</span>
+              </button>
+            </div>
+            <p class="error-msg" id="confirm-error" role="alert"></p>
+          </div>
+
+          <!-- Terms -->
+          <div class="flex items-start gap-3 mb-6">
+            <input type="checkbox" id="terms" name="terms"
+              class="w-4 h-4 mt-0.5 rounded border-gray-300 text-[#0066CC] focus:ring-[#0066CC] flex-shrink-0" required aria-required="true"/>
+            <label for="terms" class="text-[13px] text-[#3A3A3C] leading-relaxed">
+              I agree to the
+              <a href="javascript:void(0)" aria-disabled="true" class="text-[#0066CC] hover:underline">Terms of Use</a>
+              and
+              <a href="javascript:void(0)" aria-disabled="true" class="text-[#0066CC] hover:underline">Privacy Policy</a>
+            </label>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-primary" aria-label="Create your AppleVerse account">
+            <span id="btn-text">Create Account</span>
+            <span id="btn-spinner" class="hidden">
+              <svg class="animate-spin inline w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>Creating…
+            </span>
+          </button>
+        </form>
+
+        <div class="divider my-6 text-[12px] text-[#8E8E93]">already a member?</div>
+        <p class="text-center text-[14px]">
+          <a href="/login.html" class="text-[#0066CC] font-semibold hover:underline">Sign In Instead</a>
+        </p>
+      </div>
+
+      <div class="flex items-center justify-center gap-2 mt-6 text-[12px] text-[#8E8E93]">
+        <span class="material-symbols-outlined text-[14px]">shield</span>
+        <span>bcrypt · JWT · CSRF · Rate limiting · End-to-end secure</span>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { register, redirectIfAuthenticated, checkPasswordStrength } from '/src/auth.js';
+
+    redirectIfAuthenticated('/account.html');
+
+    const form = document.getElementById('signup-form');
+    const nameEl = document.getElementById('name');
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const confirmEl = document.getElementById('confirm');
+    const termsEl = document.getElementById('terms');
+
+    // Password toggle
+    function makeToggle(btnId, inputId, iconId) {
+      document.getElementById(btnId).addEventListener('click', () => {
+        const input = document.getElementById(inputId);
+        const icon  = document.getElementById(iconId);
+        input.type = input.type === 'password' ? 'text' : 'password';
+        icon.textContent = input.type === 'password' ? 'visibility_off' : 'visibility';
+      });
+    }
+    makeToggle('toggle-pw', 'password', 'pw-icon');
+    makeToggle('toggle-confirm', 'confirm', 'confirm-icon');
+
+    // Field helpers
+    const clearErr = (id) => {
+      document.getElementById(id)?.classList.remove('error');
+      document.getElementById(id + '-error')?.classList.remove('show');
+    };
+    const showErr = (id, msg) => {
+      document.getElementById(id)?.classList.add('error');
+      const el = document.getElementById(id + '-error');
+      if (el) { el.textContent = msg; el.classList.add('show'); }
+    };
+    const setValid = (id) => { document.getElementById(id)?.classList.add('valid'); };
+
+    [nameEl, emailEl, confirmEl].forEach(el => {
+      el.addEventListener('input', () => { clearErr(el.id); el.classList.remove('valid'); });
+    });
+
+    // Password strength
+    passwordEl.addEventListener('input', () => {
+      clearErr('password');
+      const { checks, score, label, color } = checkPasswordStrength(passwordEl.value);
+      document.getElementById('strength-fill').style.width = (score / 5 * 100) + '%';
+      document.getElementById('strength-fill').style.background = color;
+      document.getElementById('password-strength-label').textContent = passwordEl.value ? label : '';
+      document.getElementById('password-strength-label').style.color = color;
+
+      const reqMap = { 'req-length': checks.length, 'req-upper': checks.uppercase, 'req-lower': checks.lowercase, 'req-number': checks.number, 'req-special': checks.special };
+      Object.entries(reqMap).forEach(([id, met]) => {
+        const el = document.getElementById(id);
+        el.classList.toggle('met', met);
+        el.querySelector('.material-symbols-outlined').textContent = met ? 'check' : 'close';
+      });
+    });
+
+    function showAlert(id, msg) {
+      document.getElementById(id).classList.add('show');
+      document.getElementById(id + '-msg').textContent = msg;
+    }
+    function hideAlerts() {
+      document.getElementById('alert-error').classList.remove('show');
+      document.getElementById('alert-success').classList.remove('show');
+    }
+    function setLoading(v) {
+      document.getElementById('submit-btn').disabled = v;
+      document.getElementById('btn-text').classList.toggle('hidden', v);
+      document.getElementById('btn-spinner').classList.toggle('hidden', !v);
+    }
+
+    function validate() {
+      let ok = true;
+      if (!nameEl.value || nameEl.value.trim().length < 2) {
+        showErr('name', 'Name must be at least 2 characters.'); ok = false;
+      }
+      if (!emailEl.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        showErr('email', 'Please enter a valid email address.'); ok = false;
+      }
+      const { score } = checkPasswordStrength(passwordEl.value);
+      if (score < 5) { showErr('password', 'Password must meet all requirements.'); ok = false; }
+      if (passwordEl.value !== confirmEl.value) { showErr('confirm', 'Passwords do not match.'); ok = false; }
+      if (!termsEl.checked) { showAlert('alert-error', 'You must agree to the Terms of Use to continue.'); ok = false; }
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlerts();
+      if (!validate()) return;
+      setLoading(true);
+      try {
+        const result = await register({
+          name: nameEl.value.trim(),
+          email: emailEl.value.trim(),
+          password: passwordEl.value,
+        });
+
+        if (result.ok) {
+          showAlert('alert-success', 'Account created! Redirecting to your account…');
+          setTimeout(() => { window.location.href = '/account.html'; }, 1200);
+          return;
+        }
+        const { code, error, fields } = result.data || {};
+        if (code === 'VALIDATION_ERROR') {
+          fields?.forEach(f => showErr(f.field, f.message));
+          showAlert('alert-error', 'Please fix the errors above.');
+        } else if (code === 'RATE_LIMIT_EXCEEDED') {
+          showAlert('alert-error', 'Too many requests. Please try again in 15 minutes.');
+        } else {
+          showAlert('alert-error', error || 'Registration failed. Please try again.');
+        }
+      } catch {
+        showAlert('alert-error', 'Connection error. Please check your network.');
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
