@@ -3,6 +3,8 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import os from 'os';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import config from './config.js';
 import {
   requestId,
@@ -90,6 +92,17 @@ app.get('/api/health', (req, res) => {
 // ─── 404 Handler ──────────────────────────────────────────────────────
 app.use('/api', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found.', code: 'NOT_FOUND' });
+});
+
+// ─── Serve Static Frontend Assets in Production ───────────────────────
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const distPath = join(__dirname, '..', 'dist');
+
+app.use(express.static(distPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(join(distPath, 'index.html'));
 });
 
 // ─── Global Error Handler ─────────────────────────────────────────────
