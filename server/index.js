@@ -19,6 +19,7 @@ import productRoutes from './routes/products.js';
 import cartRoutes    from './routes/cart.js';
 import wishlistRoutes from './routes/wishlist.js';
 import adminRoutes   from './routes/admin.js';
+import checkoutRoutes from './routes/checkout.js';
 import { db, closeDb } from './services/db.js';
 import { PRODUCTS, CATEGORIES } from './data/products.js';
 
@@ -47,6 +48,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart',     cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/admin',    adminRoutes);
+app.use('/api/checkout', checkoutRoutes);
 
 // ─── Health Check (enhanced with diagnostics) ─────────────────────────
 app.get('/api/health', (req, res) => {
@@ -107,24 +109,32 @@ app.use((err, req, res, next) => {
 });
 
 // ─── Start Server ────────────────────────────────────────────────────────────────
-const server = app.listen(config.port, () => {
-  console.log(`\n🛡️  AppleVerse API Server v2.1.0`);
-  console.log(`   Port:        ${config.port}`);
-  console.log(`   Environment: ${config.nodeEnv}`);
-  console.log(`   CORS origins: ${config.cors.allowedOrigins.join(', ')}`);
-  console.log(`   Products:    ${PRODUCTS.length} across ${CATEGORIES.length} categories`);
-  console.log(`   Auth rate limit: ${config.rateLimit.auth.max} req/${config.rateLimit.auth.windowMs / 60000}min`);
-  console.log(`\n✅ Server ready at http://localhost:${config.port}\n`);
-});
+let server;
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(config.port, () => {
+    console.log(`\n🛡️  AppleVerse API Server v2.1.0`);
+    console.log(`   Port:        ${config.port}`);
+    console.log(`   Environment: ${config.nodeEnv}`);
+    console.log(`   CORS origins: ${config.cors.allowedOrigins.join(', ')}`);
+    console.log(`   Products:    ${PRODUCTS.length} across ${CATEGORIES.length} categories`);
+    console.log(`   Auth rate limit: ${config.rateLimit.auth.max} req/${config.rateLimit.auth.windowMs / 60000}min`);
+    console.log(`\n✅ Server ready at http://localhost:${config.port}\n`);
+  });
+}
 
 // ─── Graceful Shutdown ────────────────────────────────────────────────────────────────
 function shutdown(signal) {
   console.log(`\n[server] ${signal} received. Shutting down gracefully...`);
-  server.close(() => {
-    console.log('[server] HTTP server closed.');
-    closeDb(); // Flush WAL and close SQLite cleanly
+  if (server) {
+    server.close(() => {
+      console.log('[server] HTTP server closed.');
+      closeDb(); // Flush WAL and close SQLite cleanly
+      process.exit(0);
+    });
+  } else {
+    closeDb();
     process.exit(0);
-  });
+  }
   // Force exit after 10 seconds if graceful close stalls
   setTimeout(() => {
     console.error('[server] Forced shutdown after timeout.');

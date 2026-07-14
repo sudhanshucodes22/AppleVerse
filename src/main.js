@@ -322,7 +322,7 @@ function renderCartItems() {
   });
 }
 
-function openCheckoutModal() {
+async function openCheckoutModal() {
   closeCartDrawer();
   
   let modal = document.getElementById('checkout-modal');
@@ -336,13 +336,31 @@ function openCheckoutModal() {
   const cart = getCart();
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const totalInr = total * USD_TO_INR;
+
+  // Create payment intent first
+  let paymentIntentId = '';
+  let clientSecret = '';
+  
+  try {
+    const res = await apiFetch('/checkout/create-payment-intent', { method: 'POST' });
+    if (!res || !res.ok) {
+      showToast('Could not initialize checkout. Please try again.', 'error');
+      return;
+    }
+    const data = await res.json();
+    paymentIntentId = data.paymentIntentId;
+    clientSecret = data.clientSecret;
+  } catch (err) {
+    showToast('Network error initializing payment.', 'error');
+    return;
+  }
   
   modal.innerHTML = `
     <div class="bg-white dark:bg-zinc-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
       <div class="p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center bg-[#F5F5F7] dark:bg-zinc-800/50">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[#0066CC]">shopping_cart_checkout</span>
-          <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Secure Checkout</h3>
+          <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Secure Stripe Checkout</h3>
         </div>
         <button id="close-checkout-modal" class="material-symbols-outlined p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors text-zinc-500">close</button>
       </div>
@@ -357,59 +375,67 @@ function openCheckoutModal() {
             ${cart.reduce((sum, item) => sum + item.quantity, 0)} items
           </div>
         </div>
+
+        <div class="bg-blue-50 dark:bg-blue-950/20 text-[#0066CC] border border-blue-200 dark:border-blue-800/50 rounded-2xl p-4 text-xs flex gap-3">
+          <span class="material-symbols-outlined">info</span>
+          <div>
+            <p class="font-bold mb-1">Stripe Sandbox Mode Enabled</p>
+            <p>You can test this checkout using standard Stripe credentials. Use card number <strong>4242 4242 4242 4242</strong> with any future expiry and CVV.</p>
+          </div>
+        </div>
         
         <form id="checkout-form" class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">First Name</label>
-              <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="John">
+              <input type="text" id="chk-fname" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="John">
             </div>
             <div>
               <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Last Name</label>
-              <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="Doe">
+              <input type="text" id="chk-lname" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="Doe">
             </div>
           </div>
           
           <div>
             <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Email Address</label>
-            <input type="email" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="john.doe@example.com">
+            <input type="email" id="chk-email" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="john.doe@example.com">
           </div>
           
           <div>
             <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Shipping Address</label>
-            <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="1 Infinite Loop">
+            <input type="text" id="chk-address" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="1 Infinite Loop">
           </div>
           
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">City</label>
-              <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="Cupertino">
+              <input type="text" id="chk-city" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="Cupertino">
             </div>
             <div>
               <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Postal Code</label>
-              <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="95014">
+              <input type="text" id="chk-zip" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="95014">
             </div>
           </div>
           
           <div class="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-4">
             <h4 class="font-semibold text-zinc-900 dark:text-white flex items-center gap-2">
               <span class="material-symbols-outlined text-zinc-500">credit_card</span>
-              <span>Payment Details</span>
+              <span>Stripe Card Details</span>
             </h4>
             
             <div>
               <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Card Number</label>
-              <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="4111 2222 3333 4444">
+              <input type="text" id="chk-cardnum" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="4242 4242 4242 4242" maxlength="19">
             </div>
             
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Expiration Date</label>
-                <input type="text" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="MM/YY">
+                <input type="text" id="chk-expiry" required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="MM/YY" maxlength="5">
               </div>
               <div>
                 <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Security Code (CVV)</label>
-                <input type="password" required maxlength="4" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="123">
+                <input type="password" id="chk-cvv" required maxlength="4" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:outline-none focus:border-[#0066CC]" placeholder="123">
               </div>
             </div>
           </div>
@@ -418,7 +444,9 @@ function openCheckoutModal() {
       
       <div class="p-6 border-t border-zinc-200 dark:border-zinc-800 bg-[#F5F5F7] dark:bg-zinc-800/50 flex gap-4">
         <button id="cancel-checkout" class="flex-1 border border-zinc-300 dark:border-zinc-700 hover:bg-black/5 dark:hover:bg-white/5 py-4 rounded-xl font-semibold transition-all">Cancel</button>
-        <button type="submit" form="checkout-form" class="flex-1 bg-[#0066CC] hover:bg-[#0077ED] text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-98 transition-all">Place Order</button>
+        <button type="submit" id="pay-btn" form="checkout-form" class="flex-1 bg-[#0066CC] hover:bg-[#0077ED] text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-98 transition-all flex justify-center items-center gap-2">
+          <span>Pay ₹${totalInr.toLocaleString('en-IN')}</span>
+        </button>
       </div>
     </div>
   `;
@@ -429,56 +457,86 @@ function openCheckoutModal() {
     const card = modal.querySelector('.scale-95');
     if (card) card.classList.remove('scale-95');
   }, 10);
+
+  // Format Card Number (space every 4 digits)
+  const cardInput = document.getElementById('chk-cardnum');
+  cardInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    let formatted = '';
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 4 === 0) formatted += ' ';
+      formatted += value[i];
+    }
+    e.target.value = formatted;
+  });
+
+  // Format Expiry Date (MM/YY)
+  const expiryInput = document.getElementById('chk-expiry');
+  expiryInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    if (value.length > 2) {
+      e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    } else {
+      e.target.value = value;
+    }
+  });
   
   document.getElementById('close-checkout-modal').addEventListener('click', closeCheckoutModal);
   document.getElementById('cancel-checkout').addEventListener('click', closeCheckoutModal);
   
   const form = document.getElementById('checkout-form');
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    handleOrderSuccess();
+
+    const cardNumber = cardInput.value.replace(/\s/g, '');
+    if (cardNumber !== '4242424242424242') {
+      showToast('Incorrect Sandbox card. Please use 4242 4242 4242 4242.', 'error');
+      return;
+    }
+
+    const payBtn = document.getElementById('pay-btn');
+    const originalText = payBtn.innerHTML;
+    payBtn.disabled = true;
+    payBtn.innerHTML = `
+      <span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+      Processing Secure Payment...
+    `;
+
+    const cardLast4 = cardNumber.slice(-4);
+    const shippingAddress = `${document.getElementById('chk-address').value}, ${document.getElementById('chk-city').value} - ${document.getElementById('chk-zip').value}`;
+
+    // Wait 1.8 seconds to simulate network auth
+    setTimeout(async () => {
+      try {
+        const confirmRes = await apiFetch('/checkout/confirm-payment', {
+          method: 'POST',
+          body: JSON.stringify({
+            paymentIntentId,
+            cardLast4,
+            shippingAddress
+          })
+        });
+
+        if (confirmRes && confirmRes.ok) {
+          const resData = await confirmRes.json();
+          handleOrderSuccess(resData.order.orderRef, totalInr);
+        } else {
+          const errData = await confirmRes.json();
+          showToast(errData.error || 'Payment confirmation failed.', 'error');
+          payBtn.disabled = false;
+          payBtn.innerHTML = originalText;
+        }
+      } catch (err) {
+        showToast('Connection failed. Please retry.', 'error');
+        payBtn.disabled = false;
+        payBtn.innerHTML = originalText;
+      }
+    }, 1800);
   });
 }
 
-function closeCheckoutModal() {
+function handleOrderSuccess(orderRef, totalPaid) {
   const modal = document.getElementById('checkout-modal');
-  if (modal) {
-    const card = modal.querySelector('.bg-white, .dark\\:bg-zinc-900');
-    if (card) card.classList.add('scale-95');
-    modal.classList.remove('opacity-100');
-    modal.classList.add('opacity-0', 'pointer-events-none');
-  }
-}
-
-async function handleOrderSuccess() {
-  const modal = document.getElementById('checkout-modal');
-  const orderNum = 'AV-' + Math.floor(100000 + Math.random() * 900000);
-  const cart = getCart();
-
-  // Persist order to backend (only if user is logged in)
-  if (isAuthenticated()) {
-    try {
-      await apiFetch('/user/orders', {
-        method: 'POST',
-        body: JSON.stringify({
-          orderRef: orderNum,
-          items: cart.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            qty: item.qty,
-            image: item.image || null,
-          })),
-          total: cart.reduce((sum, i) => sum + (i.price * (i.qty || 1)), 0),
-          currency: 'INR',
-          status: 'Confirmed',
-        }),
-      });
-    } catch (err) {
-      console.warn('[order] Failed to persist order:', err);
-    }
-  }
-
   const card = modal.querySelector('.bg-white, .dark\\:bg-zinc-900');
   if (card) {
     card.innerHTML = `
@@ -487,10 +545,10 @@ async function handleOrderSuccess() {
           <span class="material-symbols-outlined text-[48px] animate-bounce">check_circle</span>
         </div>
         <h3 class="text-3xl font-bold text-zinc-900 dark:text-white">Order Placed Successfully!</h3>
-        <p class="text-zinc-500 dark:text-zinc-400 max-w-md">Your order has been placed. A confirmation summary is linked to your billing email.</p>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-md">Your payment of <strong>₹${totalPaid.toLocaleString('en-IN')}</strong> succeeded. A confirmation invoice email was generated and sent to your billing address.</p>
         <div class="bg-[#F5F5F7] dark:bg-zinc-800/30 px-6 py-4 rounded-2xl">
           <span class="text-sm text-zinc-500">Order Reference:</span>
-          <span class="font-mono font-bold text-[#0066CC] ml-2">${orderNum}</span>
+          <span class="font-mono font-bold text-[#0066CC] ml-2">${orderRef}</span>
         </div>
         <button id="close-success-modal" class="bg-[#0066CC] hover:bg-[#0077ED] text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all">
           Continue Shopping

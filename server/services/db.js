@@ -162,6 +162,17 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
   CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+
+  CREATE TABLE IF NOT EXISTS payment_intents (
+    id         TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    amount     REAL NOT NULL,
+    currency   TEXT NOT NULL DEFAULT 'INR',
+    status     TEXT NOT NULL DEFAULT 'pending',
+    items      TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_payment_intents_user ON payment_intents(user_id);
 `);
 
 // ─── JSON → SQLite Migration (runs once on first startup) ─────────────

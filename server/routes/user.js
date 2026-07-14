@@ -6,6 +6,7 @@ import { verifyCsrfToken } from '../middleware/security.js';
 import { UserStore } from '../services/userStore.js';
 import { db } from '../services/db.js';
 import config from '../config.js';
+import { sendPasswordChangedEmail } from '../services/email.js';
 
 const router = Router();
 
@@ -86,6 +87,12 @@ router.post('/change-password', verifyCsrfToken, changePasswordRules, async (req
     UserStore.update(user.id, { passwordHash: newHash });
 
     console.log(`[user] Password changed: ${req.user.email}`);
+
+    // Send email alert in background
+    sendPasswordChangedEmail(user).catch(mailErr => {
+      console.error('[user/change-password] Security alert email failed:', mailErr);
+    });
+
     return res.status(200).json({ message: 'Password changed successfully.', code: 'PASSWORD_CHANGED' });
   } catch (err) {
     console.error('[user/change-password]', err);

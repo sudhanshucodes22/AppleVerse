@@ -9,6 +9,7 @@ import config from '../config.js';
 import { UserStore, TokenStore } from '../services/userStore.js';
 import { authLimiter, verifyCsrfToken } from '../middleware/security.js';
 import { requireAuth } from '../middleware/authenticate.js';
+import { sendWelcomeEmail } from '../services/email.js';
 
 const router = Router();
 
@@ -133,6 +134,11 @@ router.post('/register', authLimiter, verifyCsrfToken, registerRules, async (req
     setRefreshCookie(res, refreshToken);
 
     console.log(`[auth] New registration: ${user.email} (ID: ${user.id})`);
+
+    // Send welcome email in background
+    sendWelcomeEmail(user).catch(mailErr => {
+      console.error('[auth/register] Welcome email failed:', mailErr);
+    });
 
     return res.status(201).json({
       message: 'Account created successfully.',
