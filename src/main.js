@@ -769,6 +769,105 @@ function initParallax() {
 }
 
 /* ─────────────────────────────────────────────
+   8. DYNAMIC WISHLIST HEARTS SYSTEM
+───────────────────────────────────────────── */
+async function initWishlistHearts(authenticated) {
+  const cards = document.querySelectorAll('.glass-card, .card, div[class*="rounded-"], div[class*="glass-"]');
+  if (!cards.length) return;
+
+  const savedIds = new Set();
+  if (authenticated) {
+    try {
+      const res = await apiFetch('/wishlist');
+      if (res && res.ok) {
+        const data = await res.json();
+        (data.items || []).forEach(item => savedIds.add(item.productId));
+      }
+    } catch (e) {
+      console.warn('[wishlist] Could not pre-fetch items:', e);
+    }
+  }
+
+  cards.forEach(card => {
+    if (card.hasAttribute('data-no-price')) return;
+
+    const hasBuyBtn = Array.from(card.querySelectorAll('button, a')).some(el => {
+      const txt = el.textContent.trim().toLowerCase();
+      return txt === 'buy' || txt === 'pre-order' || txt === 'buy now' || txt === 'add to bag' || el.hasAttribute('data-buy-btn');
+    });
+    if (!hasBuyBtn) return;
+
+    const nameEl = card.querySelector('h3, h2, .font-headline-lg, .text-headline-md, h4');
+    if (!nameEl) return;
+    const name = nameEl.textContent.trim();
+    const productId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    if (window.getComputedStyle(card).position === 'static') {
+      card.style.position = 'relative';
+    }
+
+    if (card.querySelector('.wishlist-heart-btn')) return;
+
+    const isSaved = savedIds.has(productId);
+
+    const heartBtn = document.createElement('button');
+    heartBtn.type = 'button';
+    heartBtn.className = 'wishlist-heart-btn absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md shadow-md border border-[#D2D2D7]/20 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95';
+    heartBtn.setAttribute('aria-label', isSaved ? 'Remove from wishlist' : 'Add to wishlist');
+    heartBtn.setAttribute('data-product-id', productId);
+    heartBtn.innerHTML = `<span class="material-symbols-outlined text-[20px] transition-colors" style="font-variation-settings: 'FILL' ${isSaved ? 1 : 0}; color: ${isSaved ? '#FF3B30' : '#8E8E93'}">favorite</span>`;
+
+    heartBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!authenticated) {
+        showToast('Please sign in to save items to your wishlist.', 'error');
+        return;
+      }
+
+      const iconEl = heartBtn.querySelector('.material-symbols-outlined');
+      const alreadySaved = iconEl.style.fontVariationSettings.includes("'FILL' 1");
+
+      if (alreadySaved) {
+        try {
+          const res = await apiFetch(`/wishlist/${encodeURIComponent(productId)}`, { method: 'DELETE' });
+          if (res && res.ok) {
+            iconEl.style.fontVariationSettings = "'FILL' 0";
+            iconEl.style.color = '#8E8E93';
+            heartBtn.setAttribute('aria-label', 'Add to wishlist');
+            showToast(`Removed ${name} from Wishlist.`, 'success');
+          } else {
+            showToast('Failed to update wishlist.', 'error');
+          }
+        } catch {
+          showToast('Connection error.', 'error');
+        }
+      } else {
+        try {
+          const res = await apiFetch('/wishlist', {
+            method: 'POST',
+            body: JSON.stringify({ productId }),
+          });
+          if (res && res.ok) {
+            iconEl.style.fontVariationSettings = "'FILL' 1";
+            iconEl.style.color = '#FF3B30';
+            heartBtn.setAttribute('aria-label', 'Remove from wishlist');
+            showToast(`Saved ${name} to Wishlist! ❤️`, 'success');
+          } else {
+            showToast('Failed to save item.', 'error');
+          }
+        } catch {
+          showToast('Connection error.', 'error');
+        }
+      }
+    });
+
+    card.insertBefore(heartBtn, card.firstChild);
+  });
+}
+
+/* ─────────────────────────────────────────────
    INIT — runs when DOM is ready
 ───────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', async () => {
@@ -790,4 +889,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   initScrollReveal();
   initColorSwatches();
   initParallax();
+  initWishlistHearts(authenticated);
 });
